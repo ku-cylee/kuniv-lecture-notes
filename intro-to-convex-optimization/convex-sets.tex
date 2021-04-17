@@ -1,0 +1,129 @@
+\section{Convex Sets}
+
+\subsection{Affine Set, Convex Cone and Convex Sets}
+
+\subsubsection*{Definitions}
+Definitions of subspace, affine set, convex cone and convex set.
+$$
+    \forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~(1)~\Leftrightarrow~A: (2)
+$$
+\begin{itemize}
+    \item Subspace: $\theta_i \in \mathbb{R}$
+    \item Affine: $\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1$
+    \item Convex Cone: $\theta_i \in \mathbb{R},~ \theta_i \geq 0$
+    \item Convex: $\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1, \theta_i \geq 0$
+\end{itemize}
+
+주의: 모든 subspace는 affine set이고, 모든 subspace는 convex cone이다. 포함관계 헷갈리기 쉬움.
+
+\subsubsection*{Affine Sets}
+Definition: $A$ is affine set if
+$$
+\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1
+$$
+\begin{itemize}
+    \item Linear Equations $S = \{~x~|~Ax=b~\}$
+    \item Half Plane is NOT an affine set
+\end{itemize}
+
+\subsubsection*{Convex Sets}
+Definition $A$ is convex set if
+$$
+\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1, \theta_i \geq 0
+$$
+\begin{itemize}
+    \item Discrete Set: Convex if the set has only one point, otherwise not convex
+    \item $\{0,1\}$ is not convex, but $[0,1]$ and $(0,1)$ are convex
+\end{itemize}
+
+\subsubsection*{Convex Hull}
+\begin{itemize}
+    \item Convex hull of set $S$
+    \item Notation: $\mathrm{conv}(S)$
+    \item Definition: Smallest convex set that contains $S$
+    \item If $S$ is convex, $S = \mathrm{conv}(S)$
+\end{itemize}
+
+\subsubsection*{Convex Cone}
+Definition: $A$ is convex cone if
+$$
+\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \theta_i \geq 0
+$$
+Convex cone must include the origin
+
+\subsection{Positive (Semi-)Definite Matrices}
+
+\subsubsection*{Definitions}
+Positive Definite Matrix (PD): 
+$ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} > 0 \Rightarrow A \succ 0$
+
+Positive Semi-definite Matrix (PSD): 
+$ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0 \Rightarrow A \succeq 0$
+
+\subsubsection*{Notations}
+\begin{itemize}
+    \item $\mathbb{S}^n$: Set of symmetric $n \times n$ matrices
+    \item $\mathbb{S}^n_+$: Set of symmetric psd $n \times n$ matrices
+    \item $\mathbb{S}^n_{++}$: Set of symmetric pd $n \times n$ matrices
+\end{itemize}
+
+\subsubsection*{Properites}
+\begin{itemize}
+    \item Real symmetric matrices have real eigenvalues
+    \item $A \in \mathbb{S}^n_+$ $\Leftrightarrow$ $\lambda_i \geq 0$
+    \item $A \in \mathbb{S}^n_{++}$ $\Leftrightarrow$ $\lambda_i > 0$
+\end{itemize}
+
+\subsection{Examples of Affine/Convex Sets}
+
+\subsubsection*{Hyperplanes}
+\begin{itemize}
+    \item Def: $\{\mathbf{x}|\mathbf{a}^T\mathbf{x} = \mathbf{b},~\mathbf{a} \neq \mathbf{0}\}$
+    \item Hyperplanes are affine and convex
+\end{itemize}
+
+\subsubsection*{Halfspaces}
+\begin{itemize}
+    \item Def: $\{\mathbf{x}|\mathbf{a}^T\mathbf{x} \leq \mathbf{b},~\mathbf{a}\neq\mathbf{0}\}$
+    \item $\mathbf{a}$ and $\mathbf{x} - \mathbf{x_0}$ has obtuse angle
+    \item Halfspaces are convex, but not affine
+\end{itemize}
+
+\subsubsection*{Norm Balls and Norm Cones}
+\begin{itemize}
+    \item $p$-norm ball: $\{\mathbf{x}~|~\Vert \mathbf{x} - \mathbf{x_0} \Vert_p \geq r\}$
+    \item $p$-norm cone: $\{\mathbf{x}~|~\Vert \mathbf{x} \Vert_p \geq t\}$
+    \item Norm balls and cones are convex sets
+\end{itemize}
+
+\subsubsection*{Polyhedra}
+\begin{itemize}
+    \item Solution set of finitely many linear \textbf{equalities} and \textbf{inequalities}
+    \item Can be represented as $\{\mathbf{x}|A\mathbf{x} \succ \mathbf{b},~ C\mathbf{x} = \mathbf{d} \}$
+    \item Intersection of a finite number of hyperplanes and halfspaces.
+\end{itemize}
+
+\subsubsection*{Separating and Supporting Hyperplanes}
+
+Separating Hyperplane
+\begin{itemize}
+    \item $C$, $D$ are disjoint convex sets $\Rightarrow$ 
+        $\exists \mathbf{a} \neq \mathbf{0},~\mathbf{b}$ s.t. 
+        $\forall \mathbf{x} \in C,~\mathbf{a}^T\mathbf{x} \preceq \mathbf{b}$,
+        $\forall \mathbf{x} \in D,~\mathbf{a}^T\mathbf{x} \succeq \mathbf{b}$
+    \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{b}\}$ separates $C$ and $D$.
+\end{itemize}
+
+Supporting Hyperplane of set $C$ at boundary point $x_0$
+\begin{itemize}
+    \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{a}^T\mathbf{x_0},~\mathbf{a}\neq\mathbf{0}\}$
+\end{itemize}
+
+\subsection{Convexity-preserving Operations}
+
+\begin{itemize}
+    \item Intersection: $C_1$, $C_2$: convex $\Rightarrow$ $C_1 \cap C_2$: convex
+    \item Scaling: $C$: convex $\Rightarrow$ $aC \equiv \{a\mathbf{x}~|~\mathbf{x} \in C\}$: convex
+    \item Translation: $C$: convex $\Rightarrow$ $\mathbf{a} + C \equiv \{\mathbf{a}+\mathbf{x}~|~\mathbf{x}\in C\}$: convex
+    \item Minkowski addition: $C_1$, $C_2$: convex $\Rightarrow$ $C_1 \oplus C_2 \equiv \{\mathbf{x_1}+\mathbf{x_2}~|~\mathbf{x_1}\in C_1,~\mathbf{x_2}\in C_2\}$: convex
+\end{itemize}
