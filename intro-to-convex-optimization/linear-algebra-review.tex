@@ -1,0 +1,165 @@
+\section{Linear Algebra Review}
+
+\subsection{Vector Spaces}
+
+\subsubsection*{Vector Space and Subspace}
+\begin{itemize}
+    \item Vector space $\mathcal{V}$ consists of
+    \begin{itemize}
+        \item A set of vectors
+        \item Addition operator
+        \item Multiplication with scalar
+        \item Special element $\mathbf{0}$ vector
+    \end{itemize}
+    \item Subspace of a vector space: Subset of a vector space \& Itself is a vector space
+\end{itemize}
+
+\subsubsection*{Basis and Dimension}
+\begin{itemize}
+    \item $\mathcal{B} = \{\mathbf{v}_1,~\mathbf{v}_2,~\cdots,~\mathbf{v}_n\}$ is a basis of vector space $\mathcal{V}$ if
+    \begin{itemize}
+        \item $\mathcal{B}$ spans $\mathcal{V}$, i.e. $\mathcal{V} = \mathrm{span}(\mathbf{v}_1,~\mathbf{v}_2,~\cdots,~\mathbf{v}_n)$
+        \item $\mathbf{v}_1,~\mathbf{v}_2,~\cdots,~\mathbf{v}_n$ are linearly independent
+    \end{itemize}
+    \item Dimension: $\mathrm{dim}(\mathcal{V}) = |~\mathcal{B}~|$, $\mathrm{dim}(\{\mathbf{0}\}) = 0$
+\end{itemize}
+
+\subsubsection*{Range}
+\begin{itemize}
+    \item $A \in \mathbb{R}^{m\times n}$, $\mathcal{R}(A) = \{A\mathbf{x}~|~\mathbf{x}\in\mathbb{R}^n\}$
+    \item $A = \begin{mtx}{cccc} \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{a}_n \end{mtx}$,
+        then $\mathcal{R} = \mathrm{span}(\mathbf{a}_1,~\mathbf{a}_2,~\cdots,\mathbf{a}_n)$
+\end{itemize}
+
+Interpretation
+\begin{itemize}
+    \item $\mathbf{v} \in \mathcal{R}(A)$, $\mathbf{w} \notin \mathcal{R}(A)$, $\mathbf{y} = A\mathbf{x}$: output of a sensor to input $\mathbf{x}$
+    \begin{itemize}
+        \item $\mathbf{y} = \mathbf{v}$: possible/consistent output, $\mathbf{y} = \mathbf{w}$: impossible/inconsistent output
+    \end{itemize}
+    \item $\mathcal{R}(A)$: achievable output set
+\end{itemize}
+
+\subsubsection*{Nullspace}
+\begin{itemize}
+    \item Nullspace of $A$: $\mathcal{N}(A) = \{\mathbf{x} \in \mathbb{R}^n~|~A\mathbf{x} = \mathbf{0}\}$
+    \item Vectors of $\mathcal{N}(A)$ are orthogonal to the rows of $A$
+\end{itemize}
+
+Interpretation
+\begin{itemize}
+    \item $\mathcal{N}(A)$ gives ambiguity of system $A$
+    \item $\forall \mathbf{x} \in \mathbb{R}^n$, $\forall \mathbf{v} \in \mathcal{N}(A)$, $A(\mathbf{x} + \mathbf{v}) = A(\mathbf{x})$
+\end{itemize}
+
+\subsubsection*{Rank}
+\begin{itemize}
+    \item Definition
+    \begin{itemize}
+        \item $A \in \mathbb{R}^{m \times n}$, $\mathrm{rank}(A) \equiv \mathrm{dim}(\mathcal{R}(A))$
+        \item Number of independent columns(rows) of $A$ $\Rightarrow$ $\mathrm{rank}(A^T) = \mathrm{rank}(A)$
+        \item Represents degree of freedom
+    \end{itemize}
+    \pagebreak
+    \item Properties
+    \begin{itemize}
+        \item $\mathrm{rank}(A) \leq \min(m, n)$: Degree of freedom cannot be exceeded
+        \item $\mathrm{rank}(BC) \leq \min(\mathrm{rank}(B), \mathrm{rank}(C))$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Full Rank}
+\begin{itemize}
+    \item Definition
+    \begin{itemize}
+        \item $A \in \mathbb{R}^{m \times n}$ has full rank if $\mathrm{rank}(A) = \min (m, n)$
+        \item $m = n$ (square matrix) $\Rightarrow$ $\exists A^{-1}$
+        \item $m \geq n$ (skinny matrix) $\Rightarrow$ All columns are independent
+        \item $m \leq n$ (fat matrix) $\Rightarrow$ All rows are independent
+    \end{itemize}
+    \item $A$ is full rank and $\mathrm{rank}(A) = m$ $(m \leq n)$
+    \begin{itemize}
+        \item Columns of $A$ spans $\mathbb{R}^m$
+        \item Rows of $A$ are independent
+        \item $A^T\mathbf{c}$ $\Rightarrow$ $\mathbf{c} = \mathbf{0}$
+        \item $\det(AA^T) \neq 0$
+        \item $A$ has right inverse: $\exists B$ s.t. $AB = I$ with $B = A^T(AA^T)^{-1}$
+    \end{itemize}
+    \item $A$ is full rank and $\mathcal{N}(A) = \{\mathbf{0}\}$
+    \begin{itemize}
+        \item $\mathrm{rank}(A) = n$
+        \item Columns of $A$ are independent
+        \item $A\mathbf{c} = \mathbf{0}$ $\Rightarrow$ $\mathbf{c} = \mathbf{0}$
+        \item $\det(AA^T) \neq 0$
+        \item $A$ has left inverse: $\exists B$ s.t. $BA = I$
+    \end{itemize}
+\end{itemize}
+
+\subsection{Determinant}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item Function that maps a square matrix to a real number
+    \item Algebraic Def: Recursively defined using $(n-1) \times (n-1)$ determinant
+    \item Geometric Def: Signed value of parallelpiped formed by columns of $A$
+\end{itemize}
+
+\subsubsection*{Properties}
+\begin{itemize}
+    \item Multilinear:
+    \begin{itemize}
+        \item $\begin{detmtx}{cccccc}
+            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_1+\mathbf{v}_2&\cdots&\mathbf{a}_n
+        \end{detmtx} = \begin{detmtx}{cccccc}
+            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_1&\cdots&\mathbf{a}_n
+        \end{detmtx} + \begin{detmtx}{cccccc}
+            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_2&\cdots&\mathbf{a}_n
+        \end{detmtx}$
+    \end{itemize}
+    \item Scaling of columns: 
+    \begin{itemize}
+        \item $\begin{detmtx}{cccccc}
+            \mathbf{a}_1&\mathbf{a}_2&\cdots&c\mathbf{a}_i&\cdots&\mathbf{a}_n
+        \end{detmtx} = c \begin{detmtx}{cccccc}
+            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{a}_i&\cdots&\mathbf{a}_n
+        \end{detmtx}$
+    \end{itemize}
+    \item Determinant is zero if two columns are same: 
+    \begin{itemize}
+        \item$\begin{detmtx}{cccccc}
+            \mathbf{a}_1&\cdots&\mathbf{a}_i&\mathbf{a}_i&\cdots&\mathbf{a}_n
+        \end{detmtx} = 0$
+    \end{itemize}
+\end{itemize}
+\pagebreak
+
+\subsection{Eigenvalues and Symmetric Matrices}
+
+\subsubsection*{Definition}
+For $A \in \mathbb{R}^n$, $\lambda \in \mathbb{R}$ is called eigenvalue and
+$\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\mathbf{v} = \lambda\mathbf{v} $
+
+\subsubsection*{Eigenvalues of Symmetric Matrices}
+\begin{itemize}
+    \item For a real matrix $A \in \mathbb{S}^n$,
+    \begin{itemize}
+        \item eigenvalues are real
+        \item eigenvectors are mutually orthogonal
+    \end{itemize}
+    \item Spectral Decomposition
+    \begin{itemize}
+        \item $A \in \mathbb{S}^n$ can be decomposed as $A = U\Lambda U^T$, i.e. $AU = U\Lambda$
+        \item $\Lambda$: Diagonal matrix with $\lambda_i$ at $i$-th diagonal,
+            $U$: Orthogonal matrix $\Rightarrow$ $U^T = U^{-1}$
+    \end{itemize}
+    \item Positive Definiteness of Symmetric Matrices
+    \begin{itemize}
+        \item $A = U\Lambda U^T = \sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^T$: Sum of rank-1 matrices
+        \item $\mathbf{u}_i$: bases $\Rightarrow$ $\mathbf{x} = \sum_{i} \hat{\mathbf{x}_i}\mathbf{u}_i$
+            $\Rightarrow$ $A\mathbf{x} = \sum_{i} \lambda_i \hat{\mathbf{x}_i}\mathbf{u}_i$
+            $\Rightarrow$ $\mathbf{x}^TA\mathbf{x} = \sum_{i} \lambda_i \hat{\mathbf{x}_i}^2$
+        \item $A$: Positive definite $\Leftrightarrow$ $\forall i$, $\lambda_i \geq 0$
+        \item $A$: Invertible $\Leftrightarrow$ $\forall i$, $\lambda_i \neq 0$
+        \item $\lambda_i$: Eigenvalues of $A$ $\Rightarrow$ $\lambda_i^k$: Eigenvalues of $A^k$
+    \end{itemize}
+\end{itemize}
