@@ -5,13 +5,14 @@
 \subsubsection*{Definitions}
 Definitions of subspace, affine set, convex cone and convex set.
 $$
-    \forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~(1)~\Leftrightarrow~A: (2)
+    \forall \theta_i \in \mathbb{R}~\mathrm{s.t. (1)},~
+    \forall x_i \in A,~\sum_i \theta_i x_i \in A~\Leftrightarrow~A: \mathrm{(2)}
 $$
 \begin{itemize}
-    \item Subspace: $\theta_i \in \mathbb{R}$
-    \item Affine: $\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1$
-    \item Convex Cone: $\theta_i \in \mathbb{R},~ \theta_i \geq 0$
-    \item Convex: $\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1, \theta_i \geq 0$
+    \item Subspace: (No additional condition)
+    \item Affine: $\sum_i \theta_i = 1$
+    \item Convex Cone: $\theta_i \geq 0$
+    \item Convex: $\theta_i \geq 0$, $\sum_i \theta_i = 1$
 \end{itemize}
 
 주의: 모든 subspace는 affine set이고, 모든 subspace는 convex cone이다. Subspace는 $\sum_i \theta_i = 1$인
@@ -21,17 +22,17 @@ linear combination의 결과도 포함되어 있어야 하고, $\sum_i \theta_i 
 \subsubsection*{Affine Sets}
 Definition: $A$ is affine set if
 $$
-\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1
+    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1, \forall x_i \in A,~\sum_i \theta_i x_i \in A
 $$
 \begin{itemize}
-    \item Linear Equations $S = \{~x~|~Ax=b~\}$
+    \item Linear Equations $S = \{x~|~Ax=b\}$
     \item Half Plane is NOT an affine set
 \end{itemize}
 
 \subsubsection*{Convex Sets}
 Definition $A$ is convex set if
 $$
-\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \sum_i \theta_i = 1, \theta_i \geq 0
+    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1, \theta_i \geq 0, \forall x_i \in A,~\sum_i \theta_i x_i \in A
 $$
 \begin{itemize}
     \item Discrete Set: Convex if the set has only one point, otherwise not convex
@@ -49,24 +50,25 @@ $$
 \subsubsection*{Convex Cone}
 Definition: $A$ is convex cone if
 $$
-\forall x_1,~x_2,~\cdots,~x_n \in A,~\sum_i \theta_i x_i \in A,~\theta_i \in \mathbb{R},~ \theta_i \geq 0
+    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\theta_i \geq 0, \forall x_i \in A,~\sum_i \theta_i x_i \in A
 $$
 Convex cone must include the origin
 
 \subsection{Positive (Semi-)Definite Matrices}
 
 \subsubsection*{Definitions}
-Positive Definite Matrix (PD): 
-$ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} > 0 \Rightarrow A \succ 0$
-
-Positive Semi-definite Matrix (PSD): 
-$ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0 \Rightarrow A \succeq 0$
+\begin{itemize}
+    \item Positive Definite (PD) Matrix: 
+        $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} > 0 \Rightarrow A \succ 0$
+    \item Positive Semi-definite (PSD) Matrix: 
+        $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0 \Rightarrow A \succeq 0$
+\end{itemize}
 
 \subsubsection*{Notations}
 \begin{itemize}
     \item $\mathbb{S}^n$: Set of symmetric $n \times n$ matrices
-    \item $\mathbb{S}^n_+$: Set of symmetric psd $n \times n$ matrices
-    \item $\mathbb{S}^n_{++}$: Set of symmetric pd $n \times n$ matrices
+    \item $\mathbb{S}^n_+$: Set of symmetric PSD $n \times n$ matrices
+    \item $\mathbb{S}^n_{++}$: Set of symmetric PD $n \times n$ matrices
 \end{itemize}
 
 \subsubsection*{Properites}
@@ -93,15 +95,15 @@ $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\ma
 
 \subsubsection*{Norm Balls and Norm Cones}
 \begin{itemize}
-    \item $p$-norm ball: $\{\mathbf{x}~|~\Vert \mathbf{x} - \mathbf{x_0} \Vert_p \geq r\}$
-    \item $p$-norm cone: $\{\mathbf{x}~|~\Vert \mathbf{x} \Vert_p \geq t\}$
+    \item $p$-norm ball: $\{\mathbf{x}~|~\Vert \mathbf{x} - \mathbf{x_0} \Vert_p \leq r\}$
+    \item $p$-norm cone: $\{\mathbf{x}~|~\Vert \mathbf{x} \Vert_p \leq t\}$
     \item Norm balls and cones are convex sets
 \end{itemize}
 
 \subsubsection*{Polyhedra}
 \begin{itemize}
     \item Solution set of finitely many linear \textbf{equalities} and \textbf{inequalities}
-    \item Can be represented as $\{\mathbf{x}|A\mathbf{x} \succ \mathbf{b},~ C\mathbf{x} = \mathbf{d} \}$
+    \item Can be represented as $\{\mathbf{x}|A\mathbf{x} \preceq \mathbf{b},~ C\mathbf{x} = \mathbf{d} \}$
     \item Intersection of a finite number of hyperplanes and halfspaces.
 \end{itemize}
 
