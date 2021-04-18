@@ -54,30 +54,6 @@ $$
 $$
 Convex cone must include the origin
 
-\subsection{Positive (Semi-)Definite Matrices}
-
-\subsubsection*{Definitions}
-\begin{itemize}
-    \item Positive Definite (PD) Matrix: 
-        $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} > 0 \Rightarrow A \succ 0$
-    \item Positive Semi-definite (PSD) Matrix: 
-        $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0 \Rightarrow A \succeq 0$
-\end{itemize}
-
-\subsubsection*{Notations}
-\begin{itemize}
-    \item $\mathbb{S}^n$: Set of symmetric $n \times n$ matrices
-    \item $\mathbb{S}^n_+$: Set of symmetric PSD $n \times n$ matrices
-    \item $\mathbb{S}^n_{++}$: Set of symmetric PD $n \times n$ matrices
-\end{itemize}
-
-\subsubsection*{Properites}
-\begin{itemize}
-    \item Real symmetric matrices have real eigenvalues
-    \item $A \in \mathbb{S}^n_+$ $\Leftrightarrow$ $\lambda_i \geq 0$
-    \item $A \in \mathbb{S}^n_{++}$ $\Leftrightarrow$ $\lambda_i > 0$
-\end{itemize}
-
 \subsection{Examples of Affine/Convex Sets}
 
 \subsubsection*{Hyperplanes}
@@ -95,8 +71,8 @@ Convex cone must include the origin
 
 \subsubsection*{Norm Balls and Norm Cones}
 \begin{itemize}
-    \item $p$-norm ball: $\{\mathbf{x}~|~\Vert \mathbf{x} - \mathbf{x_0} \Vert_p \leq r\}$
-    \item $p$-norm cone: $\{\mathbf{x}~|~\Vert \mathbf{x} \Vert_p \leq t\}$
+    \item $p$-norm ball: $\{\mathbf{x}~|~\Vert \mathbf{x} - \mathbf{x_0} \Vert_p \leq r\}$, 
+        $p$-norm cone: $\{\mathbf{x}~|~\Vert \mathbf{x} \Vert_p \leq t\}$
     \item Norm balls and cones are convex sets
 \end{itemize}
 
