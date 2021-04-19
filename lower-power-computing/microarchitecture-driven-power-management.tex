@@ -1,0 +1,195 @@
+\section{Microarchitecture-Driven Power Management}
+
+\subsection{Power Consumption}
+
+\subsubsection*{Dynamic Power}
+\begin{itemize}
+    \item 동적 전력. Chip이 동작할 때 소모되는 전력
+    \item $P_{\mathrm{dyn}} = \alpha \cdot C_L \cdot V_{\mathrm{dd}}^2 \cdot f$
+    \item $C_L$: Capacitance
+    \begin{itemize}
+        \item 수용 가능한 전하의 총량
+        \item 사용되는 gate의 수(fan-out), 전선 길이, 트랜지스터 크기 등
+        \item 너무 낮으면 0과 1을 구별할 수 없으므로 한계가 있음
+    \end{itemize}
+    \item $V_{\mathrm{dd}}^2$: Supply voltage
+    \begin{itemize}
+        \item 세대가 지나며 많이 낮아지고 있음
+        \item 반드시 $V_{\mathrm{th}}$(threshold voltage)보단 높아야 함
+    \end{itemize}    
+    \item $f$: Frequency. 낮으면 performance가 떨어지므로 낮추기 어려움. 최근에는 계속 증가
+    \item Switching Power, Clock Power 등이 있음
+\end{itemize}
+
+\subsubsection*{Leakage Power}
+\begin{itemize}
+    \item 누설 전력, 정적 전력(static power). Chip이 동작하지 않아도 소모되는 전력
+    \item $P_{\mathrm{leak}} = I_{\mathrm{leak}} \cdot V_{\mathrm{dd}}$
+    \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 공정 미세화가 진행되면 누설전력 급증
+    \item 공정미세화로 인해 Subthreshold Leakage가 dominant $\Rightarrow$ 대부분 $P_{\mathrm{leak}}$을 줄이는 기술은 여기에 집중
+    \figcmd{lower-power-computing/images/leakage-power-components.PNG}{.5}
+    \item 공정미세화가 진행되면서 누설전력이 급증하는 추세임
+    \item Core는 입력이 있을때만 gate가 작동하지만, cache는 입력이 없어도 F/F 등에 데이터 저장 $\Rightarrow$ 누설 발생
+\end{itemize}
+\pagebreak
+
+\subsection{Low-Power Interconnect}
+
+\subsubsection*{Interconnect and Power Consumption}
+\begin{itemize}
+    \item Chip간의 interconnect, 즉 버스는 전력 소모의 주 원인
+    \begin{itemize}
+        \item PC는 대부분 버스 구조를 갖는다
+        \item 모바일은 버스 구조를 사용하지 않고, point-to-point 구조 $\Rightarrow$ chip size가 큼
+    \end{itemize}
+    \item Chip의 성능 향상 $\Rightarrow$ 트랜지스터 증가, 전선의 밀도 증가 $\Rightarrow$ $C_L$ 증가
+\end{itemize}
+
+\subsubsection*{Bus Encoding}
+\begin{itemize}
+    \item 버스 인코딩 방식을 바꾸어 switching activity를 줄이는 방법
+    \item 두 값 사이의 hamming distance가 wire 수의 절반 초과 $\Rightarrow$ 대부분 버스가 switch 됨
+    \begin{itemize}
+        \item 예: 0000 $\rightarrow$ 1110: Hamming Distance는 3
+    \end{itemize}
+    \item Bus Inversion
+    \begin{itemize}
+        \item Hamming Distance가 크면 그 다음 수를 invert시킴
+        \item 0000 $\rightarrow$ 1110보다 0000 $\rightarrow$ 0001이 switching activity가 더 적다
+        \item Invert했음을 표시하는 flag bit가 필요함. 1bit만 필요하므로 이득이 될 수 있음
+        \item Inversion 과정에서 overhead 발생 $\Rightarrow$ 느리게 동작하는 storage 등에서 사용
+        \item Hamming distance 계산 과정, En/decode 과정에서 latency가 발생한다는 단점
+    \end{itemize}
+    \item Gray Code Encoding
+    \begin{itemize}
+        \item 다음 수로 넘어갈 때 단 1bit만 바뀌는 인코딩
+        \item 예: $10 = 1111_2$, $11 = 1110_2$
+        \item 장점: Array encoding 등 순차적인 count의 관여가 많으면 동적 전력 감소
+        \item 단점: Switch가 많을수록 에러 확률이 증가하여 noise에 취약함. 순차적인 count가 아니면 오히려 손해
+    \end{itemize}
+    \item One-Hot Encoding
+    \begin{itemize}
+        \item 데이터를 표현할 때 단 하나의 1만 사용됨
+        \item 장점: 임의의 두 수 간에 switch 수는 많아야 2회 $\Rightarrow$ 동적 전력 소모량 감소, Error detection 쉬움
+        \item 단점: Bit수가 지나치게 늘어남 $\Rightarrow$ En/decoder이 복잡, Too much cost
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Crosstalk}
+\begin{itemize}
+    \item Chip의 미세화 $\Rightarrow$ Wire간의 거리가 감소 $\Rightarrow$ 간섭(crosstalk) 발생 가능성 증가
+    \item 간섭이 발생하면 switch에서의 delay, error 등의 발생 가능성 증가
+    \item 해결 방법: 전류가 흐르는 wire 사이에 전류가 흐르지 않는 shield wire 배치
+\end{itemize}
+
+\subsubsection*{Low Swing Buses}
+\figcmd{lower-power-computing/images/low-swing-buses.PNG}{.5}
+\begin{itemize}
+    \item 버스에서 정보를 전달할 때 더 낮은 전압으로 전달하는 방법
+    \item Differential Signaling: 전압이 너무 낮아 detection 힘듦 $\Rightarrow$
+        신호를 원래 신호와 역전시킨 신호로 분리한 후 비교하여 차이를 늘림 $\Rightarrow$ 비교적 detection 쉬움
+    \item 장점: $P_\mathrm{dyn} \varpropto V_{\mathrm{dd}}^2$ $\Rightarrow$ 동적 전력이 감소, Crosstalk 예방, 전압폭 감소 $\Rightarrow$ latency 감소
+    \item 단점: 부가적인 En/decoder 필요, Noise에 취약
+    \item SRAM, DRAM 등에서 사용, North Bridge, South Bridge 등에서 미사용
+\end{itemize}
+
+\subsubsection*{Bus Segmentation}
+\figcmd{lower-power-computing/images/bus-segmentation.PNG}{.5}
+\begin{itemize}
+    \item A $\rightarrow$ C로 보낼 때 A $\rightarrow$ F로 보낼 수 있을 정도의 전압을 걸어야 함 $\Rightarrow$ 전력 낭비
+    \item 버스를 여러 segment로 분할, segment 간에는 traffic을 조절하는 link(F/F)로 연결: Register insertion
+    \item Link에 위치한 F/F에서 신호를 계속 증폭시켜줌
+    \item 장점: Short path에서는 전력 소모, latency 감소 효과
+    \item 단점: Long path에서는 전력 소모, latency가 오히려 증가
+    \item 주로 Mobile AP CPU에서 사용됨
+\end{itemize}
+
+\subsubsection*{Network On Chip (NOC)}
+\figcmd{lower-power-computing/images/network-on-chip.PNG}{.5}
+\begin{itemize}
+    \item 각 Processing unit을 simple CPU router에 붙여서 운용
+    \item Intel의 high-end server CPU에 사용됨
+    \item P2P 구조보다는 성능이 낮지만 hardware cost는 낮음
+\end{itemize}
+\pagebreak
+
+\subsection{Low-Power Memories}
+
+\subsubsection*{Approaches for Low-Power Memories}
+\begin{itemize}
+    \item Memory에 적용되는 기술들은 RAM, ROM뿐만 아니라 캐시에도 적용될 수 있음
+    \item Types of Memories (빠르고 가격이 비싼 순위)
+    \begin{enumerate}
+        \item Register: F/F의 집합
+        \item Cache: SRAM. 지속적인 전원 공급 필요 $\Rightarrow$ 누설 전력 큼
+        \item Main memory: DRAM
+        \item Storage: SSD, HDD, Magentic Tape, \ldots
+    \end{enumerate}
+    \item 전력 소모를 줄이기 위한 두 가지 접근
+    \begin{itemize}
+        \item Memory 접근당 전력 소모를 줄임
+        \item Memory 접근 횟수를 줄임
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Splitting Memories into Smaller Sub-Systems(Bank)}
+\begin{itemize}
+    \item 메모리를 여러 개의 bank로 나누고 필요한 메모리가 있는 bank만 활성화
+    \item Main Memory는 여러 bank로 나누어져 있음
+    \item Compiler과 OS는 데이터를 최소한의 bank로 나눔 $\Rightarrow$ 다른 bank가 power down하여 전력 소모 줄임
+    \item 단점: Data가 어느 bank에 있는지 알아내면서 latency 발생, Decoder $\cdot$ mux의 필요로 cost 증가
+    \item Banked Cache (Image Below)
+    \begin{itemize}
+        \item Cache address: Tag - Index - Offset의 순서
+        \item Index로 row 탐색 $\Rightarrow$ Tag로 hit/miss 판단 $\Rightarrow$ Offset으로 data 전달
+        \item Bank selection bits 삽입, tag의 bits를 줄임 $\Rightarrow$ Bank selection
+    \end{itemize}
+    \item Partitoned Power-Aware Instruction Cache
+    \begin{itemize}
+        \item 사용할 때는 bank를 enable하고 사용하지 않을때는 low power mode(DVFS)로 전환
+        \item Prediction을 기반으로 이루어짐
+    \end{itemize}
+\end{itemize}
+
+\figcmd{lower-power-computing/images/banked-cache.PNG}{.5}
+\pagebreak
+
+\subsubsection*{Augmenting the Memory Hierachy with Specialized Cache Structure}
+\begin{itemize}
+    \item L0 Cache (Filter Cache)
+    \begin{itemize}
+        \item CPU와 L1 Cache 사이에 작은 L0 Cache를 삽입. L0 Cache에 먼저 접근, miss 시 L1에 접근
+        \item L0 Cache는 app의 working set의 대부분을 저장 $\Rightarrow$ 대부분의 memory access를 걸러냄
+        \item 전력 소모는 줄어드나 cost는 증가. 단, L0 miss \& L1 hit 발생 시 전력 소모 증가
+    \end{itemize}
+    \item Filter TLB (Translation Lookahead Buffer)
+    \begin{itemize}
+        \item TLB: Page table의 cache와 같은 개념
+        \item Page table: Virtual address와 Physical address의 mapping. Main memory 내에 위치
+    \end{itemize}
+    \item Scratch Pad Memory (SPM)
+    \begin{itemize}
+        \item SPM: Main memory처럼 동작하나 작은 용량의 SRAM(<1MB)으로 이루어짐
+        \item Main memory는 cache와 달리 hit/miss가 없음. 주소로 접근하면 100\% 원하는 data를 찾음
+        \item 장점: 전력 소모 감소, latency 감소
+        \item 단점: High cost
+    \end{itemize}
+    \item Trace Cache
+    \begin{itemize}
+        \item L1 cache에서 instruction을 compile된 순서로 저장하지 않고 실행된 순서로 저장 (address는 불변)
+        \item Loop에서의 반복 실행이 발생하면 instruction cache hit rate이 높아짐
+        \item Instruction cache access를 줄여 전력 소모가 감소함
+        \item Instruction cache hit rate: $\approx$ 98\textasciitilde99\% $\Rightarrow$ $\approx$ 100\%
+    \end{itemize}
+    \item Dynamic Direction Prediction-Based Trace Cache
+    \begin{itemize}
+        \item Instruction을 가져올 때 Branch Prediction을 이용한 방식
+        \item Branch prediction 과정의 latency로 인해 잘 사용되지 않음
+    \end{itemize}
+    \item Selective Trace Cache
+    \begin{itemize}
+        \item Hot Trace: 자주 실행된 trace $\Rightarrow$ Trace cache에 넣어둠
+        \item 컴파일러가 branch instruction 뒤에 hot trace에 대한 힌트 삽입
+        \item ISA 표준을 개정해야 함 $\Rightarrow$ Too much overhead $\Rightarrow$ 안 쓰임
+    \end{itemize}
+\end{itemize}
