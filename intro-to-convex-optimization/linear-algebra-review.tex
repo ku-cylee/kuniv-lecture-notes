@@ -108,12 +108,12 @@ Interpretation
 \begin{itemize}
     \item Multilinear:
     \begin{itemize}
-        \item $\begin{detmtx}{cccccc}
-            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_1+\mathbf{v}_2&\cdots&\mathbf{a}_n
-        \end{detmtx} = \begin{detmtx}{cccccc}
-            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_1&\cdots&\mathbf{a}_n
-        \end{detmtx} + \begin{detmtx}{cccccc}
-            \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{v}_2&\cdots&\mathbf{a}_n
+        \item $\begin{detmtx}{ccccc}
+            \mathbf{a}_1&\cdots&\mathbf{v}_1+\mathbf{v}_2&\cdots&\mathbf{a}_n
+        \end{detmtx} = \begin{detmtx}{ccccc}
+            \mathbf{a}_1&\cdots&\mathbf{v}_1&\cdots&\mathbf{a}_n
+        \end{detmtx} + \begin{detmtx}{ccccc}
+            \mathbf{a}_1&\cdots&\mathbf{v}_2&\cdots&\mathbf{a}_n
         \end{detmtx}$
     \end{itemize}
     \item Scaling of columns: 
@@ -168,9 +168,9 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 
 \subsubsection*{Definition}
 \begin{itemize}
-    \item A function that maps length $n$ vector to scalar s.t. $f(x) = \mathbf{x}^TA\mathbf{x}$ ($A \in \mathbb{S}^n$)
-    \item $A \notin \mathbb{S}^n$, can be replaced by $\tilde{A} = \frac 1 2 \left(A + A^T \right) \in \mathbb{S}^n$,
-        so assuption $A \in \mathbb{S}^n$ does not lose generality
+    \item A function that maps length $n$ vector to scalar s.t. $f(x) = \mathbf{x}^TQ\mathbf{x}$ ($Q \in \mathbb{S}^n$)
+    \item $Q \notin \mathbb{S}^n$ can be replaced by $\tilde{Q} = \frac 1 2 \left(Q + Q^T \right) \in \mathbb{S}^n$,
+        so assuption $Q \in \mathbb{S}^n$ does not lose generality
 \end{itemize}
 
 \subsubsection*{Positive (Semi-)Definite Matrices}
@@ -193,23 +193,64 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
         \item $\mathbb{S}^n_+$: Set of symmetric PSD $n \times n$ matrices
         \item $\mathbb{S}^n_{++}$: Set of symmetric PD $n \times n$ matrices
     \end{itemize}
-    \item Properites for $A \in \mathbb{S}^n$
+\end{itemize}
+\pagebreak
+
+\subsubsection*{Positive Definiteness and Eigenvalues ($Q \in \mathbb{S}^n$)}
+\begin{itemize}
+    \item $\mathbf{x}^T Q\mathbf{x} = \mathbf{x}^T (U\Lambda U^T) \mathbf{x}
+        = \mathbf{x}^T \left(\sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^T\right) \mathbf{x}
+        = \sum_i c_i^2 \lambda_i$ $\left(\mathbf{x} = \sum_i \mathbf{c}_i \mathbf{u}_i\right)$
+    \item $Q$ is real matrix $\Rightarrow$ Eigenvalues are all real
+    \item $Q \succ 0$ $\Leftrightarrow$ $\lambda_i > 0$, $Q \succeq 0$ $\Leftrightarrow$ $\lambda_i \geq 0$
+    \item $Q \prec 0$ $\Leftrightarrow$ $\lambda_i < 0$, $Q \preceq 0$ $\Leftrightarrow$ $\lambda_i \leq 0$
+    \item $Q$ is indefinite $\Leftrightarrow$ There are both positive and negative $\lambda_i$s.
+    \item $Q \succ 0$ $\Rightarrow$ Diagonal elements $> 0$, $Q \succeq 0$ $\Rightarrow$ Diagonal elements $\geq 0$
+\end{itemize}
+
+\subsubsection*{Properties of Positive Definiteness}
+\begin{itemize}
+    \item $A, B \in \mathbb{S}_{++}^n$
     \begin{itemize}
-        \item $A$ is real matrix $\Rightarrow$ Eigenvalues are all real
-        \item $A \succ 0$ $\Leftrightarrow$ $\lambda_i > 0$, $A \succeq 0$ $\Leftrightarrow$ $\lambda_i \geq 0$
-        \item $A \prec 0$ $\Leftrightarrow$ $\lambda_i < 0$, $A \preceq 0$ $\Leftrightarrow$ $\lambda_i \leq 0$
-        \item $A$ is indefinite $\Leftrightarrow$ There are both positive and negative $\lambda_i$s.
+        \item $\exists A^{-1}$, $A^{-1} \succ 0$ ($A^{-1} = QD^{-1}Q^T$, Eigenvalues are $\frac 1 {\lambda_i}$)
+        \item $A + B \succ 0$
     \end{itemize}
+    \item $A \in \mathbb{R}^{m \times n}$
+    \begin{itemize}
+        \item $\mathbf{x}^T\left(A^TA\right)\mathbf{x} = (A\mathbf{x})^T(A\mathbf{x}) = \Vert A\mathbf{x} \Vert^2 \geq 0$
+        \item $A^TA \succeq 0$ ($\mathrm{rank}(A) = n~\Rightarrow~A^TA \succ 0$)
+        \item $AA^T \succeq 0$ ($\mathrm{rank}(A) = m~\Rightarrow~AA^T \succ 0$)
+    \end{itemize}
+    \item $\mathbf{v}\mathbf{v}^T \in \mathbb{S}_+^n$: Rank-1 matrix
+    \item $A \in \mathbb{S}_+^n$ $\Rightarrow$ $A^k \in \mathbb{S}_+^n$
+\end{itemize}
+
+\subsubsection*{Positive Definiteness and Determinants}
+\begin{itemize}
+    \item Let $Q = \begin{mtx}{cc}a&b\\b&c\end{mtx}$
+    \item $|Q - \lambda I| = 0$ $\Rightarrow$ $\lambda^2 - (a + c)\lambda + \left( ac - b^2 \right) = 0$
+    \item Discriminant: $D = (a - c)^2 + 4b^2 \geq 0$ $\Rightarrow$ All eigenvalues are real numbers
+    \item Two positive solutions: $a + c > 0$, $ac - b^2 > 0$ $\Rightarrow$ $a > 0$, $c > 0$, $ac - b^2 > 0$
+    \item $Q \in S_{++}^2$ $\Rightarrow$ Diagnoal values are positive, $|Q| > 0$
 \end{itemize}
 
 \subsubsection*{Ellipse}
 \begin{itemize}
     \item $\left\{\mathbf{x}~|~\mathbf{x}^TQ\mathbf{x}=c,~Q \succ 0\right\}$ is an ellipse
     \item If $Q = I$, the given set is a sphere
-    \item $Q \in \mathbb{S}^n$ $\Rightarrow$ $Q = U\Lambda U^T$ $\Rightarrow$
-        $1 = \mathbf{x}^T Q\mathbf{x} = \mathbf{x}^T U\Lambda U^T \mathbf{x} = \mathbf{y}^T \Lambda \mathbf{y}$
-        ($\mathbf{y} = U^T\mathbf{x}$)
-        $\Rightarrow$ $\sum_i \frac {y_i^2} {\left( \sqrt{\frac 1 {\lambda_i}} \right)^2} = 1$
+    \item $1 = \mathbf{x}^T Q\mathbf{x} = \sum_i \lambda_i y_i^2$ $\Rightarrow$
+        $\sum_i \frac {y_i^2} {\left( \sqrt{\frac 1 {\lambda_i}} \right)^2} = 1$
     \item Axis Lengths: $\frac 2 {\sqrt {\lambda_i}}$ $\Rightarrow$ Eigenvectors with larger eigenvalue: shorter axis length
     \item Axis Directions: Eigenvectors of $Q$
+\end{itemize}
+
+\subsubsection*{Rayleigh Quotient}
+\begin{itemize}
+    \item Definition: $R(Q, \mathbf{x}) = \frac {\mathbf{x}^T Q\mathbf{x}} {\mathbf{x}^T\mathbf{x}}$ for $Q \in \mathbb{S}^n$
+    \item $\mathbf{x}$: unit vector $\Rightarrow$ $R(Q, \mathbf{x}) = \mathbf{x}^TQ\mathbf{x}$
+    \item $Q \succ 0$ $\Rightarrow$ Eigenvector with maximum(minimum) eigenvalue maximizes(minimizes) $R(Q, \mathbf{x})$
+    \item Proof: $\max_{\mathbf{x} \neq \mathbf{0}} \frac {\mathbf{x}^T Q\mathbf{x}} {\mathbf{x}^T\mathbf{x}}
+        = \max_{\mathbf{x} \neq \mathbf{0}} \frac {\sum_i \lambda_i \mathbf{x}_i^2} {\sum_i \mathbf{x}_i^2}
+        \leq \max_{\mathbf{x} \neq \mathbf{0}} \frac {\lambda_{\mathrm{max}}\sum_i \mathbf{x}_i^2} {\sum_i \mathbf{x}_i^2}
+        = \lambda_{\mathrm{max}}$
 \end{itemize}
