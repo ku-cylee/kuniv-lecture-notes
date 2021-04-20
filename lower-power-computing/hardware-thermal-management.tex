@@ -87,3 +87,57 @@
 \end{itemize}
 
 \subsection{(Micro)Architectural Techniques}
+
+\subsubsection*{Dynamic Thermal Managment (DTM)}
+\begin{itemize}
+    \item 온도의 급격한 증가 (thermal excursion)을 monitoring하여 조절
+    \item DVFS, Throttling (clock gating), Cooling solution등을 이용함
+    \item Critical Temperature and Threshold Temperature
+    \begin{itemize}
+        \item $T_{\mathrm{threshold}}$: 넘지 않으면 좋으나 넘어도 큰 문제는 없는 온도. S/W(DVFS)가 manage
+        \item $T_{\mathrm{critical}}$: 넘으면 심각한 문제가 발생할 수 있는 온도. H/W(throttling)가 manage
+        \item $T_{\mathrm{critical}} > T_{\mathrm{threshold}}$
+    \end{itemize}
+    \item 최근 연구 주제: Costly throttling, 성능 저하 최소화
+    \item DVFS나 Throttling을 통한 DTM은 필연적으로 delay 발생 (H/W: \textless 1$\mu$s, S/W: \textasciitilde 10ms)
+    \figcmd{lower-power-computing/images/dtm-by-dvfs.PNG}{.5}
+    \item 주로 frequency를 낮추어 DTM 수행. 100MHz 단위의 조절 가능 (전압은 낮아지는데 시간이 오래걸림)
+\end{itemize}
+
+\subsubsection*{Techniques for Microprocessor Cores/General Applications}
+\begin{itemize}
+    \item Feedback Control (Skadron et al. [2003])
+    \begin{itemize}
+        \item Application behavior을 토대로 전압과 frequency 조절 $\Rightarrow$ 성능 저하 최소화
+        \item 대부분의 DTM techniques에 이용될 수 있음
+    \end{itemize}
+    \item DTM Considering Fan Speed (Shin et al. [2009])
+    \begin{itemize}
+        \item 전력 소모와 온도의 co-optimization이 필요
+        \item 예: 온도를 낮추기 위해 cooling fan speed up
+        \begin{itemize}
+            \item 팬 사용으로 인해 추가 전력 발생
+            \item 팬 사용으로 cool down되어 누설 전력 감소
+        \end{itemize}
+        \item 두 요소 같이 고려해야 함
+    \end{itemize}
+    \item Frequency Selection for Multi-core Microprocessor (Mukherjee and Memik [2006b])
+    \begin{itemize}
+        \item Core가 여러 개인 경우 코어 간에 열이 발산됨
+        \item Core에 최적 frequency 사용, 이웃한 core의 사용을 피함
+    \end{itemize}
+    \item Adapt3D (Coskun et al. [2009]): Chip을 stack한 형태의 multi-core에 위의 technique 적용
+\end{itemize}
+
+\subsubsection*{Techniques for On-chip Caches}
+\begin{itemize}
+    \item Cache는 동적 전력이 낮아 온도가 낮음 / 누설 전력은 계속 증가함 $\Rightarrow$ Chip에서 높은 누설 전력 비중 차지
+    \begin{itemize}
+        \item \texttt{ld}, \texttt{sd}만 cache 사용 (\textless 20\%)
+    \end{itemize}
+    \item 유휴 상태 Power Reduction: Gated $V_{\mathrm{dd}}$, DVFS 등
+    \item 하나의 cache line을 여러 row로 분산 $\Rightarrow$ 전력 밀도 $\downarrow$ (John et al. [2005])
+    \item Selective cache ways + Gated $V_{\mathrm{dd}}$ (Ku et al. [2005])
+    \item 원래 온도가 낮은 영역이기 때문에 비효율적임
+\end{itemize}
+
