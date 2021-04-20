@@ -19,7 +19,7 @@
         \item $\mathrm{\bar{CS}}$: 1 = Chip select / 0 = Chip not select
     \end{itemize}
     \figcmd{lower-power-computing/images/sram-read-and-write.png}{.5}
-    \item Active(Dynamic) Power and Standby(Static) Power Reduction
+    \item Active(Dynamic) Power and Standby(Leakage) Power Reduction
     \begin{itemize}
         \item Active Power 발생 원인: Decoders, Memory 배열, Sense amplifiers, Input/output buffer 등
         \item Standby Power 발생 원인: Data retention에 필요한 전류 (용량에 비례)
@@ -66,4 +66,46 @@
     \end{itemize}
     \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 온도가 증가하면 누설 전력이 급격히 증가
     \item 공정미세화가 진행되면서 누설 전력의 비중이 높아지고 있음
+\end{itemize}
+
+\subsection{DRAM Low-Power Techniques}
+
+\subsubsection*{DRAM (Dynamic RAM)}
+\begin{itemize}
+    \item 고밀도 DRAM은 컴퓨터 등의 main memory로 주로 사용됨
+    \item High/Low-Power DRAM
+    \begin{itemize}
+        \item Low-Power DRAM: Active current가 낮음
+        \begin{itemize}
+            \item Capacitance를 줄이면 unstable, capacity(RAM 용량)를 줄이면 performance issue 발생
+        \end{itemize}
+        \item High-Speed DRAM: 빠른 access time을 위해 data retention current 희생
+    \end{itemize}
+    \item DRAM은 row address와 column address가 나누어져서 들어감
+\end{itemize}
+
+\subsubsection*{Power Reduction Techniques}
+\begin{itemize}
+    \item Active(Dynamic) Power
+    \begin{itemize}
+        \item 발생 원인: Decoders, Memory 배열, Sense amplifiers, Other Circuits
+        \item 해결 방법: 모든 capacitance $\downarrow$, 내부 $V_{\mathrm{dd}}$ $\downarrow$, 주변 회로에 필요한 DC 전력 $\downarrow$
+    \end{itemize}
+    \item Data Retention(Leakage) Power
+    \begin{itemize}
+        \item 발생 원인: Data retention을 위한 refresh operation
+        \item 해결 방법: Refresh period $\uparrow$ (오동작 발생 가능), Refresh 돼야하는 cell의 수 $\downarrow$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Advanced Data Retention Power Reduction Techniques}
+\begin{itemize}
+    \item TCSR (Temperature Compensated Self Refresh)
+    \begin{itemize}
+        \item 주변(ambient) 온도가 refresh rate에 영향: $(\mathrm{Refresh~Rate}) \varpropto \frac 1 {t_{\mathrm{retention}}} \varpropto T_{\mathrm{ambient}}$
+        \item Capacitor가 고온에서 전하를 더 빨리 잃기 때문에 발생함
+        \item 저온에서 refresh rate $\downarrow$ $\Rightarrow$ 전력 소모 $\downarrow$
+    \end{itemize}
+    \item PASR (Partial Array Self Refresh): DRAM의 bank마다 refresh rate를 다르게 설정
+    \item DPD (Deep Power Down): 쓰지 않을때는 storage에 flush한 후 power down $\Rightarrow$ soft switch-off
 \end{itemize}
