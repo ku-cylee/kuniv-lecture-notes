@@ -38,4 +38,52 @@
 
 \subsection{Temperature Monitoring}
 
+\subsubsection*{Importance of Temperature Monitoring}
+\begin{itemize}
+    \item Chip의 온도는 매우 짧은 순간에 변함 $\Rightarrow$ 정확한 온도 monitoring X $\Rightarrow$ chip 손상 가능
+    \item 효과적인 DTM(Dynamic Thermal Management)에 필수적인 요소임
+    \item 대부분 CPU는 적어도 10개의 온도 센서를 가지고 있음 $\Rightarrow$ 센서의 데이터는 OS-level에서 읽을 수 있음
+    \item Cool Down Techniques
+    \begin{itemize}
+        \item Thermal throttling: Operation stop, Clock ``literally'' stops. (HW scheme)
+        \item DVFS: Power decreases (SW scheme)
+    \end{itemize}
+\end{itemize}
+\pagebreak
+
+\subsubsection*{Importance of On-chip Sensor Placement}
+\begin{itemize}
+    \item 열원과 센서간의 거리가 조금만 떨어져도 온도의 측정값은 불확실
+    \item 열이 많이 발생할 것으로 예상되는 곳에 센서를 배치해야 함
+    \item 너무 많은 센서를 배치하면 cost가 증가
+    \begin{itemize}
+        \item 센서의 면적(작음)보다는 analog-digital converter(큼)로 인해 주로 증가
+        \item 최근에는 analog-digial converter를 share하여 사용하기도 함
+    \end{itemize}
+    \item 제한된 개수의 센서를 최적의 위치에 배치하는 것이 주요 과제
+\end{itemize}
+
+\subsubsection*{Techniques of On-chip Sensor Placement}
+\begin{itemize}
+    \item K-means clustering
+    \begin{itemize}
+        \item $k$ sensors (clusters) \& $n$ hotspots (data points) $\Rightarrow$ 각 $k$에 대해 optimal point를 찾아냄
+    \end{itemize}
+    \item Dynamic selection method
+    \begin{itemize}
+        \item Interpolation을 이용하여 열원 위치를 짐작함
+        \item 통신량이 많음 $\Rightarrow$ serious interconnect power overhead
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Temperature Estimation}
+\begin{itemize}
+    \item Predictive (= Proactive): $T_{\mathrm{th}}$에 도달하기 전에 미리 thermal mgmt 수행
+    \item Reactive: $T_{\mathrm{th}}$에 도달하면 thermal mgmt 수행
+    \begin{itemize}
+        \item 전력을 소모하고 온도가 올라갈 때까지 delay가 있음, Late response $\Rightarrow$ 비효율적!
+    \end{itemize}
+    \item Instruction의 operator에 따라 사용하는 CPU가 다름을 이용하여 prediction 수행
+\end{itemize}
+
 \subsection{(Micro)Architectural Techniques}
