@@ -115,7 +115,7 @@
 
 \subsection{Low-Power Memories}
 
-\subsubsection*{Approaches for Low-Power Memories}
+\subsubsection*{Memories and Power Consumption}
 \begin{itemize}
     \item Memory에 적용되는 기술들은 RAM, ROM뿐만 아니라 캐시에도 적용될 수 있음
     \item Types of Memories (빠르고 가격이 비싼 순위)
@@ -169,7 +169,7 @@
     \end{itemize}
     \item Scratch Pad Memory (SPM)
     \begin{itemize}
-        \item SPM: Main memory처럼 동작하나 작은 용량의 SRAM(<1MB)으로 이루어짐
+        \item SPM: Main memory처럼 동작하나 작은 용량의 SRAM({\textless}1MB)으로 이루어짐
         \item Main memory는 cache와 달리 hit/miss가 없음. 주소로 접근하면 100\% 원하는 data를 찾음
         \item 장점: 전력 소모 감소, latency 감소
         \item 단점: High cost
@@ -190,6 +190,69 @@
     \begin{itemize}
         \item Hot Trace: 자주 실행된 trace $\Rightarrow$ Trace cache에 넣어둠
         \item 컴파일러가 branch instruction 뒤에 hot trace에 대한 힌트 삽입
-        \item ISA 표준을 개정해야 함 $\Rightarrow$ Too much overhead $\Rightarrow$ 안 쓰임
+        \item ISA 표준 개정 필요 $\Rightarrow$ Too much overhead $\Rightarrow$ 안 쓰임
     \end{itemize}
+\end{itemize}
+
+\subsection{Low-Power Caches}
+
+\subsubsection*{Caches and Power Consumption}
+\figcmd{lower-power-computing/images/cache-structure.PNG}{.6}
+\begin{itemize}
+    \item Cache의 작동 방식
+    \begin{enumerate}
+        \item Decoder가 cache address의 index 값을 받음 $\Rightarrow$ Word lines 활성화 $\Rightarrow$ Bit lines 뽑음
+        \item Sense Amps: Low power swing을 사용하기 때문에 신호를 다시 증폭시켜야 함
+        \item Comparators: Tag Comparison이 이루어짐 $\Rightarrow$ Hit/miss 판별
+        \item Hit인 경우 데이터 내보냄, miss인 경우 내보내지 않음
+    \end{enumerate}
+    \item 전체 전력 소모의 절반 이상이 cache일 정도로 전력 소모가 큼
+\end{itemize}
+
+\subsubsection*{Dynamically Resizable Instruction (DRI)}
+\begin{itemize}
+    \item Cache의 사이즈를 필요한 만큼만 늘리고 줄여서 사용하는 방식
+    \item $V_{\mathrm{dd}}^2$를 gating하여 cache의 일부분을 활성화/비활성화함
+    \item App의 cache-miss 패턴을 분석하는 H/W profiler를 이용하여 활성화 여부 결정, Miss rate가 일정 threshold 초과하면 활성화
+    \item 장점: 동적 전력 소모 감소. $I_{\mathrm{leak}}$이 감소하여 누설 전력 소모 감소 효과도 있음
+    \item 단점
+    \begin{itemize}
+        \item 비활성화 시 데이터 휘발
+        \item App history 분석, Cache profiling: Overhead 발생
+        \item Reactivate 과정에서 전력 소모/latency 등 발생
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Cache Decay}
+\begin{itemize}
+    \item 각 cache line을 활성화/비활성화하여 사용하는 방식
+    \item 일정 시간동안 no access $\Rightarrow$ Cache line을 sleep mode로 전환(turn off), 재access시 cache line 재활성화
+    \item 장점: 동적 전력과 누설 전력이 모두 감소
+    \item 단점
+    \begin{itemize}
+        \item 비활성화 시 데이터 휘발
+        \item App history 분석, Cache profiling: Overhead 발생
+        \item Decay 과정에서 latency 발생
+        \item Power line마다 gating하는 것은 매우 큰 overhead 유발
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Drowsy Cache}
+\begin{itemize}
+    \item 사용하지 않는 cache를 turn-off(power gating)하지 않고, DVFS를 통해 low power mode로 전환
+    \item DVFS (Dynamic Voltage Frequency Scaling)
+    \begin{itemize}
+        \item $V_\mathrm{dd}^2$, $f$를 감소시켜 전력 소모 감소
+        \item $f$가 증가하면 반드시 $V_\mathrm{dd}^2$가 증가하여야 함. $f$가 감소하면 $V_\mathrm{dd}^2$ 낮출 수 있음
+        \item $P \varpropto V_\mathrm{dd}^2 f \varpropto f^3$이므로 전력 소모가 $f^3$에 비례하여 감소 $\Leftarrow$ No!
+        \item $P_{\mathrm{dyn}} \varpropto f^3$, 그러나 DVFS의 목적은 $P_{\mathrm{leak}}$의 감소
+    \end{itemize}
+    \item Wake penalty: Low power mode $\rightarrow$ Nominal mode로 전환할때 시간이 걸림. 70nm 공정에선 1 cycle
+    \item 단점: $V_{\mathrm{threshold}}$를 줄이면 DVFS를 수행할 공간이 없음, SRAM은 noise에 취약함
+\end{itemize}
+
+\subsubsection*{Dead Block Elimination}
+\begin{itemize}
+    \item App 실행 중 이미 사용이 완료된 block(dead block)을 power-down 해버리는 방식
+    \item Compiler가 dead block hint 등 주어야 함 $\Rightarrow$ ISA 표준 개정 필요 $\Rightarrow$ Too much overhead
 \end{itemize}
