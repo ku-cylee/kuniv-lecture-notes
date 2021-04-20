@@ -240,15 +240,8 @@
 \subsubsection*{Drowsy Cache}
 \begin{itemize}
     \item 사용하지 않는 cache를 turn-off(power gating)하지 않고, DVFS를 통해 low power mode로 전환
-    \item DVFS (Dynamic Voltage Frequency Scaling)
-    \begin{itemize}
-        \item $V_\mathrm{dd}^2$, $f$를 감소시켜 전력 소모 감소
-        \item $f$가 증가하면 반드시 $V_\mathrm{dd}^2$가 증가하여야 함. $f$가 감소하면 $V_\mathrm{dd}^2$ 낮출 수 있음
-        \item $P \varpropto V_\mathrm{dd}^2 f \varpropto f^3$이므로 전력 소모가 $f^3$에 비례하여 감소 $\Leftarrow$ No!
-        \item $P_{\mathrm{dyn}} \varpropto f^3$, 그러나 DVFS의 목적은 $P_{\mathrm{leak}}$의 감소
-    \end{itemize}
     \item Wake penalty: Low power mode $\rightarrow$ Nominal mode로 전환할때 시간이 걸림. 70nm 공정에선 1 cycle
-    \item 단점: $V_{\mathrm{threshold}}$를 줄이면 DVFS를 수행할 공간이 없음, SRAM은 noise에 취약함
+    \item 단점: $V_{\mathrm{th}}$를 줄이면 DVFS를 수행할 공간이 없음, SRAM은 noise에 취약함
 \end{itemize}
 
 \subsubsection*{Dead Block Elimination}
@@ -256,3 +249,143 @@
     \item App 실행 중 이미 사용이 완료된 block(dead block)을 power-down 해버리는 방식
     \item Compiler가 dead block hint 등 주어야 함 $\Rightarrow$ ISA 표준 개정 필요 $\Rightarrow$ Too much overhead
 \end{itemize}
+\pagebreak
+
+\subsection{Adaptive Instruction Queue}
+\begin{itemize}
+    \item Instruction queue가 빠르게 실행되지 않으면 queue size를 줄임
+    \item 여러가지 heuristic algorithm으로 판별함
+\end{itemize}
+
+\subsection{DVFS (Dynamic Voltage Frequency Scaling)}
+
+\subsubsection*{Necessity of Microcontroller}
+\begin{itemize}
+    \item Voltage는 frequency보다 훨씬 느리게 변함
+    \item $f$를 먼저 증가시키면 $V_{\mathrm{dd}}$가 $f$의 증가 속도를 못 따라감
+        $\Rightarrow$ $V_{\mathrm{dd}}-f$ pair 깨짐 $\Rightarrow$ Chip 오동작 가능
+    \item $V_{\mathrm{dd}}$가 증가한 것을 확인한 후 $f$를 올려야 함 $\Rightarrow$ Microcontroller의 task
+\end{itemize}
+
+\subsubsection*{Hardware Scheme and Software Scheme}
+\begin{itemize}
+    \item Hardware Scheme: $\mu$s 단위로 실행, Page보다 작은 단위로 관리
+    \item Software Scheme: ms 단위로 실행, Page 단위로 관리
+\end{itemize}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item Clock frequency를 보장할 수 있을 정도로 $V_\mathrm{dd}^2$를 낮춤 $\Rightarrow$ 전력 소모 감소
+    \item Performance target을 달성할 수 있을 정도로 $f$를 낮춤 $\Rightarrow$ 전력 소모 감소
+\end{itemize}
+
+\subsubsection*{S/W Scheme Based on H/W primitives}
+\begin{itemize}
+    \item H/W: Power mgmt chip 등의 microcontroller로 $V_{\mathrm{dd}}$, $f$ 적용하는 primitive(firmware) 제공
+    \item S/W: Management 담당
+    \begin{itemize}
+        \item Frequency를 제공하는 voltage regulator과 같은 chip은 CPU의 바깥쪽에 존재 $\Rightarrow$ I/O가 수반됨
+        \item Voltage regulator과 같은 chip을 CPU 안으로 가져오면 cost가 매우 커짐 $\Rightarrow$ 손해
+        \item CPU 밖에서 frequency control이 이루어지면 I/O가 수반 $\Rightarrow$ H/W에서 수행하더라도 어차피 느림
+        \item 나중에 기술이 발전하여 CPU 안으로 가져와도 cost가 크게 늘지 않으면 H/W scheme이 될 수 있음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{System Load (CPU utilization)}
+\begin{itemize}
+    \item Heavy Load: High $f$, $V_{\mathrm{dd}}$, $P$, Low memory access
+    \begin{itemize}
+        \item Hard real-time 작업: Strictly 실시간으로 수행되어야 함. 예: 원자력 발전소 등
+    \end{itemize}
+    \item Soft Load: Low $f$, $V_{\mathrm{dd}}$, $P$, High memory access
+    \begin{itemize}
+        \item Soft real-time 작업: 실시간으로 수행되되, 일정 시간 내에만 수행되면 됨. 예: Multimedia apps 등
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Pros and Cons}
+\begin{itemize}
+    \item Pros
+    \begin{itemize}
+        \item $f$가 증가하면 반드시 $V_\mathrm{dd}^2$가 증가하여야 함. $f$가 감소하면 $V_\mathrm{dd}^2$ 낮출 수 있음
+        \item $P \varpropto V_\mathrm{dd}^2 f \varpropto f^3$이므로 전력 소모가 $f^3$에 비례하여 감소? $\Leftarrow$ No
+        \item $P_{\mathrm{dyn}} \varpropto f^3$, 그러나 DVFS의 목적은 $P_{\mathrm{leak}}$의 감소
+    \end{itemize}
+    \item Cons
+    \begin{itemize}
+        \item 한계: 앞으로 수행될 작업을 예측하기 힘듦 (unpredictable)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Microprocessor and Peripheral Power Management}
+
+\subsubsection*{Misconception of DVFS}
+\begin{itemize}
+    \item Deadline안에 전력을 가장 효율적으로 소모하여 작업을 수행하는 방법이 아님!
+    \item 작업 수행 시간이 증가 $\Rightarrow$ 주변(peripheral) 기기는 계속 작동 $\Rightarrow$ 전력 소모 오히려 증가 가능
+    \item 동적 전력은 감소할 수 있으나 누설 전력은 오히려 증가함
+\end{itemize}
+
+\subsubsection*{Making Use of Memory Wall}
+\begin{itemize}
+    \item Memory access는 시간이 긺 $\Rightarrow$ Memory 값이 필요한 Task 3은 늦게 실행됨
+    \item Task 2가 아무리 일찍 끝나도 memory access가 끝나기 전까지는 Task 3 실행 불가 $\Rightarrow$ Stall
+    \item Memory access가 많은 application은 $f$를 낮추어도 performance의 차이가 거의 없음
+    \item CPU utilization 확인 (낮으면 memory access 많음) $\Rightarrow$ DVFS 적극 사용
+\end{itemize}
+\figcmd{lower-power-computing/images/memory-wall.PNG}{.5}
+
+\subsubsection*{DVFS in Multiple Clock Domain Architecture}
+\begin{itemize}
+    \item GALS: Globally Asynchronous, Locally Synchronous
+    \begin{itemize}
+        \item Synchronous Logic: Logic 내의 모든 F/F register가 하나의 clock으로 동작
+        \item Asynchronous Logic: Logic 내의 모든 F/F register가 하나의 clock으로 동작하는 것은 아님
+    \end{itemize}
+    \item 여러 CPU core를 여러 domain으로 나누고, 각 domain이 각기 다른 clock으로 동작함
+    \item 장점: CPU domain간 전력 소모가 다름 $\Rightarrow$ 신호를 더 작은 영역에 생성
+    \item CPU에서는 GALS를 많이 사용
+    \item GPU는 대부분 하나의 task에 대해 전체 core가 같이 돎 $\Rightarrow$ Load가 거의 비슷 $\Rightarrow$ async로 돌 이유가 없음
+\end{itemize}
+
+\subsubsection*{Resource Hibernation}
+\begin{itemize}
+    \item 유휴 상태의 component를 power down하여 전력 소모 감소
+    \item 디스크, 네트워크 interface, 디스플레이 등에서 많이 사용
+\end{itemize}
+\pagebreak
+
+\subsection{Commercial Systems}
+
+\subsubsection*{Energy-Flexibility(Generality) Gap}
+\begin{itemize}
+    \item Power과 performance 간의 tradeoff
+    \item Dedicated H/W: High energy efficiency, Low flexibility
+    \item Embedded Processors: Low energy efficiency, High flexibility
+\end{itemize}
+\figcmd{lower-power-computing/images/energy-flexibity-gap.PNG}{.4}
+
+\subsection{Emerging Technologies}
+
+\subsubsection*{Soft Error}
+\begin{itemize}
+    \item 같은 유형의 에러가 다시 발생하지 않을수도 있는 에러 ($\approx 10^{-7}$)
+    \item $V_{\mathrm{dd}}$ 감소 $\Rightarrow$ Soft error 발생 확률 증가
+    \item $\alpha$ 입자, 중성자 등으로 인해 발생
+    \item 해결 방안
+    \begin{itemize}
+        \item Error checking code: Pairity bit, SEC-DED (Single Error Correction-Double Error Detection)
+        \item Thread duplication $\Rightarrow$ Too much overhead $\Rightarrow$ 군수, 우주, 원자력 등에서만 이용
+        \item Idle Pipeline Utilization $\Rightarrow$ Resource conflict 발생 가능
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Process Variation}
+\begin{itemize}
+    \item 공정 미세화 $\Rightarrow$ Design Margin Decrease $\Rightarrow$ 너무 작아서 미세한 변화(latency 등)도 체감이 큼
+    \item 불랑품 발생 가능성 증가 $\Rightarrow$ 수율 감소
+    \item 목표 $f$가 달성되지 않으면 $V_{\mathrm{dd}}$를 높여서 출하하기도 함
+    \item Within die variation: intra-die variation
+    \item Die-to-die variation: inter-die variation
+\end{itemize}
+\figcmd{lower-power-computing/images/process-variation.PNG}{.4}
