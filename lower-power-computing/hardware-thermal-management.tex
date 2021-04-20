@@ -1,0 +1,41 @@
+\section{Hardware Thermal Management}
+
+\subsection{Introduction}
+
+\subsubsection*{Temperature Issue Arise}
+\begin{itemize}
+    \item 과거에는 성능 향상이 제일 중요한 과제였음
+    \item 복잡한 미세공정, 높은 clock frequency, Chip area의 감소 $\Rightarrow$ Power Density 증가
+    \item Power $\uparrow$ $\Rightarrow$ Power density(전력 밀도) $\uparrow$ $\Rightarrow$ $T$ $\uparrow$ $\Rightarrow$ $P_{\mathrm{leak}}$ $\uparrow$ $\Rightarrow$ Power $\uparrow$: Loop
+    \item Multi-core architecture $\Rightarrow$ Thermal problem이 일시적으로 해소
+\end{itemize}
+
+\subsubsection*{Importance of Temperature Issue}
+\begin{itemize}
+    \item 공정미세화의 진행 $\Rightarrow$ 전력 밀도는 exponentially 상승 중 (원자로 수준에 근접)
+    \item 신뢰도(reliability) 문제 초래: 수명, 영구적 손상 등
+    \item Microprocessor Design Cost
+    \begin{itemize}
+        \item Core의 개수, 복잡도 등은 processor의 온도에 큰 영향을 미침
+        \item 이러한 earliest design stages에서 온도에 관한 고려가 이루어져야 함
+    \end{itemize}
+    \item 온도는 매우 복잡한 과정으로 예측되며, 환경 요인에 영향을 많이 받음 $\Rightarrow$ 예측 어려움
+    \begin{itemize}
+        \item 주변 공기, 주변 chip, thermal grease의 종류 등에 영향 받음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Temperature Management and Power Management}
+\begin{itemize}
+    \item 온도와 전력은 관계가 깊지만 전력의 절약이 항상 온도 감소를 가져오는 것은 아님
+    \begin{itemize}
+        \item 예: Memory Bank 도입하여 전력 소모 감소 $\Rightarrow$ 면적 감소로 전력 밀도 증가 $\Rightarrow$ 온도 증가
+    \end{itemize}
+    \item Power mgmt: 온도가 낮은(= underutilized) 영역에 집중, 변화 속도 빠름
+    \item Temperature mgmt: 온도가 높은(= heavily utilized) 영역에 집중, 변화 속도 느림
+    \item 두 management에 같은 techniques 사용 가능, But policies are different
+\end{itemize}
+
+\subsection{Temperature Monitoring}
+
+\subsection{(Micro)Architectural Techniques}
