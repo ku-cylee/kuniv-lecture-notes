@@ -1,0 +1,60 @@
+\section{Convex Functions}
+
+\subsection{Definition of Convex Function}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item $f~:~\mathbb{R}^n \rightarrow \mathbb{R}$: convex $\Leftrightarrow$
+    $\mathcal{D}(f)$: convex and $\forall \theta \in [0,1],~\forall x_1,~x_2 \in \mathcal{D}(f),$
+    $$ f(\theta x_1 + (1 - \theta) x_2 ) \leq \theta f(x_1) + (1 - \theta)f(x_2) $$
+    \item $f~:~\mathbb{R}^n \rightarrow \mathbb{R}$: strictly convex $\Leftrightarrow$
+    $\mathcal{D}(f)$: convex and $\forall \theta \in [0,1],
+    ~\forall x_1,~x_2 \in \mathcal{D}(f) (x_1 \neq x_2),$
+    $$ f(\theta x_1 + (1 - \theta) x_2 ) < \theta f(x_1) + (1 - \theta)f(x_2) $$
+    \item $f$: concave $\Leftrightarrow$ $-f$: convex
+\end{itemize}
+
+\subsubsection*{Convex/Concave Functions on $\mathbb{R}$}
+\begin{itemize}
+    \item Convex Functions
+    \begin{itemize}
+        \item Affine: $f(x) = ax + b$
+        \item Exponential: $f(x) = e^{ax}$ $(a \in \mathbb{R})$
+        \item Powers: $f(x) = x^\alpha$ $\left(\alpha \in (-\infty,0] \cup [1, \infty),~x \in \mathbb{R}_{++}\right)$)
+        \item Powers of absolute value: $f(x) = |x|^p$ $(p \in [1,\infty))$
+        \item Negative entropy: $f(x) = x \log x$ $(x \in \mathbb{R}_{++})$
+    \end{itemize}
+    \item Concave Functions
+    \begin{itemize}
+        \item Affine: $f(x) = ax + b$
+        \item Powers: $f(x) = x^\alpha$ $\left(\alpha \in [0,1],~x \in \mathbb{R}_{++}\right)$
+        \item Logarithm: $f(x) = \log x$ $(x \in \mathbb{R}_{++})$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Convex Functions on $\mathbb{R}^n$}
+\begin{itemize}
+    \item Affine: $f(\mathbf{x}) = \mathbf{a}^T\mathbf{x} + b$ ($\mathbf{a} \in \mathbb{R}^n$, $b\in\mathbb{R}$)
+    \item $p$-norms: $f(\mathbf{x}) = \left(\sum_i |x_i|^p\right)^{\frac 1 p}$ ($p \geq 1$)
+\end{itemize}
+
+\subsubsection*{Convex Functions on $\mathbb{R}^{m\times n}$}
+\begin{itemize}
+    \item Affine: $f(X) = \mathrm{tr}(A^T X) + b$ ($A \in \mathbb{R}^{m \times n}$, $b \in \mathbb{R}$)
+    \begin{itemize}
+        \item $\mathrm{tr}(A^T B) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} B_{ij}$: Inner product of $A$ and $B$
+    \end{itemize}
+    \item Matrix Norm (Spectral Norm): $f(X) = \Vert X \Vert_2 = \max_{\mathbf{v}} \frac {\Vert X\mathbf{v} \Vert_2} {\Vert \mathbf{v} \Vert_2} = \sigma_{\max}(X)$
+    \begin{itemize}
+        \item Triangluar inequality ($\Vert A+B \Vert = \Vert A \Vert + \Vert B \Vert$) does hold for matrix norm
+        \item $\forall A \in \mathbb{R}^{m\times n}$, $A^T A \succeq 0$ $\Rightarrow$ $\lambda_i \geq 0$ $\Rightarrow$ Singluar values $\sigma_i = \sqrt{\lambda_i}$ can be defined
+        \item Then, singular value decomposition (SVD): $A = U\Sigma V^T$ ($U^TU = V^TV = I$, $\Sigma$: diag mtx with $\sigma_i$)
+        \item Then, $A^T A = \left( U\Sigma V^T \right) \left(V \Sigma^T U^T \right) = U\Sigma \Sigma^T U^T = U \Lambda U^T$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Restriction Line}
+\begin{itemize}
+    \item $f(x)$: convex $\Leftrightarrow$ $\forall$ $a$, $b$ s.t. $a + bt \in \mathcal{D}(f)$, $g:~\mathbb{R} \rightarrow \mathbb{R}$ defined as $g(t) = f(a + bt)$: convex on $t$
+    \item Determining convexity of 1-D function is relatively easier
+\end{itemize}
