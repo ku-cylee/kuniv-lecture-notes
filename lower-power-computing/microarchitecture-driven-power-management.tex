@@ -12,7 +12,7 @@
         \item 사용되는 gate의 수(fan-out), 전선 길이, 트랜지스터 크기 등
         \item 너무 낮으면 0과 1을 구별할 수 없으므로 한계가 있음
     \end{itemize}
-    \item $V_{\mathrm{dd}}^2$: Supply voltage
+    \item $V_{\mathrm{dd}}$: Supply voltage
     \begin{itemize}
         \item 세대가 지나며 많이 낮아지고 있음
         \item 반드시 $V_{\mathrm{th}}$(threshold voltage)보단 높아야 함
@@ -144,14 +144,13 @@
         \item Index로 row 탐색 $\Rightarrow$ Tag로 hit/miss 판단 $\Rightarrow$ Offset으로 data 전달
         \item Bank selection bits 삽입, tag의 bits를 줄임 $\Rightarrow$ Bank selection
     \end{itemize}
+    \figcmd{lower-power-computing/images/banked-cache.PNG}{.5}
     \item Partitoned Power-Aware Instruction Cache
     \begin{itemize}
         \item 사용할 때는 bank를 enable하고 사용하지 않을때는 low power mode(DVFS)로 전환
         \item Prediction을 기반으로 이루어짐
     \end{itemize}
 \end{itemize}
-
-\figcmd{lower-power-computing/images/banked-cache.PNG}{.5}
 \pagebreak
 
 \subsubsection*{Augmenting the Memory Hierachy with Specialized Cache Structure}
@@ -212,7 +211,7 @@
 \subsubsection*{Dynamically Resizable Instruction (DRI)}
 \begin{itemize}
     \item Cache의 사이즈를 필요한 만큼만 늘리고 줄여서 사용하는 방식
-    \item $V_{\mathrm{dd}}^2$를 gating하여 cache의 일부분을 활성화/비활성화함
+    \item $V_{\mathrm{dd}}$를 gating하여 cache의 일부분을 활성화/비활성화함
     \item App의 cache-miss 패턴을 분석하는 H/W profiler를 이용하여 활성화 여부 결정, Miss rate가 일정 threshold 초과하면 활성화
     \item 장점: 동적 전력 소모 감소. $I_{\mathrm{leak}}$이 감소하여 누설 전력 소모 감소 효과도 있음
     \item 단점
@@ -241,7 +240,7 @@
 \begin{itemize}
     \item 사용하지 않는 cache를 turn-off(power gating)하지 않고, DVFS를 통해 low power mode로 전환
     \item Wake penalty: Low power mode $\rightarrow$ Nominal mode로 전환할때 시간이 걸림. 70nm 공정에선 1 cycle
-    \item 단점: $V_{\mathrm{th}}$를 줄이면 DVFS를 수행할 공간이 없음, SRAM은 noise에 취약함
+    \item 단점: DVFS로 $V_{\mathrm{dd}}$가 $V_{\mathrm{th}}$ 근처까지 줄어들면 error가 발생할 수 있음
 \end{itemize}
 
 \subsubsection*{Dead Block Elimination}
@@ -275,7 +274,7 @@
 
 \subsubsection*{Definition}
 \begin{itemize}
-    \item Clock frequency를 보장할 수 있을 정도로 $V_\mathrm{dd}^2$를 낮춤 $\Rightarrow$ 전력 소모 감소
+    \item Clock frequency를 보장할 수 있을 정도로 $V_\mathrm{dd}$를 낮춤 $\Rightarrow$ 전력 소모 감소
     \item Performance target을 달성할 수 있을 정도로 $f$를 낮춤 $\Rightarrow$ 전력 소모 감소
 \end{itemize}
 
@@ -311,11 +310,9 @@
         \item $P \varpropto V_\mathrm{dd}^2 f \varpropto f^3$이므로 전력 소모가 $f^3$에 비례하여 감소? $\Leftarrow$ No
         \item $P_{\mathrm{dyn}} \varpropto f^3$, 그러나 DVFS의 목적은 $P_{\mathrm{leak}}$의 감소
     \end{itemize}
-    \item Cons
-    \begin{itemize}
-        \item 한계: 앞으로 수행될 작업을 예측하기 힘듦 (unpredictable)
-    \end{itemize}
+    \item Cons: 앞으로 수행될 작업을 예측하기 힘듦 (unpredictable)
 \end{itemize}
+\pagebreak
 
 \subsection{Microprocessor and Peripheral Power Management}
 
