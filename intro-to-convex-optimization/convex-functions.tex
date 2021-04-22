@@ -47,7 +47,8 @@
     \item Matrix Norm (Spectral Norm): $f(X) = \Vert X \Vert_2 = \max_{\mathbf{v}} \frac {\Vert X\mathbf{v} \Vert_2} {\Vert \mathbf{v} \Vert_2} = \sigma_{\max}(X)$
     \begin{itemize}
         \item Triangluar inequality ($\Vert A+B \Vert = \Vert A \Vert + \Vert B \Vert$) does hold for matrix norm
-        \item $\forall A \in \mathbb{R}^{m\times n}$, $A^T A \succeq 0$ $\Rightarrow$ $\lambda_i \geq 0$ $\Rightarrow$ Singluar values $\sigma_i = \sqrt{\lambda_i}$ can be defined
+        \item $\forall A \in \mathbb{R}^{m\times n}$, $A^T A \succeq 0$ $\Rightarrow$ $\lambda_i \geq 0$
+            $\Rightarrow$ Singluar values $\sigma_i = \sqrt{\lambda_i}$ can be defined
         \item Then, singular value decomposition (SVD): $A = U\Sigma V^T$ ($U^TU = V^TV = I$, $\Sigma$: diag mtx with $\sigma_i$)
         \item Then, $A^T A = \left( U\Sigma V^T \right) \left(V \Sigma^T U^T \right) = U\Sigma \Sigma^T U^T = U \Lambda U^T$
     \end{itemize}
@@ -55,6 +56,94 @@
 
 \subsubsection*{Restriction Line}
 \begin{itemize}
-    \item $f(x)$: convex $\Leftrightarrow$ $\forall$ $a$, $b$ s.t. $a + bt \in \mathcal{D}(f)$, $g:~\mathbb{R} \rightarrow \mathbb{R}$ defined as $g(t) = f(a + bt)$: convex on $t$
+    \item $f(x)$: convex $\Leftrightarrow$ $\forall$ $a$, $b$ s.t. $a + bt \in \mathcal{D}(f)$,
+        $g:~\mathbb{R} \rightarrow \mathbb{R}$ defined as $g(t) = f(a + bt)$: convex on $t$
     \item Determining convexity of 1-D function is relatively easier
+\end{itemize}
+
+\subsection{Derivatives and Convexity}
+
+\subsubsection*{Gradient}
+\begin{itemize}
+    \item Gradient is a row vector of partial derivatives of function $f: \mathbb{R}^n \rightarrow \mathbb{R}$
+    $$ \nabla f(\mathbf{x}) = \left(\frac {\partial f(\mathbf{x})} {\partial x_1}, \frac {\partial f(\mathbf{x})} {\partial x_2}, \cdots, \frac {\partial f(\mathbf{x})} {\partial x_n} \right) $$
+    \item Taylor expansion: $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^T \Delta \mathbf{x}$
+    \item $f(\mathbf{x}) = \mathbf{c}^T\mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = \mathbf{c}$
+    \item $f(\mathbf{x}) = \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = 2Q\mathbf{x}$
+\end{itemize}
+    
+\subsubsection*{Jacobian}
+\begin{itemize}
+    \item Jacobian is a matrix of partial derivatives of function $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$
+        ($f(\mathbf{x}) = (f_1(\mathbf{x}), f_2(\mathbf{x}), \cdots, f_m(\mathbf{x}))$)
+    $$ J_f = \begin{mtx}{c}
+        \nabla f_1(\mathbf{x})^T \\ \nabla f_2(\mathbf{x})^T \\ \vdots \\ \nabla f_m(\mathbf{x})^T
+    \end{mtx} = \begin{mtx}{cccc}
+        \frac {\partial f_1} {\partial x_1} & \frac {\partial f_1} {\partial x_2} & \cdots & \frac {\partial f_1} {\partial x_n} \\
+        \frac {\partial f_2} {\partial x_1} & \frac {\partial f_2} {\partial x_2} & \cdots & \frac {\partial f_2} {\partial x_n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \frac {\partial f_m} {\partial x_1} & \frac {\partial f_m} {\partial x_2} & \cdots & \frac {\partial f_m} {\partial x_n}
+    \end{mtx},~\left[ J_f \right]_{ij} = \frac {\partial f_i} {\partial x_j} $$
+    \item $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + J_f \Delta \mathbf{x}$
+    \item $f(\mathbf{x}) = A\mathbf{x}$ $\Rightarrow$ $J_f = A$
+\end{itemize}
+
+\subsubsection*{Hessian}
+\begin{itemize}
+    \item Hessian is a second-order derivative, i.e. Jacobian of $\nabla f$
+    $$ \nabla^2 f(\mathbf{x}) = \begin{mtx}{cccc}
+        \frac {\partial^2 f} {\partial x_1^2} & \frac {\partial^2 f} {\partial x_1 \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_1 \partial x_n} \\
+        \frac {\partial^2 f} {\partial x_2 \partial x_1} & \frac {\partial^2 f} {\partial x_2^2} & \cdots & \frac {\partial^2 f} {\partial x_2 \partial x_n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \frac {\partial^2 f} {\partial x_n \partial x_1} & \frac {\partial^2 f} {\partial x_n \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_n^2}
+    \end{mtx},~ \left[ \nabla^2 f \right]_{ij} = \frac {\partial^2 f} {\partial x_i \partial x_j} $$
+    \item Taylor Expansion: $f(\mathbf{x} + \Delta \mathbf{x})
+        \approx f(\mathbf{x}) + f^{\prime}(\mathbf{x})\Delta\mathbf{x} + \frac 1 2 f^{\prime\prime}(\mathbf{x})\Delta\mathbf{x}^2$
+    \item $\nabla f(\mathbf{x} + \Delta \mathbf{x}) \approx \nabla f(\mathbf{x}) + J_{\nabla f}(\mathbf{x}) \Delta \mathbf{x}$
+    \item Hessian is a square, symmetric matrix
+    \item $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla^2 f(\mathbf{x}) = Q$
+\end{itemize}
+
+\subsubsection*{First-order Condition of Convexity}
+\begin{itemize}
+    \item $f$ is differentiable: $\mathcal{D}(f)$: open, $\forall x \in \mathcal{D}(f),~\exists\nabla f(x)$
+    \item $f$: differentiable, $\mathcal{D}(f)$: convex. $f$: convex $\Leftrightarrow$
+    $$ \forall x, y \in \mathcal{D}(f),~f(y) \geq f(x) + \nabla f(x)^T (y-x) $$
+\end{itemize}
+
+\subsubsection*{Second-order Condition of Convexity}
+\begin{itemize}
+    \item $f$ is twice differentiable: $\mathcal{D}(f)$: open, $\forall x \in \mathcal{D}(f),~\exists\nabla^2 f(x)$
+    \item $f$: twice differentiable, $\mathcal{D}(f)$: convex. $f$: convex $\Leftrightarrow$
+    $$ \forall x \in \mathcal{D}(f),~\nabla^2 f(x) \succeq 0 $$
+    \item $f$ is strictly convex if $\nabla^2 f(x) \succ 0$
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Quadratic: $P \in \mathbb{S}^n_{+}$ $\Rightarrow$ 
+        $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^T P\mathbf{x} + \mathbf{q}^T\mathbf{x} + r$: convex ($\nabla^2 f = P$)
+    \item Least-squares Objective: $f(\mathbf{x}) = \Vert A\mathbf{x} - \mathbf{b} \Vert_2^2$: convex ($\nabla^2 f = 2A^T A$)
+    \item Quadratic-over-linear: $y > 0$ $\Rightarrow$ $f(x, y) = \frac {x^2} y$: convex
+\end{itemize}
+
+\subsubsection*{Log-sum-exponential}
+\begin{itemize}
+    \item Definition
+        $$ f(\mathbf{x}) = \log \sum_{k=1}^n \exp x_k $$
+    \item Proof
+    \begin{itemize}
+        \item Let $z_k = \exp x_k$, then
+            $\frac {\partial f(\mathbf{x})} {\partial x_i} = \frac {z_k} {\sum_k z_k}$,
+            $\frac {\partial^2 f(\mathbf{x})} {\partial x_i^2} = \frac {z_i \sum_k z_k - (z_i)^2} {(\sum_k z_k)^2}$,
+            $\frac {\partial^2 f(\mathbf{x})} {\partial x_i \partial x_j} = \frac {z_i z_j} {(\sum_k z_k)^2}$
+        \item $\nabla^2 f(\mathbf{x}) = \frac 1 {\mathbf{1}^T \mathbf{z}} \mathrm{diag}(\mathbf{z}) - \frac 1 {(\mathbf{1}^T \mathbf{z})^2} \mathbf{z}\mathbf{z}^T$
+        \item $\forall \mathbf{v}$, $\mathbf{v}^T \nabla^2 f(\mathbf{x}) \mathbf{v}
+            = \frac {(\sum_k z_k v_k^2)(\sum_k z_k) - (\sum_k v_k z_k)^2} {(\sum_k z_k^2)^2} \geq 0$
+            ($\because$ Cauchy-Schwarz Inequality)
+    \end{itemize}
+    \item Smooth-max function: $x_1 \gg x_2$ $\Rightarrow$ $\log \left( e^{x_1} + e^{x_2} \right) \approx \log e^{x_1} = x_1 = \max(x_1, x_2)$
+    \begin{itemize}
+        \item Converts non-differentiable function $\max(x_1, x_2)$ to differentiable function $\log \left( e^{x_1} + e^{x_2} \right)$
+    \end{itemize}
 \end{itemize}
