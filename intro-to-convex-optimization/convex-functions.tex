@@ -153,15 +153,114 @@
 \subsubsection*{Sublevel Set and Epigraph}
 \begin{itemize}
     \item $\alpha$-sublevel set of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
-        $$ C_{\alpha} = \{ x \in \mathcal{D}(f) | f(x) \leq \alpha \} $$
+        $$ C_{\alpha} = \{ \mathbf{x} \in \mathcal{D}(f) | f(\mathbf{x}) \leq \alpha \} $$
     \item $f$: convex function $\Rightarrow$ $\forall \alpha \in \mathbb{R}$, $C_\alpha$: convex set
     \item Epigraph of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
-        $$ \mathrm{epi}(f) = \{ (x,t) \in \mathbb{R}^{n+1}~|~x \in \mathcal{D}(f),~f(x) \leq t \} $$
+        $$ \mathrm{epi}(f) = \{ (\mathbf{x},t) \in \mathbb{R}^{n+1}~|~\mathbf{x} \in \mathcal{D}(f),~f(\mathbf{x}) \leq t \} $$
     \item $f$: convex function $\Leftrightarrow$ $\mathrm{epi}(f)$: convex set
 \end{itemize}
 
 \subsubsection*{Jenson's Inequality}
 \begin{itemize}
     \item For any random variable $z$, $f$: convex $\Rightarrow$ $f(\mathbb{E}[z]) \leq \mathbb{E}[f(z)]$
-    \item $z = \begin{cases} x_1~~\mathrm{w.p.}~\theta \\ x_2~~\mathrm{w.p.}~(1-\theta) \end{cases}$
+    \item Basic Inequality: $z = \begin{cases} x_1~~\mathrm{w.p.}~\theta \\ x_2~~\mathrm{w.p.}~(1-\theta) \end{cases}$
+\end{itemize}
+
+\subsection{Convexity-preserving Operations}
+
+\subsubsection*{Nonnegative Weighted Sum}
+\begin{itemize}
+    \item $\forall i=1,~2,~\cdots,~n$, $f_i$: convex, $w_i \geq 0$ $\Rightarrow$
+        $f(\mathbf{x}) = \sum_{i=1}^n w_i f_i (\mathbf{x})$: convex
+    \item $w(y) \geq 0$, $w(y) f(\mathbf{x},y)$: convex in $\mathbf{x}$ for fixed $y$ $\Rightarrow$
+        $g(\mathbf{x}) = \int w(y) f(\mathbf{x}, y) dy$: convex
+\end{itemize}
+
+\subsubsection*{Composition with Affine Function}
+\begin{itemize}
+    \item $f$: convex $\Rightarrow$ $f(A\mathbf{x} + \mathbf{b})$: convex
+    \item Log barrier for linear inequalities: 
+        $f(\mathbf{x}) = - \sum_{i=1}^n \log (\mathbf{b}_i - \mathbf{a}_i^T \mathbf{x})$,
+        $\mathcal{D}(f) = \{x~|~\mathbf{a}_i^T \mathbf{x} < \mathbf{b}_i,~i=1,~2,~\cdots,~m\}$
+    \begin{itemize}
+        \item $f$ is the ``interior''(borders excluded) of the polyhedron
+    \end{itemize}
+    \item Norm of affine functions: $f(\mathbf{x}) = \Vert A\mathbf{x} + \mathbf{b} \Vert_p$
+    \item Log determinant: $f(A) = \log \det (A)$: concave ($A \in \mathbb{S}^n_{++}$)
+\end{itemize}
+
+\subsubsection*{Pointwise Supremum}
+\begin{itemize}
+    \item $\forall \mathbf{y} \in A$, $f(\mathbf{x}, \mathbf{y})$: convex for fixed $\mathbf{y}$, $g$: convex
+        $$ g(x) = \sup_{\mathbf{y} \in A} f(\mathbf{x}, \mathbf{y}) \left( = \max_{\mathbf{y}_i \in A}\{ f(\mathbf{x}, \mathbf{y}_i) \} \right) $$
+    \item Note: $f(x, y)$ need NOT to be convex both in $x$ and $y$ (Example: $f(x, y) = x^2 \log(1+y)$)
+    \item Pointwise Maximum Examples
+    \begin{itemize}
+        \item Piecewise-linear Function:
+            $f(\mathbf{x}) = \max_i \left\{ \mathbf{a}_i^T\mathbf{x} + \mathbf{b}_i \right\}$: convex
+        \item Sum of $r$ largest components of $\mathbf{x} \in \mathbb{R}^n$:
+            $f(\mathbf{x}) = \sum_{i=1}^r \mathbf{x}_{[i]}$: convex
+        \begin{itemize}
+            \item $\mathbf{x}_{[i]}$: $i$-th largest component of $\mathbf{x}$
+            \item Proof: $f(\mathbf{x}) = \max\left\{\sum_{j=1}^r x_{i_j}~|~1\leq i_1 < i_2 < \cdots < i_r \leq n\right\}$
+        \end{itemize}
+    \end{itemize}
+    \item Pointwise Supremum Examples
+    \begin{itemize}
+        \item Support function of set $C$: $S_C(\mathbf{x}) = \sup_{\mathbf{y} \in C} \mathbf{y}^T \mathbf{x}$: convex
+        \item Distance to farthest point in a set $C$: $f(\mathbf{x}) = \sup_{\mathbf{y}\in C} \Vert \mathbf{x} - \mathbf{y} \Vert$: convex
+        \item Maximum eigenvalue: $A \in \mathbb{S}^n$, $f$: convex
+            $$ f(A) = \sup_{\mathbf{x} \in \mathbb{R}^n} \frac {\mathbf{x}^T A\mathbf{x}} {\mathbf{x}^T\mathbf{x}} $$
+    \end{itemize}
+\end{itemize}
+\pagebreak
+
+\subsubsection*{Composition}
+\begin{itemize}
+    \item $g:\mathbb{R}^n \rightarrow \mathbb{R}^k$, $h:\mathbb{R}^k \rightarrow \mathbb{R}$, $f(\mathbf{x}) = h(g(\mathbf{x}))$: convex
+    \item Condition: $h$: convex, ($g_i$: convex \& $h$: nondecreasing) or ($g_i$: concave \& $h$: nonincreasing)
+    \item $h$ should be non(inc/dec)reasing for each argument i.e. only in one variable and others fixed
+    \item Composition with Scalar Functions Examples
+    \begin{itemize}
+        \item $g(\mathbf{x})$: convex $\Rightarrow$ $\exp g(\mathbf{x})$: convex
+        \item $g(\mathbf{x})$: concave and positive $\Rightarrow$ $\frac 1 {g(\mathbf{x})}$: convex
+    \end{itemize}
+    \item Vector Composition Examples
+    \begin{itemize}
+        \item $g_i$: concave, positive $\Rightarrow$ $\sum_{i} \log g_i(\mathbf{x})$: concave
+        \item $g_i$: convex $\Rightarrow$ $\log \sum_i \exp g_i(\mathbf{x})$: convex
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Minimization}
+\begin{itemize}
+    \item $f(\mathbf{x}, \mathbf{y})$: convex in $(\mathbf{x}, \mathbf{y})$, $C$: convex set
+        $\Rightarrow$ $g(\mathbf{x}) = \inf_{\mathbf{y} \in C} f(\mathbf{x}, \mathbf{y})$: convex
+    \item Note: Convexity condition on $f$ has been ``strengthened''
+    \item Examples
+    \begin{itemize}
+        \item $C \succ 0$, $Q = \begin{mtx}{cc} A & B \\ B^T & C\end{mtx} \succeq 0$,
+            $\mathbf{z} = \begin{mtx}{c} \mathbf{x} \\ \mathbf{y} \end{mtx}$,
+            $f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^TA\mathbf{x} + 2\mathbf{x}^TB\mathbf{y} + \mathbf{y}^TC\mathbf{y} = Q\mathbf{z}$ $\Rightarrow$ $g$: convex
+            $$ g(\mathbf{x}) = \inf_{\mathbf{y}} f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T (A - BC^{-1}B^T)\mathbf{x} $$
+            \begin{itemize}
+                \item Since $g$: convex, Schur Complement $A - BC^{-1}B^T \succeq 0$
+            \end{itemize}
+        \item Distance to a set: $S$: convex $\Rightarrow$
+            $\mathrm{dist}(\mathbf{x}, S) = \inf_{\mathbf{y} \in S} \Vert \mathbf{x} - \mathbf{y} \Vert$: convex
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Perspective}
+\begin{itemize}
+    \item $f:\mathbb{R}^n \rightarrow \mathbb{R}$, $g:\mathbb{R}^{n+1} \rightarrow \mathbb{R}$,
+        $f$: convex, $t>0$ $\Rightarrow$ $g(\mathbf{x}, t) = t f\left( \frac {\mathbf{x}} t \right)$: convex
+    \item Examples
+    \begin{itemize}
+        \item $f(\mathbf{x}) = \mathbf{x}^T\mathbf{x}$: convex
+            $\Rightarrow$ $g(\mathbf{x}, t) = \frac {\mathbf{x}^T\mathbf{x}} t$: convex
+        \item $g(\mathbf{x}, t) = -t\log {\frac {\mathbf{x}} t} = t\log t - t\log \mathbf{x}$: convex
+        \item $f$: convex $\Rightarrow$
+            $g(\mathbf{x}) = \left(\mathbf{c}^T\mathbf{x} + \mathbf{d}\right) f \left( \frac {A\mathbf{x} + \mathbf{b}} {\mathbf{c}^T\mathbf{x} + d} \right)$: convex
+    \end{itemize}
 \end{itemize}
