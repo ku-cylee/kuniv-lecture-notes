@@ -29,27 +29,23 @@
     \item $A \in \mathbb{R}^{m\times n}$, $\mathcal{R}(A) = \{A\mathbf{x}~|~\mathbf{x}\in\mathbb{R}^n\}$
     \item $A = \begin{mtx}{cccc} \mathbf{a}_1&\mathbf{a}_2&\cdots&\mathbf{a}_n \end{mtx}$,
         then $\mathcal{R} = \mathrm{span}(\mathbf{a}_1,~\mathbf{a}_2,~\cdots,\mathbf{a}_n)$
-\end{itemize}
-
-Interpretation
-\begin{itemize}
-    \item $\mathbf{v} \in \mathcal{R}(A)$, $\mathbf{w} \notin \mathcal{R}(A)$, $\mathbf{y} = A\mathbf{x}$: output of a sensor to input $\mathbf{x}$
+    \item Interpretation
     \begin{itemize}
+        \item $\mathbf{v} \in \mathcal{R}(A)$, $\mathbf{w} \notin \mathcal{R}(A)$, $\mathbf{y} = A\mathbf{x}$: output of a sensor to input $\mathbf{x}$
         \item $\mathbf{y} = \mathbf{v}$: possible/consistent output, $\mathbf{y} = \mathbf{w}$: impossible/inconsistent output
+        \item $\mathcal{R}(A)$: achievable output set
     \end{itemize}
-    \item $\mathcal{R}(A)$: achievable output set
 \end{itemize}
 
 \subsubsection*{Nullspace}
 \begin{itemize}
     \item Nullspace of $A$: $\mathcal{N}(A) = \{\mathbf{x} \in \mathbb{R}^n~|~A\mathbf{x} = \mathbf{0}\}$
     \item Vectors of $\mathcal{N}(A)$ are orthogonal to the rows of $A$
-\end{itemize}
-
-Interpretation
-\begin{itemize}
-    \item $\mathcal{N}(A)$ gives ambiguity of system $A$
-    \item $\forall \mathbf{x} \in \mathbb{R}^n$, $\forall \mathbf{v} \in \mathcal{N}(A)$, $A(\mathbf{x} + \mathbf{v}) = A(\mathbf{x})$
+    \item Interpretation
+    \begin{itemize}
+        \item $\mathcal{N}(A)$ gives ambiguity of system $A$
+        \item $\forall \mathbf{x} \in \mathbb{R}^n$, $\forall \mathbf{v} \in \mathcal{N}(A)$, $A(\mathbf{x} + \mathbf{v}) = A(\mathbf{x})$
+    \end{itemize}    
 \end{itemize}
 
 \subsubsection*{Rank}
@@ -212,7 +208,7 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 \begin{itemize}
     \item $A, B \in \mathbb{S}_{++}^n$
     \begin{itemize}
-        \item $\exists A^{-1}$, $A^{-1} \succ 0$ ($A^{-1} = QD^{-1}Q^T$, Eigenvalues are $\frac 1 {\lambda_i}$)
+        \item $\exists A^{-1}$, $A^{-1} \succ 0$ ($A^{-1} = QD^{-1}Q^T$, Eigenvalues are $\lambda_i^{-1}$)
         \item $A + B \succ 0$
     \end{itemize}
     \item $A \in \mathbb{R}^{m \times n}$
@@ -228,7 +224,7 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 \subsubsection*{Positive Definiteness and Determinants}
 \begin{itemize}
     \item Let $Q = \begin{mtx}{cc}a&b\\b&c\end{mtx}$
-    \item $|Q - \lambda I| = 0$ $\Rightarrow$ $\lambda^2 - (a + c)\lambda + \left( ac - b^2 \right) = 0$
+    \item $|~Q - \lambda I~| = 0$ $\Rightarrow$ $\lambda^2 - (a + c)\lambda + \left( ac - b^2 \right) = 0$
     \item Discriminant: $D = (a - c)^2 + 4b^2 \geq 0$ $\Rightarrow$ All eigenvalues are real numbers
     \item Two positive solutions: $a + c > 0$, $ac - b^2 > 0$ $\Rightarrow$ $a > 0$, $c > 0$, $ac - b^2 > 0$
     \item $Q \in S_{++}^2$ $\Rightarrow$ Diagonal values are positive, $|Q| > 0$

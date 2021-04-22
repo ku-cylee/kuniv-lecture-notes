@@ -3,38 +3,38 @@
 \subsection{Affine Set, Convex Cone and Convex Sets}
 
 \subsubsection*{Definitions}
-Definitions of subspace, affine set, convex cone and convex set.
-$$
-    \forall \theta_i \in \mathbb{R}~\mathrm{s.t. (1)},~
-    \forall x_i \in A,~\sum_i \theta_i x_i \in A~\Leftrightarrow~A: \mathrm{(2)}
-$$
 \begin{itemize}
-    \item Subspace: (No additional condition)
-    \item Affine: $\sum_i \theta_i = 1$
-    \item Convex Cone: $\theta_i \geq 0$
-    \item Convex: $\theta_i \geq 0$, $\sum_i \theta_i = 1$
+    \item Definition:
+    $$ \forall \theta_i \in \mathbb{R}~\mathrm{s.t. (1)},~
+        \forall x_i \in A,~\sum_i \theta_i x_i \in A~\Leftrightarrow~A: \mathrm{(2)} $$
+    \begin{itemize}
+        \item Subspace: (No additional condition)
+        \item Affine: $\sum_i \theta_i = 1$
+        \item Convex Cone: $\theta_i \geq 0$
+        \item Convex: $\theta_i \geq 0$, $\sum_i \theta_i = 1$
+    \end{itemize}
+    \item 주의: 모든 subspace는 affine set이고, 모든 subspace는 convex cone
+    \begin{itemize}
+        \item Subspace는 $\sum_i \theta_i = 1$인 lin. comb.의 결과 포함 \& $\sum_i \theta_i = 2$인 lin. comb.의 결과도 포함
+        \item Affine set은 $\sum_i \theta_i = 1$의 결과만 포함되어있어도 됨
+        \item $\therefore$ Subspace가 더 넓은 범위!
+    \end{itemize}
 \end{itemize}
 
-주의: 모든 subspace는 affine set이고, 모든 subspace는 convex cone이다. Subspace는 $\sum_i \theta_i = 1$인
-linear combination의 결과도 포함되어 있어야 하고, $\sum_i \theta_i = 2$인 linear combination의 결과도 포함되어 있어야 함.
-그러나 affine set은 $\sum_i \theta_i = 1$의 결과만 포함되어있어도 됨 $\rightarrow$ Subspace가 더 넓은 범위!
-
 \subsubsection*{Affine Sets}
-Definition: $A$ is affine set if
-$$
-    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1, \forall x_i \in A,~\sum_i \theta_i x_i \in A
-$$
 \begin{itemize}
+    \item $A$ is affine set if
+        $$ \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1,
+            \forall x_i \in A,~\sum_i \theta_i x_i \in A $$
     \item Linear Equations $S = \{x~|~Ax=b\}$
     \item Half Plane is NOT an affine set
 \end{itemize}
 
 \subsubsection*{Convex Sets}
-Definition $A$ is convex set if
-$$
-    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1, \theta_i \geq 0, \forall x_i \in A,~\sum_i \theta_i x_i \in A
-$$
 \begin{itemize}
+    \item $A$ is convex set if
+        $$ \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\sum_i \theta_i = 1, \theta_i \geq 0,
+            \forall x_i \in A,~\sum_i \theta_i x_i \in A $$    
     \item Discrete Set: Convex if the set has only one point, otherwise not convex
     \item $\{0,1\}$ is not convex, but $[0,1]$ and $(0,1)$ are convex
 \end{itemize}
@@ -48,11 +48,12 @@ $$
 \end{itemize}
 
 \subsubsection*{Convex Cone}
-Definition: $A$ is convex cone if
-$$
-    \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\theta_i \geq 0, \forall x_i \in A,~\sum_i \theta_i x_i \in A
-$$
-Convex cone must include the origin
+\begin{itemize}
+    \item $A$ is convex cone if
+        $$ \forall \theta_i \in \mathbb{R}~\mathrm{s.t.}~\theta_i \geq 0,
+            \forall x_i \in A,~\sum_i \theta_i x_i \in A $$
+    \item Convex cone must include the origin
+\end{itemize}
 
 \subsection{Examples of Affine/Convex Sets}
 
@@ -84,26 +85,25 @@ Convex cone must include the origin
 \end{itemize}
 
 \subsubsection*{Separating and Supporting Hyperplanes}
-
-Separating Hyperplane
 \begin{itemize}
-    \item $C$, $D$ are disjoint convex sets $\Rightarrow$ 
-        $\exists \mathbf{a} \neq \mathbf{0},~\mathbf{b}$ s.t. 
-        $\forall \mathbf{x} \in C,~\mathbf{a}^T\mathbf{x} \preceq \mathbf{b}$,
-        $\forall \mathbf{x} \in D,~\mathbf{a}^T\mathbf{x} \succeq \mathbf{b}$
-    \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{b}\}$ separates $C$ and $D$.
-\end{itemize}
-
-Supporting Hyperplane of set $C$ at boundary point $x_0$
-\begin{itemize}
-    \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{a}^T\mathbf{x_0},~\mathbf{a}\neq\mathbf{0}\}$
+    \item Separating Hyperplane
+    \begin{itemize}
+        \item $C$, $D$ are disjoint convex sets $\Rightarrow$ 
+            $\exists \mathbf{a} \neq \mathbf{0},~\mathbf{b}$ s.t. 
+            $\forall \mathbf{x} \in C,~\mathbf{a}^T\mathbf{x} \preceq \mathbf{b}$,
+            $\forall \mathbf{x} \in D,~\mathbf{a}^T\mathbf{x} \succeq \mathbf{b}$
+        \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{b}\}$ separates $C$ and $D$.
+    \end{itemize}
+    \item Supporting Hyperplane of set $C$ at boundary point $x_0$
+    \begin{itemize}
+        \item $\{\mathbf{x}~|~\mathbf{a}^T\mathbf{x} = \mathbf{a}^T\mathbf{x_0},~\mathbf{a}\neq\mathbf{0}\}$
+    \end{itemize}
 \end{itemize}
 
 \subsection{Convexity-preserving Operations}
-
 \begin{itemize}
     \item Intersection: $C_1$, $C_2$: convex $\Rightarrow$ $C_1 \cap C_2$: convex
-    \item Scaling: $C$: convex $\Rightarrow$ $aC \equiv \{a\mathbf{x}~|~\mathbf{x} \in C\}$: convex
-    \item Translation: $C$: convex $\Rightarrow$ $\mathbf{a} + C \equiv \{\mathbf{a}+\mathbf{x}~|~\mathbf{x}\in C\}$: convex
-    \item Minkowski addition: $C_1$, $C_2$: convex $\Rightarrow$ $C_1 \oplus C_2 \equiv \{\mathbf{x_1}+\mathbf{x_2}~|~\mathbf{x_1}\in C_1,~\mathbf{x_2}\in C_2\}$: convex
+    \item Scaling: $C$: convex $\Rightarrow$ $aC \equiv \{a\mathbf{x}|\mathbf{x} \in C\}$: convex
+    \item Translation: $C$: convex $\Rightarrow$ $\mathbf{a} + C \equiv \{\mathbf{a}+\mathbf{x}|\mathbf{x}\in C\}$: convex
+    \item Minkowski addition: $C_1$, $C_2$: convex $\Rightarrow$ $C_1 \oplus C_2 \equiv \{\mathbf{x_1}+\mathbf{x_2}|\mathbf{x_1}\in C_1,~\mathbf{x_2}\in C_2\}$: convex
 \end{itemize}
