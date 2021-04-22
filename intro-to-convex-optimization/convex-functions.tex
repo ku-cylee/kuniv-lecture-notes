@@ -147,3 +147,21 @@
         \item Converts non-differentiable function $\max(x_1, x_2)$ to differentiable function $\log \left( e^{x_1} + e^{x_2} \right)$
     \end{itemize}
 \end{itemize}
+
+\subsection{Sublevel Set and Jenson's Inequality}
+
+\subsubsection*{Sublevel Set and Epigraph}
+\begin{itemize}
+    \item $\alpha$-sublevel set of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
+        $$ C_{\alpha} = \{ x \in \mathcal{D}(f) | f(x) \leq \alpha \} $$
+    \item $f$: convex function $\Rightarrow$ $\forall \alpha \in \mathbb{R}$, $C_\alpha$: convex set
+    \item Epigraph of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
+        $$ \mathrm{epi}(f) = \{ (x,t) \in \mathbb{R}^{n+1}~|~x \in \mathcal{D}(f),~f(x) \leq t \} $$
+    \item $f$: convex function $\Leftrightarrow$ $\mathrm{epi}(f)$: convex set
+\end{itemize}
+
+\subsubsection*{Jenson's Inequality}
+\begin{itemize}
+    \item For any random variable $z$, $f$: convex $\Rightarrow$ $f(\mathbb{E}[z]) \leq \mathbb{E}[f(z)]$
+    \item $z = \begin{cases} x_1~~\mathrm{w.p.}~\theta \\ x_2~~\mathrm{w.p.}~(1-\theta) \end{cases}$
+\end{itemize}
