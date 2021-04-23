@@ -173,7 +173,7 @@
     \item $\forall i=1,~2,~\cdots,~n$, $f_i$: convex, $w_i \geq 0$ $\Rightarrow$
         $f(\mathbf{x}) = \sum_{i=1}^n w_i f_i (\mathbf{x})$: convex
     \item $w(y) \geq 0$, $w(y) f(\mathbf{x},y)$: convex in $\mathbf{x}$ for fixed $y$ $\Rightarrow$
-        $g(\mathbf{x}) = \int w(y) f(\mathbf{x}, y) dy$: convex
+        $g(\mathbf{x}) = \int w(\mathbf{y}) f(\mathbf{x}, \mathbf{y}) d\mathbf{y}$: convex
 \end{itemize}
 
 \subsubsection*{Composition with Affine Function}
@@ -263,4 +263,46 @@
         \item $f$: convex $\Rightarrow$
             $g(\mathbf{x}) = \left(\mathbf{c}^T\mathbf{x} + \mathbf{d}\right) f \left( \frac {A\mathbf{x} + \mathbf{b}} {\mathbf{c}^T\mathbf{x} + d} \right)$: convex
     \end{itemize}
+\end{itemize}
+
+\subsection{Quasiconvexity and Quasiconcavity}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item $f:\mathbb{R}^n \rightarrow \mathbb{R}$: quasiconvex $\Leftrightarrow$ $\mathcal{D}(f)$: convex,
+        $\forall \alpha \in \mathbb{R}$, $S_{\alpha} = \{x \in \mathcal{D}(f)~|~f(x)\leq\alpha\}$: convex
+    \item $f$: quasiconcave $\Leftrightarrow$ $-f$: quasiconvex
+    \item $f$: quasilinear $\Leftrightarrow$ $f$: quasiconvex, $f$: quasiconcave
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item $\sqrt{|~x~|}$ ($x \in \mathbb{R}$): quasiconvex
+    \item $\mathrm{ceil}(x) = \inf \{z \in \mathbb{Z}~|~z \geq x \}$: quasilinear
+    \item $\log x$ ($x \in \mathbb{R}_{++}$): quasilinear
+    \item $f(x_1, x_2): x_1 x_2$ ($x_1,~x_2 \in \mathbb{R}$): quasiconcave
+    \item Linear-fractional function: $f(\mathbf{x}) = \frac {\mathbf{a}^T\mathbf{x} + b} {\mathbf{c}^T\mathbf{x} + d}$
+        ($\mathcal{D}(f) = \left\{\mathbf{x}~|~\mathbf{c}^T\mathbf{x} + d > 0 \right\}$): quasilinear
+    \item Distance ratio: $f(\mathbf{x}) = \frac {\Vert \mathbf{x} - \mathbf{a} \Vert_2} {\Vert \mathbf{x} - \mathbf{b} \Vert_2}$,
+    ($\mathcal{D}(f) = \left\{\mathbf{x}|\Vert\mathbf{x}-\mathbf{a}\Vert_2 \leq \Vert\mathbf{x}-\mathbf{b}\Vert_2 \right\}$): quasiconvex
+\end{itemize}
+
+\subsubsection*{Properties}
+\begin{itemize}
+    \item Modified Jensen's Inequality: $f$: quasiconvex $\Rightarrow$ $\forall \theta \in [0,1]$,
+        $f(\theta\mathbf{x}_1 + (1 - \theta)\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+    \item First order condition: $f$: differentiable, $\mathcal{D}(f)$: convex. $f$: quasiconvex
+        $\Leftrightarrow$ $\forall f(\mathbf{y}) \leq f(\mathbf{x})$,
+        $\nabla f(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \leq 0 $
+\end{itemize}
+
+\subsubsection*{Quasiconvexity-preserving Operations}
+\begin{itemize}
+    \item Summation does NOT preserve quasiconvexity
+    \item Nonnegative weighted maximum: $\forall \mathbf{y} \in C$, $w(\mathbf{y}) \geq 0$,
+        $g(\mathbf{x}, \mathbf{y})$: quasiconvex in $\mathbf{x}$ $\Leftrightarrow$ $f$: quasiconvex
+        $$ f(\mathbf{x}) = \sup_{\mathbf{y} \in C} w(\mathbf{y})g(\mathbf{x}, \mathbf{y}) $$
+    \item Composition: $g: \mathbb{R}^n \rightarrow \mathbb{R}$: quasiconvex, $h$: nondecreasing $\Rightarrow$ $h \circ g$: quasiconvex
+    \item Minimization: $f(\mathbf{x}, \mathbf{y})$: quasiconvex in  $(\mathbf{x},\mathbf{y})$, $C$: convex
+        $\Rightarrow$ $g(\mathbf{x}) = \inf_{\mathbf{y} \in C} f(\mathbf{x}, \mathbf{y})$: quasiconvex
 \end{itemize}
