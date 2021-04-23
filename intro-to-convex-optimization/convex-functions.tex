@@ -306,3 +306,41 @@
     \item Minimization: $f(\mathbf{x}, \mathbf{y})$: quasiconvex in  $(\mathbf{x},\mathbf{y})$, $C$: convex
         $\Rightarrow$ $g(\mathbf{x}) = \inf_{\mathbf{y} \in C} f(\mathbf{x}, \mathbf{y})$: quasiconvex
 \end{itemize}
+
+\subsection{Log-Convex and Log-Concave}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item $f$: positive function, $\log f$: convex $\Leftrightarrow$ $f$: log-convex
+    \item $f$: positive function, $\log f$: concave $\Leftrightarrow$ $f$: log-concave
+    \item $f$: log-concave $\Rightarrow$ $\forall \theta \in [0,1]$, $\forall \mathbf{x}_1,\mathbf{x}_2 \in \mathcal{D}(f)$,
+        $f(\theta \mathbf{x}_1 + (1 - \theta) \mathbf{x}_2) \geq f(\mathbf{x}_1)^{\theta} f(\mathbf{x}_2)^{1-\theta}$
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Powers: $x^{\alpha}$ ($x \in \mathbb{R}$): log-convex if $\alpha \leq 0$, log-concave if $\alpha \geq 0$
+    \item Normal Distribution Probability Density Function: log-concave
+        $$ f(\mathbf{x}) = \frac 1 {\sqrt{(2\pi)^n \det\Sigma}} e^{-\frac 1 2 \left(\mathbf{x} - \mathbf{\overline{x}}\right)^T \Sigma^{-1} \left(\mathbf{x} - \mathbf{\overline{x}}\right)} $$
+    \item Cumulative Gaussian Distribution: log-concave
+        $$ \Phi(x) = \frac 1 {\sqrt{2\pi}} \int_{-\infty}^x e^{-\frac {u^2} 2} du $$
+\end{itemize}
+
+\subsubsection*{Log-convexity, Convexity and Quasiconvexity}
+\begin{itemize}
+    \item $f$: log-convex $\Rightarrow$ $f$: convex $\Rightarrow$ $f$: quasiconvex
+    \item $f$: concave $\Rightarrow$ $f$: log-concave $\Rightarrow$ $f$: quasiconcave
+    \item Log-convex, log-concave functions can be optimized due to quasiconvexity and quasiconcavity
+\end{itemize}
+
+\subsubsection*{Properties}
+\begin{itemize}
+    \item $\mathcal{D}(f)$: convex, $f$: twice differentiable. $f$: log-concave $\Rightarrow$
+        $\forall \mathbf{x} \in \mathcal{D}(f),~ f(\mathbf{x})\nabla^2f(\mathbf{x}) \preceq \nabla f(\mathbf{x}) \nabla f(\mathbf{x})^T$
+    \item $f_i$: log-concave $\Rightarrow$ $f = \prod_{i} f_i$: log-concave
+    \item Marginalization: $f:\mathbb{R}^n \times \mathbb{R}^m \rightarrow \mathbb{R}$: log-concave $\Rightarrow$
+        $g(\mathbf{x}) = \int f(\mathbf{x}, \mathbf{y}) d\mathbf{y}$: log-concave
+    \item Convolution: $f$, $g$: log-concave $\Rightarrow$ $f \ast g (\mathbf{x}) = \int f(\mathbf{x}-\mathbf{y})g(\mathbf{y})d\mathbf{y}$: log-concave
+    \item $C \subseteq \mathbb{R}^n$: convex, $\mathbf{y}$: random variable with log-concave pdf
+        $\Rightarrow$ $f(\mathbf{x}) = \mathbb{P}(\mathbf{x} + \mathbf{y} \in C)$: log-concave
+\end{itemize}
