@@ -96,3 +96,68 @@ $$ \begin{aligned}
         \item $\left(\nabla f_0\left(\mathbf{x}^{\ast}\right)\right)_i x_i^{\ast} = 0$: Complementary condition
     \end{itemize}
 \end{itemize}
+\pagebreak
+
+\subsection{Equivalent Convex Problems}
+
+\subsubsection*{Removing Equality Constraints}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{x}) \leq 0~~(i \in \mathbb{Z} \cap [1,m])\\
+        &~~A\mathbf{x} = \mathbf{b}
+\end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+    \mathrm{minimize}~~&~~f_0(F\mathbf{z} + \mathbf{x}_0) \\
+    \mathrm{subject~to}~~&~~f_i(F\mathbf{z} + \mathbf{x}_0) \leq 0~~(i \in \mathbb{Z} \cap [1,m]) \\ {}
+\end{aligned} $$
+\begin{itemize}
+    \item Minimize over $\mathbf{z}$, $A\mathbf{x} = \mathbf{b}$ $\Leftrightarrow$ $\mathbf{x} = F\mathbf{z} + \mathbf{x}_0$
+    \item Columns of $F$ span $\mathcal{N}(A)$
+\end{itemize}
+
+\subsubsection*{Introducing Equality Constraints}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f_0(A_0\mathbf{x}_0 + \mathbf{b}_0) \\
+    \mathrm{subject~to}~~&~~f_i(A_i\mathbf{x}_i + \mathbf{b}_i) \leq 0~~(i \in \mathbb{Z} \cap [1,m]) \\ {}
+\end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{y}_0) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{y}_i) \leq 0 \\
+        &~~\mathbf{y}_i = A_i \mathbf{x} + \mathbf{b}_i~~(i \in \mathbb{Z} \cap [0,m])
+\end{aligned} $$
+
+\subsubsection*{Introducing Slack Variables}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x} \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\ {}
+\end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x} + s_i \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\
+        &~~ s_i \geq 0~~(i \in \mathbb{Z} \cap [1,m])
+\end{aligned} $$
+\begin{itemize}
+    \item Minimize over $\mathbf{x}$ and $s_i$
+\end{itemize}
+
+\subsubsection*{Epigraph Form}
+\begin{itemize}
+    \item Any CO is equivalent to
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~t~(t \in \mathbb{R}) \\
+            \mathrm{subject~to}~~&~~f_0(\mathbf{x}) - t \leq 0 \\
+                &~~f_i(\mathbf{x}) \leq 0~~(i \in \mathbb{Z} \cap [1,m]) \\
+                &~~ A\mathbf{x} = \mathbf{b}
+        \end{aligned} $$
+    \item Minimize overe $\mathbf{x}$ and $t$
+    \item This converts all CO having linear objective $(\mathbf{x}, t)$
+\end{itemize}
+
+\subsubsection*{Minimizing Over Some Variables}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}_1, \mathbf{x}_2) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{x}_1) \leq 0~~(i \in \mathbb{Z} \cap [1,m])
+\end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+    \mathrm{minimize}~~&~~\tilde{f}_0(\mathbf{x}_1) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{x}_1) \leq 0~~(i \in \mathbb{Z} \cap [1,m])
+\end{aligned} $$
+\begin{itemize}
+    \item $\tilde{f}_0(\mathbf{x}_1) = \inf_{\mathbf{x}_2} f_0 (\mathbf{x}_1, \mathbf{x}_2)$
+\end{itemize}
