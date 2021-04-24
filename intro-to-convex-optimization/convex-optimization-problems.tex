@@ -161,3 +161,57 @@ $$ \begin{aligned}
 \begin{itemize}
     \item $\tilde{f}_0(\mathbf{x}_1) = \inf_{\mathbf{x}_2} f_0 (\mathbf{x}_1, \mathbf{x}_2)$
 \end{itemize}
+
+\subsection{Linear Program (LP)}
+
+\subsubsection*{Linear Program}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~\mathbf{c}^T \mathbf{x} + d \\
+    \mathrm{subject~to}~~&~~G\mathbf{x} \geq \mathbf{h} \\
+        &~~A\mathbf{x} = \mathbf{b}
+\end{aligned} $$
+\begin{itemize}
+    \item Convex problem with affine objective and constraint functions
+    \item $\mathcal{F}$ is a polyhedron
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Diet problem: Choose quantities $x_1$, $x_2$, $\cdots$, $x_n$ of $n$ foods
+    $$ \begin{aligned}
+        \mathrm{minimize}~~&~~\mathbf{c}^T \mathbf{x} \\
+        \mathrm{subject~to}~~&~~A\mathbf{x} \geq \mathbf{b},~\mathbf{x} \geq 0
+    \end{aligned} $$
+    \begin{itemize}
+        \item One unit of food $j$ costs $c_j$, contains amount of $a_{ij}$ of nutrients
+        \item Healthy diet requires nutrient $i$ in quantity at least $b_i$
+    \end{itemize}
+    \item Piecewise linear minimization
+    $$ \begin{aligned}
+        \mathrm{minimize}~~&~~\max_{i \in \mathbb{Z} \cap [1,m]} \left\{ \mathbf{a}_i^T\mathbf{x} + \mathbf{b}_i \right\} \\ {}
+    \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+        \mathrm{minimize}~~&~~t \\
+        \mathrm{subject~to}~~&~~Ax + B \leq t\mathbf{1}~~(i \in \mathbb{Z} \cap [1,m])
+    \end{aligned} $$
+    \item Chebyshev Center: Center of the largest inscribed ball $\mathcal{B} = \left\{\mathbf{x}_C+\mathbf{u}~|~\Vert\mathbf{u}\Vert_2\leq r \right\}$
+        of a polyhedron $\mathcal{P} = \left\{\mathbf{x}~|~A\mathbf{x}\leq\mathbf{b} \right\}$
+    $$ \begin{aligned}
+        \mathrm{maximize}~~&~~r \\
+        \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x}_C + r\Vert\mathbf{a}_i\Vert_2\leq\mathbf{b}_i~~(i \in \mathbb{Z} \cap [1,m])
+    \end{aligned} $$
+\end{itemize}
+
+\subsubsection*{Linear Fractional Programming}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~\phi(\mathbf{x}) = \frac {\mathbf{c}^T\mathbf{x} + d} {\mathbf{e}^T \mathbf{x} + f} \\
+    \mathrm{subject~to}~~&~~A\mathbf{x} \leq \mathbf{b} \\ {} \\ {}
+\end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+    \mathrm{minimize}~~&~~\mathbf{c}^T\mathbf{y} + d\mathbf{z} \\
+    \mathrm{subject~to}~~&~~A\mathbf{y} - b\mathbf{z} \leq 0 \\
+        &~~\mathbf{e}^T\mathbf{y} + f\mathbf{z} = 1\\
+        &~~\mathbf{z} > 0
+\end{aligned} $$
+\begin{itemize}
+    \item $\mathcal{\phi} = \left\{\mathbf{x}~|~\mathbf{e}^T\mathbf{x} + f > 0 \right\}$
+    \item Take $\mathbf{y} = \frac 1 {\mathbf{e}^T\mathbf{x} + f}\mathbf{x}$, $z = \frac 1 {\mathbf{e}^T\mathbf{x} + f}$
+\end{itemize}
