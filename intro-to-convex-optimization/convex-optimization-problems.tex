@@ -1,12 +1,12 @@
 \section{Convex Optimization Problems}
 
-\subsection{Optimization Problem}
+\subsection{Optimization Problem and Convex Optimization (CO) Problem}
 
 \subsubsection*{Standard Form of Optimization Problem}
 $$ \begin{aligned}
-    \mathrm{minimize}~&~f_0(\mathbf{x}) \\
-    \mathrm{subject~to}~&~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
-        &~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
+        &~~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p
 \end{aligned} $$
 \begin{itemize}
     \item Definitions
@@ -31,10 +31,10 @@ $$ \begin{aligned}
     \item Locally Optimal: $\exists~R > 0$ s.t. $\mathbf{x}^{\ast}$ is optimal for the following problem $\Rightarrow$:
         $\mathbf{x}^{\ast}$: locally optimal
         $$ \begin{aligned}
-            \mathrm{minimize}~&~f_0(\mathbf{x}) \\
-            \mathrm{subject~to}~&~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
-                &~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p \\
-                &~\Vert \mathbf{x} - \mathbf{x}^{\ast} \Vert \leq R
+            \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+            \mathrm{subject~to}~~&~~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
+                &~~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p \\
+                &~~\Vert \mathbf{x} - \mathbf{x}^{\ast} \Vert \leq R
         \end{aligned} $$
     \item $X_{\mathrm{opt}}$: Set of optimal points
     \begin{itemize}
@@ -43,5 +43,56 @@ $$ \begin{aligned}
     \item Optimal value: $p^{\ast} = \inf_{\mathbf{x} \in \mathcal{F}} f_0(\mathbf{x})$
     \begin{itemize}
         \item Optimal value always exist. $-\infty$ is also a possible value
+    \end{itemize}
+\end{itemize}
+\pagebreak
+
+\subsubsection*{Convex Optimization Problem}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~~&~~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
+        &~~\mathbf{a}_i^T \mathbf{x} = b_i,~i=1,2,\cdots,p
+\end{aligned} $$
+\begin{itemize}
+    \item $f_i$: convex
+    \item Equality constraints: affine
+    \item $\mathbf{a}_i^T \mathbf{x} = b_i$ can be simply written in $A\mathbf{x} = \mathbf{b}$
+        where $A \in \mathbb{R}^{p \times n}$, $\mathbf{b} \in \mathbb{R}^p$ when $\mathbf{x} \in \mathbb{R}^{n}$
+\end{itemize}
+
+\subsection{Optimality Conditions in CO}
+
+\subsubsection*{Local and Global Optimizer in CO}
+\textbf{Theorem:} If a point is locally optimal in CO, it is globally optimal as well
+
+\subsubsection*{First-Order Condition}
+\begin{itemize}
+    \item In CO, $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal $\Leftrightarrow$
+        $$ \forall~\mathbf{x} \in \mathcal{F},~\nabla f_0 \left(\mathbf{x}^{\ast}\right)^T \left( \mathbf{x} - \mathbf{x}^{\ast} \right) \geq 0 $$
+    \item Unconstrained CO: $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal
+        $\Leftrightarrow$ $\nabla f_0 \left(\mathbf{x}^{\ast}\right) = \mathbf{0}$
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+            \mathrm{subject~to}~~&~~\mathbf{x} \in \mathbb{R}^n
+        \end{aligned} $$
+    \item Equality Constrained CO
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+            \mathrm{subject~to}~~&~~A\mathbf{x} = \mathbf{b}
+        \end{aligned} $$
+    \begin{itemize}
+        \item $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal $\Leftrightarrow$
+            $\nabla f_0 \left(\mathbf{x}^{\ast}\right) + A^T \nu = 0$
+        \item $\mathbf{x}$: primal variable, $\nu$: dual variable
+    \end{itemize}
+    \item Minimization Over Positive Orthant
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
+            \mathrm{subject~to}~~&~~\mathbf{x} \geq 0
+        \end{aligned} $$
+    \begin{itemize}
+        \item $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal $\Leftrightarrow$ $\mathbf{x}^{\ast} \geq 0$,
+            $\nabla f_0 \left(\mathbf{x}^{\ast}\right) \geq 0$, $\left(\nabla f_0\left(\mathbf{x}^{\ast}\right)\right)_i x_i^{\ast} = 0$
+        \item $\left(\nabla f_0\left(\mathbf{x}^{\ast}\right)\right)_i x_i^{\ast} = 0$: Complementary condition
     \end{itemize}
 \end{itemize}
