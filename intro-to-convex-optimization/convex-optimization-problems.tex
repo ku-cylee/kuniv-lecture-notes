@@ -1,0 +1,47 @@
+\section{Convex Optimization Problems}
+
+\subsection{Optimization Problem}
+
+\subsubsection*{Standard Form of Optimization Problem}
+$$ \begin{aligned}
+    \mathrm{minimize}~&~f_0(\mathbf{x}) \\
+    \mathrm{subject~to}~&~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
+        &~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p
+\end{aligned} $$
+\begin{itemize}
+    \item Definitions
+    \begin{itemize}
+        \item Optimization variable: $\mathbf{x} = (x_1,x_2,\cdots,x_n) \in \mathbb{R}^n$
+        \item Objective function: $f_0(\mathbf{x}): \mathbb{R}^n \rightarrow \mathbb{R}$
+        \item Inequality constraints: $f_i(\mathbf{x}): \mathbb{R}^n \rightarrow \mathbb{R}$, $i=1,2,\cdots,m$
+        \item Eqaulity constraints: $h_i(\mathbf{x}): \mathbb{R}^b \rightarrow \mathbb{R}$, $i=1,2,\cdots,p$
+    \end{itemize}
+    \item Feasibility: $\mathbf{x}$ is called ``feasible'' if both conditions are true:
+    \begin{itemize}
+        \item $x \in \mathcal{D}(f_0) \cap \left\{ \cap_{i=1}^m \mathcal{D}(f_i) \right\} \cap \left\{ \cap_{i=1}^p \mathcal{D}(h_i) \right\}$
+        \item $x \in \left\{ \mathbf{z}~|~f_ii(\mathbf{z}) \leq 0,~i=1,2,\cdots,m,~h_j(\mathbf{z}) = 0,~j=1,2,\cdots,p \right\}$
+    \end{itemize}
+    \item It will be denoted as $\mathbf{x} \in \mathcal{F}$ if $\mathbf{x}$ is feasible (Only in this material)
+\end{itemize}
+
+\subsubsection*{Global Optimality and Local Optimality}
+\begin{itemize}
+    \item (Global) Optimal: $\mathbf{x}^{\ast} \in \mathcal{F}$: feasible, $\forall \mathbf{x} \in \mathcal{F}$,
+        $f_0(\mathbf{x}^{\ast}) \leq f_0(\mathbf{x})$ $\Rightarrow$ $\mathbf{x}^{\ast}$: (global) optimal
+    \item Locally Optimal: $\exists~R > 0$ s.t. $\mathbf{x}^{\ast}$ is optimal for the following problem $\Rightarrow$:
+        $\mathbf{x}^{\ast}$: locally optimal
+        $$ \begin{aligned}
+            \mathrm{minimize}~&~f_0(\mathbf{x}) \\
+            \mathrm{subject~to}~&~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
+                &~h_i(\mathbf{x}) = 0,~i=1,2,\cdots,p \\
+                &~\Vert \mathbf{x} - \mathbf{x}^{\ast} \Vert \leq R
+        \end{aligned} $$
+    \item $X_{\mathrm{opt}}$: Set of optimal points
+    \begin{itemize}
+        \item Example: $f(x) = \sin x$ has infinitely many optimal points
+    \end{itemize}
+    \item Optimal value: $p^{\ast} = \inf_{\mathbf{x} \in \mathcal{F}} f_0(\mathbf{x})$
+    \begin{itemize}
+        \item Optimal value always exist. $-\infty$ is also a possible value
+    \end{itemize}
+\end{itemize}
