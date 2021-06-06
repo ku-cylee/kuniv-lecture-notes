@@ -1,0 +1,23 @@
+\section{Modeling}
+
+\subsection{Polygon Mesh}
+
+\subsubsection*{Polygon Mesh Representation}
+\begin{itemize}
+    \item Implicit Representation (left), Explicit Representation (right)
+    \figcmd{computer-graphics/images/implicit-explicit-representation.PNG}{.8}
+    \item GPU는 polygon mesh 처리에 최적화되어 있으므로 polygon mesh를 사용하는 것이 좋음
+    \item Smooth surface에서 각 polygon mesh의 점을 sample하여 근사하게 표현
+    \item 삼각형이 가장 간단한 다각형이므로 대부분 triangle mesh를 사용
+    \begin{itemize}
+        \item (삼각형의 개수) $\approx$ $2 \times $ (꼭짓점의 개수)
+        \item 단, 사각형을 사용한 quad mesh가 사용될 때도 있음
+    \end{itemize}
+    \item Resolution / Level of Detail (LOD): Polygon mesh에서 꼭짓점의 개수
+    \begin{itemize}
+        \item resolution이 높으면 정확, mesh 처리 시간은 증가, 효율 감소
+        \item 정확도와 효율의 tradeoff임
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Resolution}
