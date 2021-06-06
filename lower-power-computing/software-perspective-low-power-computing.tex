@@ -1,0 +1,26 @@
+\section{Software Perspective Low-power Computing}
+
+\subsection{Introduction}
+
+\subsubsection*{Necessity of SW-Level Management}
+\begin{itemize}
+    \item 모바일 기기 유저의 급격한 증가 (2019년 기준 50.7억명)
+    \item 모바일 기기의 최근 경향
+    \begin{itemize}
+        \item CPU, GPU 등 고성능 프로세서의 도입 $\Rightarrow$ 성능 향상
+        \item 3D 게임, 기계학습 앱 등 연산 집약(computation-intensive) 애플리케이션의 증가
+    \end{itemize}
+    \item 에너지(배터리)의 소모 증가 $\Rightarrow$ 온도 문제로 인한 문제 발생 가능
+    \item 모바일 프로세서에서 에너지/온도 문제 해결 필수
+\end{itemize}
+
+\subsubsection*{Why SW-Level?}
+\begin{itemize}
+    \item 장점
+    \begin{itemize}
+        \item 화면 터치 여부, 영상 길이 등 high-level feature을 얻기 용이
+        \item 하드웨어의 power state 정보에 접근 용이
+        \item HW를 수정하지 않고도 현재 시스템에 적용시키기 용이
+    \end{itemize}
+    \item 단점: 매우 짧은 시간 내에 작동하기 어려움 (ms 단위)
+\end{itemize}
