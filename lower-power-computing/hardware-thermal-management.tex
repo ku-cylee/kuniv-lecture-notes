@@ -151,6 +151,7 @@
     \begin{itemize}
         \item 전통적인 프로세서를 partition하여 만든 여러 cluster로 구성
         \item 중앙화, 포트가 많은 구조 $\Rightarrow$ 포트가 적은 구조가 여러 개 분산된 구조
+        \item 분산된 cluster들은 작기 때문에 더 높은 clock frequency 사용 가능 $\Rightarrow$ 성능 향상
         \item 칩의 동작을 넓게 분산시켜 열이 발산되나, 통신 overhead가 존재
         \item Bank hopping: 여러 bank를 구성하여 동작하지 않는 bank는 sleep $\Rightarrow$ cool down
         \item Trace cache를 이용하여 new trace를 가장 차가운 bank에 assign하도록 mapping 함수를 수정
@@ -161,21 +162,23 @@
 \begin{itemize}
     \item Activity Migration (Heo et al. [2003])
     \begin{itemize}
-        \item Register file, ALU 등 typical hotspot을 복제하여 차가운 쪽 사용
+        \item Register file, ALU 등 통상적으로 뜨거운 functional unit(FU)을 복제 (identical)
         \item 전체 pipeline을 복제하지 않음
+        \item 일정 시간마다 identical unit으로 switch $\Rightarrow$ 다른 unit은 유휴 상태
         \item 최고 온도가 약 12$\cel$ 감소
+        \item 면적 overhead가 발생
     \end{itemize}
     \newpage
     \item Migrating Computation (Skadron et al. [2003])
     \begin{itemize}
-        \item 다른 functional unit을 사용하는 방법
+        \item 다른 FU를 사용하는 방법. Register file만 복사
         \begin{enumerate}
             \item 1차 register file이 DTM 실행 온도 도달
-            \item Instruction issue stall
-            \item Write-back 될 때까지 기다림
+            \item Instruction issue stall $\Rightarrow$ Write-back 될 때까지 기다림
             \item 해당 instruction을 2차 register file 사용하여 실행
+            \item 1차 register file 온도가 낮아지면 1차 register file로 복귀시킴
         \end{enumerate}
-        \item Area overhead와 온도 간의 tradeoff
+        \item Area overhead(Activity migration보다는 낮음)와 온도 간의 tradeoff
     \end{itemize}
 \end{itemize}
 
@@ -185,12 +188,12 @@
     \begin{itemize}
         \item Simple-RAD
         \begin{itemize}
-            \item Hot functional unit의 크기를 늘려 전력 밀도 $\Downarrow$
+            \item Hot FU 크기를 늘려 전력 밀도 $\Downarrow$
             \item Wire 길이가 늘어나므로 latency가 증가한다는 단점
         \end{itemize}
         \item Pipelined-RAD
         \begin{itemize}
-            \item Hot func. unit의 크기를 늘리면서 unit을 pipeline 시킴 $\Rightarrow$ $f$ 감소 방지
+            \item Hot FU의 크기를 늘리면서 unit을 pipeline 시킴 $\Rightarrow$ $f$ 감소하지 않음
             \item 열 제한이 있는 작업 처리량이 41-56\% 증가하였음
             \item ALU, register file등은 아날로그 $\Rightarrow$ noise에 민감
                 $\Rightarrow$ 온도 센서 배치 힘듦, 정확도 낮음 $\Rightarrow$ 잘 사용되지 않음
@@ -210,12 +213,12 @@
             \item 뜨거운 두 chip이 떨어져 있음 $\Rightarrow$ High latency, Low power density
         \end{itemize}
     \end{itemize}
-    \item Hot Floorplan (Sankaranarayanan et al. [2005])
+    \item HotFloorplan (Sankaranarayanan et al. [2005])
     \begin{itemize}
         \item 최고 온도, Chip 면적, Wire delay 등을 고려한 2D floorplanning tool
-        \item minimize $(\mathrm{Obj}) = (A + \lambda W)T$
+        \item min. $(\mathrm{Obj}) = (A + \lambda W)T$
         \begin{itemize}
-            \item A: Chip 면적, T: 최고 온도, W: wire 길이 합계
+            \item A: Chip 면적, T: 최고 온도, W: $\sum$ weighted wire 길이
         \end{itemize}
     \end{itemize}
     \item 3D Floorplanning
@@ -238,8 +241,8 @@
     \item Thermal-aware priority queue design (Kumar et al. [2006])
     \begin{itemize}
         \item Hot task에는 낮은 우선순위, Cool task에는 높은 우선순위 부여
-        \item Task의 온도는 performance counter를 참고하여 추정
-        \item Clock gating을 사용 $\Rightarrow$ Failsafe
+        \item Task의 hot/cool 여부는 performance counter 값을 참고하여 판단
+        \item 모든 task가 hot task일 경우 대응 불가 $\Rightarrow$ Failsafe: Clock gating
     \end{itemize}
     \item Thermal-aware load balancing and task migration (Merkel et al. [2006; 2008])
     \begin{itemize}
@@ -252,18 +255,18 @@
     \end{itemize}
     \item Task sequencing (Yang et al. [2008])
     \begin{itemize}
-        \item Task 간 일시적인 온도 관계를 고려
-        \item Hottest 작업을 먼저 골라 열적 문제가 생기지 않도로 ㄱ함
-        \item Hot task와 cold task 간의 context-switching. Hot-cool task, Cool-hot task
+        \item Thermal behavior의 temporal correlations 고려
+        \item Hot task와 cold task를 실행할 때 hot$\rightarrow$cool 순서가 cool$\rightarrow$hot 순서보다 온도가 덜 오름
+        \item 열적 문제를 야기하지 않는 선에서 hottest task를 먼저 실행
         \item 3.25-4.70\% 정도의 성능 향상
     \end{itemize}
     \item Task scheduling for 3D microprocessors (Zhou et al. [2008])
     \begin{itemize}
-        \item 3D stacking으로 인한 vertical 영향도 고려해야 함
-        \item Super task를 super core에 scheduling함
-        \item Thermal emergency $\Rightarrow$ 같은 super core에서 가장 전력을 많이 소모하는 core를 냉각
+        \item Super core: 2D 위치가 같은, 수직으로 나열된 core의 집합, Super Task: 같이 schedule된 task의 집합
+        \item 3D는 수직 방향으로도 열전도 $\Rightarrow$ 온도가 제일 높은 core와 전력 소모가 제일 높은 core는 다를 수 있음
+        \item 기존 방식은 주로 온도가 제일 높은 core를 냉각, 3D에서는 전력 소모가 제일 높은 core를 냉각
     \end{itemize}
-    \item For embedded processors
+    \item Embedded/Real-time processors
     \begin{itemize}
         \item For embedded: 에너지 reduction이 목표
         \item Real-time: QoS(deadline 내에 task 완료)를 보장하는 것이 목표
@@ -273,31 +276,31 @@
 
 \subsubsection*{Compiler-directed Techniques}
 \begin{itemize}
-    \item 장점: Hardware overhead가 적음
+    \item 장점: H/W support 불필요 $\Rightarrow$ H/W overhead가 적음
     \item 단점: Run-time에 프로그램의 dyanmic behavior을 capture할 수 없음 $\Rightarrow$ 잘 사용되지 않음
-    \item VLIW (Very Long Instruction Word) Proceesor의 compile-time scheduling
+    \item Compile-time에 VLIW(Very Long Instruction Word) 프로세서가 사용됨
     \begin{itemize}
-        \item Instruction bundle 내의 instruction을 arrange
-        \item Instruction bundle의 scheduling
+        \item VLIW에서 프로세서의 therm. behavior는 inst. bundle 내의 inst. 배열, inst. bundle의 scheduling과 관련
     \end{itemize}
     \item Load balancing and IPC tuning by compilers (Mutyam et al. [2006])
     \begin{itemize}
-        \item Load balancing: 동적 전력을 functional unit 간에 가능한 한 균일하게 분산
-        \item IPC tuning
+        \item Load balancing: 동적 전력을 FU 간에 가능한 한 균일하게 분산
+        \item IPC tuning: Loop에서 (ALU 등) 정해진 개수만 활성화되어 있으면 사용하지 않는 FU를 끔
         \begin{itemize}
-            \item Loop에서 정해진 개수만 활성화되어 있을 때 사용되지 않는 functional unit을 끔
-            \item Leakage power를 줄이기 위함
-            \item Active functional unit을 rotation
+            \item 누설 전력 감소
+            \item 동적 전력이 특정 core에만 집중될 수 있음 $\Rightarrow$ Active FU 교대시켜 해결
         \end{itemize}
     \end{itemize}
     \item For superscalar processors (Hsu and Kremer [2003])
     \begin{itemize}
         \item DVFS table을 compiler가 가지고 있음 $\Rightarrow$ DVFS 기반 DTM을 compiler를 이용하여 최적화
+        \item 성능에 예민하지 않은(insensitive) 부분을 찾음 $\Rightarrow$ 해당 부분에서는 성능을 저하시킴
     \end{itemize}
-    \item Many-core NoCs (Network-on-Chips) (Narayanana et al. [2007])
-    \begin{itemize}
+    \item Many-core NoCs (Network-on-Chips) (Narayanan et al. [2007])
+    \begin{enumerate}
+        \item 가능한 thread는 프로세서에 mapping $\Rightarrow$ 전력 밀도 분산
         \item 전력 밀도가 높은 thread를 여러 개의 전력 밀도가 낮은 thread로 나눔
-    \end{itemize}
+    \end{enumerate}
 \end{itemize}
 
 \subsubsection*{Liquid Cooling Techniques}
@@ -305,21 +308,20 @@
     \item Liquid Cooling(수냉)의 필요성
     \begin{itemize}
         \item Air cooling을 이용한 냉각은 비효율적
-        \item 액체는 공기보다 열용량이 큼 => 공기보다 더 효율적인 냉각 가능
+        \item 액체는 공기보다 열용량이 큼 $\Rightarrow$ 공기보다 더 효율적인 냉각 가능
         \item 앞으로의 thermal mgmt를 위한 신흥 기술
         \item Chip의 바깥쪽에서 이루어지는 냉각 기술
     \end{itemize}
     \item Indirect liquid cooling technique (Koo et al. [2005])
     \begin{itemize}
-        \item Die 사이로 구멍을 뚫어 chip을 냉각시킴. 냉각제와 chip이 직접 맞닿지 않음
+        \item Die 사이로 구멍(micro-channel)을 뚫어 chip을 냉각시킴. 냉각제와 chip이 직접 맞닿지 않음
     \end{itemize}
     \item Direct liquid cooling technique (Brunschwiler et al. [2008])
     \begin{itemize}
-        \item Chip과 TSV(Through Silicon Vias) 사이로 절연 냉각제를 흘려보냄. 직접 맞닿고, 방수됨
+        \item 3D 미세프로세서 대상 기술
+        \item 냉각제가 layer 사이로 들어가 절연체를 둘러쌈, chip과 TSV(Through Silicon Vias) 사이로 흐름
+        \item Outlet 수온: Data center $\rightarrow$ Liquid pumping
+        \item Inlet 수온: Liquid pumping $\rightarrow$ Chip
     \end{itemize}
     \item 냉각제를 가져오는 과정에서 전력 소모가 더 심할 수 있음
-    \begin{itemize}
-        \item Data center $\rightarrow$ Liquid pumping: Outlet water temperature
-        \item Liquid pumping $\rightarrow$ Chip: Inlet water temperature
-    \end{itemize}
 \end{itemize}
