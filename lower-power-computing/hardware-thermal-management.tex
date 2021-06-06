@@ -325,3 +325,61 @@
     \end{itemize}
     \item 냉각제를 가져오는 과정에서 전력 소모가 더 심할 수 있음
 \end{itemize}
+
+\subsection{Thermal Reliability and Security}
+
+\subsubsection*{Thermal Reliability and Security}
+\begin{itemize}
+    \item Performance / Power: 프로세서의 \textbf{Efficiency}
+    \item Temperature: 프로세서의 \textbf{Availability}
+    \begin{itemize}
+        \item 프로세서의 수명 단축, 물리적 손상, System crash 등의 malfunction 등
+    \end{itemize}
+    \item Dadvar and Skadron [2005]: Thermal 보안 취약점으로 인해 악성코드 발생 등의 문제 발생 가능성 경고
+\end{itemize}
+
+\subsubsection*{Lifetime Reliability Model (Srinivasan et al. [2004, 05])}
+\begin{itemize}
+    \item MTTF (Mean time to failure): 평균 에러 발생 시간
+    \item $\mathrm{MTTF} \varpropto \exp \frac{1}{T}$: 온도가 증가하면 에러 발생 확률은 급격하게 증가
+    \item 프로세서의 reliability는 실행중인 application과도 관련이 있음
+\end{itemize}
+
+\subsubsection*{Dynamic Reliability Management (DRM) (Srinivasan et al. [2004, 05])}
+\begin{itemize}
+    \item The architectual adaptation technique by target FIT(Failure in time) value
+    \item 신뢰도와 관련된 margin이 존재 $\Rightarrow$ 더 높은 성능으로 실행
+    \item 그렇지 않으면 target reliability design point를 달성하기 위해 성능 저하
+\end{itemize}
+
+\subsubsection*{Aging-aware scheduling technique (Tiwari and Torrellas [2008])}
+\begin{itemize}
+    \item Chip은 누적 사용 시간이 길어질수록 성능이 저하 $\Rightarrow$ Chip의 수명
+    \item 모든 core의 clock $f$는 가장 느린 core에 의해 결정 $\Rightarrow$ Hot task는 빠른 core에, cool task는 느린 core에 할당
+    \item 느린 core의 pipeline slack margin이 빠른 core보다 더 tight함
+    \item 수명 단축 현상을 분산시켜 모든 core가 동일하게 수명이 단축되도록 함
+\end{itemize}
+
+\subsubsection*{Automated stressmark generation (Joshi et al. [2008])}
+\begin{itemize}
+    \item 온도 센서가 적절히 배치되었는지, thermal guard-band가 적절히 설정되었는지 확인하기 위한 방법
+    \item 의도적으로 특정 부분을 집중적으로 뜨겁게 만듦 $\Rightarrow$ 두 FU 사이의 온도차가 매우 크게 만듦
+    \item 온도 센서가 적절히 배치되지 못하면 chip의 burn이 감지되지 못함을 이용하여 확인
+\end{itemize}
+
+\subsubsection*{Power-density induced DOS attack (Hasan et al. [2005])}
+\begin{itemize}
+    \item Malicious thread의 반복적 작업 $\Rightarrow$ 온도 증가 $\Rightarrow$ DTM 발생 $\Rightarrow$ 정당한 thread의 성능 저하를 유발
+    \item 여러 thread를 동시에 실행시키는 SMT processor 등 전형적인 hotspot이 주요 타겟
+    \item Selective sedation: Thread가 전형적인 hotspot에 접근하는 횟수를 세어 malicious 여부 판단
+\end{itemize}
+
+\subsubsection*{Thermal attack in instruction caches (Kong et al.)}
+\begin{itemize}
+    \item 주로 전형적인 hotspot에 대해 thermal attack에 대비 $\Rightarrow$ Instruction cache 등 대비되지 않은 FU 공격
+    \item Attack on L1 instruction cache
+    \begin{itemize}
+        \item L1 cache의 특정 부분만 자주 접근, 다른 FU의 DTM 발생을 억제
+        \item 예: Cache miss, branch misprediction등이 일어나지 않는 무한 loop 실행하는 방법
+    \end{itemize}
+\end{itemize}
