@@ -374,12 +374,27 @@
     \item Selective sedation: Thread가 전형적인 hotspot에 접근하는 횟수를 세어 malicious 여부 판단
 \end{itemize}
 
-\subsubsection*{Thermal attack in instruction caches (Kong et al.)}
+\subsubsection*{Thermal attack in instruction caches (Kong et al.) [2010]}
 \begin{itemize}
     \item 주로 전형적인 hotspot에 대해 thermal attack에 대비 $\Rightarrow$ Instruction cache 등 대비되지 않은 FU 공격
     \item Attack on L1 instruction cache
     \begin{itemize}
         \item L1 cache의 특정 부분만 자주 접근, 다른 FU의 DTM 발생을 억제
         \item 예: Cache miss, branch misprediction등이 일어나지 않는 무한 loop 실행하는 방법
+    \end{itemize}
+\end{itemize}
+
+\subsection{Conclusion}
+\begin{itemize}
+    \item 온도는 chip의 유용성에 큰 관련 $\Rightarrow$ Design 단계에서 기본적으로 고려해야 하는 중요한 요소
+    \item 전력 관리 부품과 열 관리 부품은 거의 유사; 어떤 policy를 사용하는지가 중요함
+    \item 새로운 열 관리 알고리즘, 열 센서에 관한 연구로 충분할 것
+    \item 상업에서는 HW/SW 비용, 열 simul의 정확도 등으로 인해 간단, 직관적인 방법 사용
+    \begin{itemize}
+        \item 그러나 학술적 연구 역시 중요함
+    \end{itemize}
+    \item 대부분 열 관리 연구는 단일 layer에 대해서 이루어지나, 실제로는 여러 layer는 같이 동작하며 상호 영향
+    \begin{itemize}
+        \item 여러 layer에 걸친 failsafe mechanism이 필요
     \end{itemize}
 \end{itemize}
