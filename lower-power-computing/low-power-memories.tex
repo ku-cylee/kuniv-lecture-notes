@@ -18,7 +18,9 @@
         \item $\mathrm{R/\overline{W}}$: 1 = read, not write / 0 = write, not read
         \item $\mathrm{\overline{CS}}$: 1 = Chip not select / 0 = Chip select
     \end{itemize}
-    \figcmd{lower-power-computing/images/sram-read-and-write.png}{.5}
+    \begin{figures}
+        \fig{lower-power-computing/images/sram-read-and-write.png}{.9}
+    \end{figures}
     \item Active(Dynamic) Power and Standby(Leakage) Power Reduction
     \begin{itemize}
         \item Active Power 발생 원인: Decoders, Memory 배열, Sense amplifiers, Input/output buffer 등
@@ -33,7 +35,7 @@
     \item Multi-Stage Row/Column Decoder
     \begin{itemize}
         \item Heirachical Word-Line (HWL)
-        \item 상위 몇개 비트를 먼저 비교 (Predecoding) 
+        \item 상위 몇개 비트를 먼저 비교 (Predecoding)
         \item 상위 비트에 따라 서로 다른 decoder 사용하여 비교 (Final Decoding)
         \item Total capacitance 감소 $\Rightarrow$ 동적 전력 감소
         \item 속도 역시 상승 $\Rightarrow$ 많이 쓰임
@@ -45,7 +47,9 @@
         \item XOR gate 결과: $a_1$, $a_2$, \ldots, $a_{n-1}$: 0, $a_n$에서는 delay로 인해 1이 되는 순간이 있음
         \item $\phi_{\mathrm{AID}}$ 값이 순간적으로 1이 되고, enable signal로 작동하여 동적 전력 소모 감소
     \end{itemize}
-    \figcmd{lower-power-computing/images/atd-circuit.png}{.2}
+    \begin{figures}
+        \fig{lower-power-computing/images/atd-circuit.png}{.6}
+    \end{figures}
 \end{itemize}
 
 \subsubsection*{Standby Power Reduction Techniques}

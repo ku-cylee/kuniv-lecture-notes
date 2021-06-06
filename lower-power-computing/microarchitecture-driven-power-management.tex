@@ -16,7 +16,7 @@
     \begin{itemize}
         \item 세대가 지나며 많이 낮아지고 있음
         \item 반드시 $V_{\mathrm{th}}$(threshold voltage)보단 높아야 함
-    \end{itemize}    
+    \end{itemize}
     \item $f$: Frequency. 낮으면 performance가 떨어지므로 낮추기 어려움. 최근에는 계속 증가
     \item Switching Power, Clock Power 등이 있음
 \end{itemize}
@@ -27,7 +27,9 @@
     \item $P_{\mathrm{leak}} = I_{\mathrm{leak}} \cdot V_{\mathrm{dd}}$
     \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 공정 미세화가 진행되면 누설전력 급증
     \item 공정미세화로 인해 Subthreshold Leakage가 dominant $\Rightarrow$ 대부분 $P_{\mathrm{leak}}$을 줄이는 기술은 여기에 집중
-    \figcmd{lower-power-computing/images/leakage-power-components.PNG}{.5}
+    \begin{figures}
+        \fig{lower-power-computing/images/leakage-power-components.PNG}{.4}
+    \end{figures}
     \item 공정미세화가 진행되면서 누설전력이 급증하는 추세임
     \item Core는 입력이 있을때만 gate가 작동하지만, cache는 입력이 없어도 F/F 등에 데이터 저장 $\Rightarrow$ 누설 발생
 \end{itemize}
@@ -83,7 +85,9 @@
 \end{itemize}
 
 \subsubsection*{Low Swing Buses}
-\figcmd{lower-power-computing/images/low-swing-buses.PNG}{.5}
+\begin{figures}
+    \fig{lower-power-computing/images/low-swing-buses.PNG}{.6}
+\end{figures}
 \begin{itemize}
     \item 버스에서 정보를 전달할 때 더 낮은 전압으로 전달하는 방법
     \item Differential Signaling: 전압이 너무 낮아 detection 힘듦 $\Rightarrow$
@@ -94,7 +98,9 @@
 \end{itemize}
 
 \subsubsection*{Bus Segmentation}
-\figcmd{lower-power-computing/images/bus-segmentation.PNG}{.5}
+\begin{figures}
+    \fig{lower-power-computing/images/bus-segmentation.PNG}{.6}
+\end{figures}
 \begin{itemize}
     \item A $\rightarrow$ C로 보낼 때 A $\rightarrow$ F로 보낼 수 있을 정도의 전압을 걸어야 함 $\Rightarrow$ 전력 낭비
     \item 버스를 여러 segment로 분할, segment 간에는 traffic을 조절하는 link(F/F)로 연결: Register insertion
@@ -105,7 +111,9 @@
 \end{itemize}
 
 \subsubsection*{Network On Chip (NOC)}
-\figcmd{lower-power-computing/images/network-on-chip.PNG}{.5}
+\begin{figures}
+    \fig{lower-power-computing/images/network-on-chip.PNG}{.4}
+\end{figures}
 \begin{itemize}
     \item 각 Processing unit을 simple CPU router에 붙여서 운용
     \item Intel의 high-end server CPU에 사용됨
@@ -144,7 +152,9 @@
         \item Index로 row 탐색 $\Rightarrow$ Tag로 hit/miss 판단 $\Rightarrow$ Offset으로 data 전달
         \item Bank selection bits 삽입, tag의 bits를 줄임 $\Rightarrow$ Bank selection
     \end{itemize}
-    \figcmd{lower-power-computing/images/banked-cache.PNG}{.5}
+    \begin{figures}
+        \fig{lower-power-computing/images/banked-cache.PNG}{.4}
+    \end{figures}
     \item Partitoned Power-Aware Instruction Cache
     \begin{itemize}
         \item 사용할 때는 bank를 enable하고 사용하지 않을때는 low power mode(DVFS)로 전환
@@ -196,7 +206,9 @@
 \subsection{Low-Power Caches}
 
 \subsubsection*{Caches and Power Consumption}
-\figcmd{lower-power-computing/images/cache-structure.PNG}{.6}
+\begin{figures}
+    \fig{lower-power-computing/images/cache-structure.PNG}{.6}
+\end{figures}
 \begin{itemize}
     \item Cache의 작동 방식
     \begin{enumerate}
@@ -330,7 +342,9 @@
     \item Memory access가 많은 application은 $f$를 낮추어도 performance의 차이가 거의 없음
     \item CPU utilization 확인 (낮으면 memory access 많음) $\Rightarrow$ DVFS 적극 사용
 \end{itemize}
-\figcmd{lower-power-computing/images/memory-wall.PNG}{.5}
+\begin{figures}
+    \fig{lower-power-computing/images/memory-wall.PNG}{.55}
+\end{figures}
 
 \subsubsection*{DVFS in Multiple Clock Domain Architecture}
 \begin{itemize}
@@ -360,7 +374,9 @@
     \item Dedicated H/W: High energy efficiency, Low flexibility
     \item Embedded Processors: Low energy efficiency, High flexibility
 \end{itemize}
-\figcmd{lower-power-computing/images/energy-flexibity-gap.PNG}{.4}
+\begin{figures}
+    \fig{lower-power-computing/images/energy-flexibity-gap.PNG}{.5}
+\end{figures}
 
 \subsection{Emerging Technologies}
 
@@ -385,4 +401,6 @@
     \item Within die variation: intra-die variation
     \item Die-to-die variation: inter-die variation
 \end{itemize}
-\figcmd{lower-power-computing/images/process-variation.PNG}{.4}
+\begin{figures}
+    \fig{lower-power-computing/images/process-variation.PNG}{.5}
+\end{figures}

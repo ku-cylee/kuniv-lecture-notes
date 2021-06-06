@@ -71,7 +71,7 @@
     \item $f(\mathbf{x}) = \mathbf{c}^T\mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = \mathbf{c}$
     \item $f(\mathbf{x}) = \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = 2Q\mathbf{x}$
 \end{itemize}
-    
+
 \subsubsection*{Jacobian}
 \begin{itemize}
     \item Jacobian is a matrix of partial derivatives of function $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$
@@ -121,7 +121,7 @@
 
 \subsubsection*{Examples}
 \begin{itemize}
-    \item Quadratic: $P \in \mathbb{S}^n_{+}$ $\Rightarrow$ 
+    \item Quadratic: $P \in \mathbb{S}^n_{+}$ $\Rightarrow$
         $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^T P\mathbf{x} + \mathbf{q}^T\mathbf{x} + r$: convex ($\nabla^2 f = P$)
     \item Least-squares Objective: $f(\mathbf{x}) = \Vert A\mathbf{x} - \mathbf{b} \Vert_2^2$: convex ($\nabla^2 f = 2A^T A$)
     \item Quadratic-over-linear: $y > 0$ $\Rightarrow$ $f(x, y) = \frac {x^2} y$: convex
@@ -177,7 +177,7 @@
 \subsubsection*{Composition with Affine Function}
 \begin{itemize}
     \item $f$: convex $\Rightarrow$ $f(A\mathbf{x} + \mathbf{b})$: convex
-    \item Log barrier for linear inequalities: 
+    \item Log barrier for linear inequalities:
         $f(\mathbf{x}) = - \sum_{i=1}^n \log (\mathbf{b}_i - \mathbf{a}_i^T \mathbf{x})$,
         $\mathcal{D}(f) = \{x~|~\mathbf{a}_i^T \mathbf{x} < \mathbf{b}_i,~i=1,~2,~\cdots,~m\}$
     \begin{itemize}
