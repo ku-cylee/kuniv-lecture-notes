@@ -24,3 +24,155 @@
     \end{itemize}
     \item 단점: 매우 짧은 시간 내에 작동하기 어려움 (ms 단위)
 \end{itemize}
+
+\subsection{Techniques Adjusting Power States of Processing Units}
+
+\subsubsection*{Power Consumption of Processing Units}
+\begin{itemize}
+    \item $P = P_{\mathrm{dyn}} + P_{\mathrm{leak}}$
+    \begin{itemize}
+        \item 동적 전력: $P_{\mathrm{dyn}} \varpropto \alpha CV^2f$
+        \item 누설 전력: $P_{\mathrm{leak}} \varpropto I_{\mathrm{leak}}V$
+    \end{itemize}
+    \item DVFS-based techniques: 동적 전력 소모를 줄임
+    \item DPM(Dynamic Power Management)-based techniques: 누설 전력 소모를 줄임
+    \begin{itemize}
+        \item Chip의 hibernation 등 power를 on/off하는 방식. HW의 power gating과 유사한 방법
+        \item DVFS와 달리 data retention 발생 $\Rightarrow$ Performance overhead, On/off 추가 전력 overhead
+    \end{itemize}
+    \item DVFS, DPM은 core 별로 다르게 작동함. 현재는 SW scheme이나 앞으로는 HW로 옮겨갈 수 있음
+    \item DVFS, DPM은 성능 저하를 초래 $\Rightarrow$ Resource demand 고려하여 적절한 $V$/$f$, active core 수 결정 필요
+\end{itemize}
+
+\subsubsection*{DVFS-based: Linux Governor}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item CPU utilization 샘플
+        \item Governor가 CPU utilization에 따라 $V$, $f$ 결정
+        \item CPU device driver가 $V$, $f$ 조정
+    \end{enumerate}
+    \newpage
+    \item Governors
+    \begin{itemize}
+        \item \textit{ondemand} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{th}}$ $\Rightarrow$ $f$를 최대로 올림 $\Rightarrow$ $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$인 최대 $f$까지 내림
+            \item Task를 갑자기 실행할 때 유리한 policy
+        \end{itemize}
+        \item \textit{conservative} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{up\_th}}$ $\Rightarrow$ $f$를 한 단계 올림
+            \item $\mathrm{util_{CPU}}<\mathrm{util_{down\_th}}$ $\Rightarrow$ $f$를 한 단계 내림
+            \item Power를 중시하는 policy; threshold 값이 따라 중시하는 요소가 달라질 수는 있음
+        \end{itemize}
+        \item \textit{interactive} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{th}}$ $\Rightarrow$ $f$를 최대로 올리고 일정 시간동안 유지 $\Rightarrow$ $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$인 최대 $f$까지 내림
+            \item Performance를 중시하는 policy
+        \end{itemize}
+        \item \textit{powersave} governor: 항상 최저 $f$ 사용; 실험용 policy
+        \item \textit{performance} governor: 항상 최대 $f$ 사용; 실험용 policy
+    \end{itemize}
+    \item Example: \textit{ondemand} governor의 동작
+    \begin{enumerate}
+        \item Pre-defined period($\approx$ 10ms) 동안 $\mathrm{util_{CPU}}$ 샘플
+        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$($\approx$ 70\textasciitilde{}90\%)와 비교
+        \item IF $\mathrm{util_{CPU}}>\mathrm{util_{th}}$: CPU 처리량이 많은 상태이므로 $f_{\mathrm{CPU}}$를 최대로 올림
+        \item IF $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$: 할 일이 적을때 낮추어야 사용자가 덜 불편하므로 $f_{\mathrm{CPU}}$를 한 단계씩 내림
+        \item Highest $f_{\mathrm{CPU}}$ s.t. $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$ 찾을 때까지 반복
+    \end{enumerate}
+    \item CPU utilization만 고려하므로 CPU와 다른 component 간의 상호작용은 고려하지 못함
+\end{itemize}
+
+\subsubsection*{DVFS-based: Other Components}
+\begin{itemize}
+    \item 가장 간단한 방법: 메모리 접근이 pre-defined threshold보다 높으면 $f_{\mathrm{CPU}}$를 줄임
+    \item Memory, storage, network 등의 resource usage와 CPU utilization을 같이 고려하여 $f_{\mathrm{CPU}}$ 결정
+    \begin{itemize}
+        \item 산업에서 사용될 정도로 general한 scheme은 아님
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: Application Characteristics}
+\begin{itemize}
+    \item Application의 특징을 분석하여 app에 따라 policy를 결정하고 적용
+    \begin{itemize}
+        \item Performance-sensitive app: 많은 CPU 자원 필요 $\Rightarrow$ $f_{\mathrm{CPU}}$ $\Uparrow$
+        \item QoS-sensitive app: QoS가 손상되지 않는 선에서 $f_{\mathrm{CPU}}$ $\Downarrow$ (Multimedia app 등)
+    \end{itemize}
+    \item 데스크탑은 프로그램의 종류가 매우 많아 효율적이지 않음 (슈퍼컴퓨터 제외)
+    \item 모바일은 앱의 수가 제한적이므로 효율적임 (플레이스토어 TOP 100 앱 분석 등)
+    \begin{itemize}
+        \item 앱의 성격을 분석하는 방법이 어렵다는 단점. 파일 확장자를 이용한 분석 방법도 제시됨
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: Users}
+\begin{itemize}
+    \item User의 피드백을 기반으로 power management 수행하는 방식들
+    \item In-app 버튼을 통해 유저가 성능 향상/전력 절약을 선택하게 하여 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \begin{itemize}
+        \item 매우 오래된 방법, 유저를 불편하게 하는 방법 $\Rightarrow$ 최근에는 거의 쓰이지 않음
+    \end{itemize}
+    \item Operation mode를 제시하여 선택한 mode에 따라 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \item 화면 터치 등 가시적 변화를 초래하는 user-triggered event의 발생 여부에 따라 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \item 터치, 움직임 센서, 카메라 등을 기계학습 모델 등을 이용해 inference
+    \begin{itemize}
+        \item 기계학습 모델을 통한 inference도 전력을 소모 $\Rightarrow$ 자주 사용하지는 못함
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: GPU}
+\begin{itemize}
+    \item CPU와 유사하게 GPU utilization을 기반으로 policy 결정. CPU와 매우 유사함
+    \item 게임의 FPS 등은 CPU와 GPU를 동시에 monitoring하여 유지시킬 수 있음
+    \begin{itemize}
+        \item $\mathrm{util_{CPU}}$이 높아 FPS가 낮음 $\Rightarrow$ $f_{\mathrm{CPU}}$ $\Uparrow$
+        \item $\mathrm{util_{GPU}}$이 높아 FPS가 낮음 $\Rightarrow$ $f_{\mathrm{GPU}}$ $\Uparrow$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DPM-based Linux Governor}
+\begin{itemize}
+    \item \textit{hotplug} governor: $\mathrm{util_{CPU}}$ 분석 $\Rightarrow$ Active core 수 조정
+    \item \textit{hotplug} governor가 DVFS governor과는 다른 점
+    \begin{itemize}
+        \item Active core 수를 줄였을 때
+        \item 꺼진 core의 누설 전력은 감소함
+        \item 켜진 core의 동적 전력은 증가 $\Rightarrow$ core의 온도 증가 $\Rightarrow$ 누설 전력이 증가
+        \item Core들의 누설 전력 총합이 반드시 감소한다는 보장 없음
+    \end{itemize}
+    \item Multithread 환경에서 \textit{hotplug} governor의 작동 방식
+    \begin{enumerate}
+        \item Pre-defined period 동안 $\mathrm{util_{CPU}}$ 샘플
+        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$와 비교
+        \item IF $\mathrm{util_{CPU}} > \mathrm{util_{up\_th}}$: CPU Turn on
+        \item IF $\mathrm{util_{CPU}} \leq \mathrm{util_{down\_th}}$: CPU Turn off
+        \item Highest \# of active cores s.t. $\mathrm{util_{down\_th}}<\mathrm{util_{CPU}}\leq\mathrm{util_{up\_th}}$ 찾을 때까지 반복 (잦은 on/off 방지)
+    \end{enumerate}
+    \item \textit{hotplug} governor는 DVFS 수행 이후에도 power/thermal 문제가 해결되지 않으면 사용됨
+    \begin{itemize}
+        \item $\Rightarrow$ $\mathrm{util_{CPU} = \frac{busy~time~when~full~performance}{sample~time}}$
+    \end{itemize}
+    \item GPU는 대부분 한번에 task가 몰림 $\Rightarrow$ $\mathrm{util_{GPU}}$이 낮고 workload가 없으면 그냥 꺼버려도 됨
+    \begin{itemize}
+        \item 단순하므로 HW-level에서 수행할 수도 있음. SW-level에서 할 이유가 없음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS- and DPM-based Techniques}
+\begin{itemize}
+    \item CPU utilization History 이용
+    \begin{itemize}
+        \item 이전의 $\mathrm{util_{CPU}}$ history에 근거, 다음 $\mathrm{util_{CPU}}$ 예측
+        \item 다음 $\mathrm{util_{CPU}}$을 기반으로 모든 power state에 대한 동적/누설 전력 예측
+        \item 전력 소모를 최소화하도록 $V$, $f$, active cores 개수 등을 동시에 조정
+    \end{itemize}
+    \item Current CPU utilization과 Power state 이용
+    \begin{itemize}
+        \item 현재 $\mathrm{util_{CPU}}$과 power state 샘플
+        \item 최적 power state를 기계학습 모델을 통해 예측
+    \end{itemize}
+    \item Industry에서는 user-based technique, ML-based technique는 잘 사용되지 않음
+\end{itemize}
