@@ -25,7 +25,7 @@
     \item 단점: 매우 짧은 시간 내에 작동하기 어려움 (ms 단위)
 \end{itemize}
 
-\subsection{Techniques Adjusting Power States of Processing Units}
+\subsection{Power Management Adjusting Power States of Processors}
 
 \subsubsection*{Power Consumption of Processing Units}
 \begin{itemize}
@@ -175,4 +175,53 @@
         \item 최적 power state를 기계학습 모델을 통해 예측
     \end{itemize}
     \item Industry에서는 user-based technique, ML-based technique는 잘 사용되지 않음
+\end{itemize}
+
+\subsubsection*{Task Scheduling-based Techniques}
+\begin{itemize}
+    \item 여러 task를 여러 core에 걸쳐 에너지 효율을 가장 높이도록 잘 분배하여 scheduling하는 방법
+    \item Task scheduling 없이 DVFS만 실행하는 것은 하나의 core만 optimize하는 것
+    \item Task scheduler가 task를 core에 할당하고, DVFS/DPM governor가 $\mathrm{util\_{CPU}}$를 기반으로 power state 조정
+    \item 예시: Assume 3 tasks $T_1$, $T_2$, $T_3$
+    \begin{itemize}
+        \item $T_1$, $T_2$간 상호작용이 많음: $T_1$, $T_2$를 같은 core에 배치, $T_3$는 다른 core에 배치
+        \item User attention level이 $T_1>T_2>T_3$: $T_2$, $T_3$를 같은 core에 배치, $T_1$은 다른 core에 배치
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Task Scheduling Hetero. Multi-core Processors}
+\begin{itemize}
+    \item Heterogeneous Multi-core Processors
+    \begin{itemize}
+        \item Big cores: 높은 성능, 높은 전력 소모
+        \item Small cores: 낮은 성능, 낮은 전력 소모
+        \item 앱을 적절한 type의 core에 배치시키는 것이 중요
+    \end{itemize}
+    \item In-Kernel Switcher
+    \begin{itemize}
+        \item 앱을 small core에 할당 $\Rightarrow$ $\mathrm{util_{CPU}}>\mathrm{util_{th}}$이면 big core로, 아니면 small core로 migrate
+        \item Big core로 migrate할 때는 small core의 full performance에서 $\mathrm{util_{CPU}}$ 측정 및 비교
+        \item BigCore $i$ $\Leftrightarrow$ SmallCore $i$, BigCore $i$ $\nLeftrightarrow$ SmallCore $j$ $(i \neq j)$
+    \end{itemize}
+    \item Global Task Scheduling
+    \begin{itemize}
+        \item 각 앱의 $\mathrm{util_{CPU}}$ 계산 $\Rightarrow$ 각 core의 $\mathrm{util_{CPU}}$에 따라 앱 할당 $\Rightarrow$ Energy optimal하게 app을 migrate
+        \item In-Kernel Switcher과는 달리, BigCore $i$ $\Leftrightarrow$ SmallCore $j$ 가능
+    \end{itemize}
+    \item Considering IPC(Instruction per cycle) and LLC(Last level cache) Miss rate
+    \begin{itemize}
+        \item Low LLC, High IPC $\Leftrightarrow$ Low memory/IO usage $\Leftrightarrow$ Computational intensive app $\Rightarrow$ Big core에 할당
+        \item High LLC, Low IPC $\Leftrightarrow$ High memory/IO usage $\Leftrightarrow$ Memory intensive app $\Rightarrow$ Small core에 할당
+    \end{itemize}
+    \item Energy Aware Scheduling (EAS)
+    \begin{itemize}
+        \item Power과 소요 시간(= performance)를 모두 고려하여 scheduling
+        \item Performance-sensitive/QoS-sensitive 등 app의 특성도 같이 고려
+    \end{itemize}
+    \item Considering App Characteristics
+    \begin{itemize}
+        \item Sub-thread list를 기반으로 app 분류
+        \item Multimedia app은 전용 MPEG decoder 등이 있다면 small core, 영상 FPS 따라 할당
+        \item Web browser은 thread의 성격에 따라 서로 다른 core에 할당
+    \end{itemize}
 \end{itemize}
