@@ -338,3 +338,42 @@
     \item 연산 능력이 더 좋은 chip에게 delegate하고, CPU는 저전력 상태에 머묾
     \item Pipelining 형태의 scheme이 사용됨
 \end{itemize}
+
+\subsection{Considering Interactions with Displays}
+
+\subsubsection*{Why Interactions with Displays}
+\begin{itemize}
+    \item Display는 전력을 많이 소모함 $\Rightarrow$ 반드시 줄여야 함
+    \item 사용자는 display에 매우 예민함 $\Rightarrow$ 연산량이 계속 증가하는 추세
+    \item LED display는 dark mode 등의 사용으로 전력을 save할 수 있음
+\end{itemize}
+
+\subsubsection*{Adjusting Display Refresh Rate}
+\begin{itemize}
+    \item Multimedia Content
+    \begin{enumerate}
+        \item 현재 frame과 다음 frame을 픽셀 단위로 분석함
+        \item Difference > threshold: Rate $\Uparrow$
+        \item Difference $\leq$ threshold: Rate를 $\Downarrow$ $\Rightarrow$ 사용자는 거의 체감 못함
+    \end{enumerate}
+    \item Relying on Scrolling speed: 스크롤 중일때 사용자가 더 sensitive하다는 가정
+    \begin{enumerate}
+        \item 화면의 scrolling speed를 측정
+        \item $s_\mathrm{scroll} > s_\mathrm{th}$: Rate $\Uparrow$
+        \item $s_\mathrm{scroll} \leq s_\mathrm{th}$: Rate $\Downarrow$
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Adjusting Resolution}
+\begin{itemize}
+    \item Distance between display and user: 거리가 멀어지면 사람의 observable pixel이 낮음
+    \begin{itemize}
+        \item $\mathrm{res_{current}} < \mathrm{res_{required}}$: 화질 $\Uparrow$
+        \item $\mathrm{res_{current}}\geq\mathrm{res_{required}}$: 화질 $\Downarrow$
+    \end{itemize}
+    \item Brightness of content
+    \begin{itemize}
+        \item 사용자는 밝은 content를 볼 때 화질에 더 민감함
+        \item 밝은 content는 높은 화질, 어두운 content는 낮은 화질
+    \end{itemize}
+\end{itemize}
