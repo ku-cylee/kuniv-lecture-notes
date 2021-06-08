@@ -8,7 +8,7 @@
     \item 모바일 기기의 최근 경향
     \begin{itemize}
         \item CPU, GPU 등 고성능 프로세서의 도입 $\Rightarrow$ 성능 향상
-        \item 3D 게임, 기계학습 앱 등 연산 집약(computation-intensive) 애플리케이션의 증가
+        \item 3D 게임, 기계학습 앱 등 연산 집약(compute-intensive) 애플리케이션의 증가
     \end{itemize}
     \item 에너지(배터리)의 소모 증가 $\Rightarrow$ 온도 문제로 인한 문제 발생 가능
     \item 모바일 프로세서에서 에너지/온도 문제 해결 필수
@@ -210,7 +210,7 @@
     \end{itemize}
     \item Considering IPC(Instruction per cycle) and LLC(Last level cache) Miss rate
     \begin{itemize}
-        \item Low LLC, High IPC $\Leftrightarrow$ Low memory/IO usage $\Leftrightarrow$ Computational intensive app $\Rightarrow$ Big core에 할당
+        \item Low LLC, High IPC $\Leftrightarrow$ Low memory/IO usage $\Leftrightarrow$ Compute intensive app $\Rightarrow$ Big core에 할당
         \item High LLC, Low IPC $\Leftrightarrow$ High memory/IO usage $\Leftrightarrow$ Memory intensive app $\Rightarrow$ Small core에 할당
     \end{itemize}
     \item Energy Aware Scheduling (EAS)
@@ -292,4 +292,49 @@
     \begin{itemize}
         \item CPU 온도 말고 skin 온도와 display 온도를 읽어들이고, 이후 온도를 예측
     \end{itemize}
+\end{itemize}
+
+\subsection{Exploiting Other Computing Resources}
+
+\subsubsection*{Offloading-based Techniques}
+\begin{itemize}
+    \item Compute-intensive app을 외부 computing 자원이나 다른 내부 computing 자원에서 실행
+    \item Memory-intensive app에 적용하는 것은 부적절함
+    \item Processing unit을 저전력 상태에 더 오래 머물게 할 수 있음
+    \item 프로세서의 전력 소모 절약으로 인한 이득(gain)과 데이터 전송으로 인한 에너지 손해(loss) 잘 고려해야 함
+\end{itemize}
+
+\subsubsection*{Cloud Server}
+\begin{itemize}
+    \item Scheme
+    \begin{itemize}
+        \item 연산의 input 데이터를 클라우드 서버로 전송 (WiFi, LTE 등): \textit{loss}
+        \item 서버에서 연산 수행, processing unit은 저전력 성태 유지: \textit{gain}
+        \item 클라우드 서버로부터 output 데이터 받음 (WiFi, LTE 등): \textit{loss}
+    \end{itemize}
+    \newpage
+    \item Gain/Loss의 예측이 관건
+    \begin{itemize}
+        \item Offline Profiling-based Table: 모든 app을 profiling하는 것은 불가능
+        \item 연산 규모, 전송 데이터 크기 등을 기반으로 선형 회기 기법으로 예측
+        \item 인터넷 신호 세기 역시 영향: 신호 강도가 약하면 input 데이터를 보낼 때 더 많은 에너지를 소모
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Another Mobile Device}
+\begin{itemize}
+    \item 모바일 기기에서 연산을 수행하고, wearable device에서 연산 수행 결과를 받음
+    \item Bluetooth vs. Wi-Fi
+    \begin{itemize}
+        \item Bluetooth: 전력 소모 낮음, 작은 대역폭으로 인해 전송 속도 느림
+        \item Wi-Fi: 전력 소모 높음, 큰 대역폭으로 인해 전송 속도 빠름
+        \item QoS만 만족하면 되는 real-time streaming 등은 bluetooth가 유리, 다운로드 등은 Wi-Fi가 유리
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Other Processing Units}
+\begin{itemize}
+    \item 연산 능력: CPU < GPU < DSP < NPU
+    \item 연산 능력이 더 좋은 chip에게 delegate하고, CPU는 저전력 상태에 머묾
+    \item Pipelining 형태의 scheme이 사용됨
 \end{itemize}
