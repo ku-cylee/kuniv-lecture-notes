@@ -225,3 +225,71 @@
         \item Web browser은 thread의 성격에 따라 서로 다른 core에 할당
     \end{itemize}
 \end{itemize}
+
+\subsection{Thermal Management Adjusting Power States of Processors}
+
+\subsubsection*{Conventional Reactive Technique}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item Pre-defined period 동안 $T_\mathrm{CPU}$ 샘플
+        \item $T_\mathrm{CPU}$을 pre-defined $T_\mathrm{th}$와 비교
+        \item IF $T_\mathrm{CPU} > T_\mathrm{th}$: Throttles $f_\mathrm{CPU}$ (DVFS + Gating)
+        \item IF $T_\mathrm{CPU} \leq T_\mathrm{th}$: Releases $f_\mathrm{CPU}$ throttle
+        \item $T_\mathrm{CPU}$를 $T_\mathrm{th}$ 근처로 유지시키며 반복
+    \end{enumerate}
+    \item $f_\mathrm{CPU}$ 올릴 때는 power mgmt, 내릴 때는 thermal mgmt가 주도권을 가짐
+    \item $f_\mathrm{CPU}$가 지나치게 많이 변동되는 결과 초래
+\end{itemize}
+
+\subsubsection*{Advanced Reactive Techniques}
+\begin{itemize}
+    \item Average frequency
+    \begin{itemize}
+        \item $P_\mathrm{dyn}\varpropto V^2f$, Jensen 부등식: $f_1^3 + f_2^3 \geq \left(\frac{f_1+f_2}{2}\right)^3$
+        \item 평균 $f$의 전력 소모량은 두 $f$의 평균 전력 소모량보다 항상 작거나 같음
+        \item 초창기 proactive techniques
+    \end{itemize}
+    \newpage
+    \item Heterogeneous multi-core 프로세서 사용
+    \begin{itemize}
+        \item $T_\mathrm{CPU} > T_\mathrm{th}$ $\Rightarrow$ 모든 app small core로 migrate $\Rightarrow$ Big core cool down $\Rightarrow$ 모든 app big core로 migrate
+        \item Big core의 온도는 DVFS를 사용하는 경우보다 훨씬 빠르게 내려감
+        \item Task scheduling-based reactive technique
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Intelligent Power Allocation (IPA)}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item 주기적으로 $T_\mathrm{CPU}$를 샘플링
+        \item $T_\mathrm{CPU} > T_\mathrm{ctrl}$ $\Rightarrow$ 다음 $T_\mathrm{CPUpred}$ 예측 시작
+        \item $T_\mathrm{CPUpred}\leq T_\mathrm{th}$일때까지 $f_\mathrm{CPU}$ 낮춤
+        \item $T_\mathrm{CPU}$를 $T_\mathrm{th}$ 아래로 유지시키면서 반복
+    \end{enumerate}
+    \item Critical Issue: Prediction이 매우 까다로움
+    \begin{itemize}
+        \item Ambient 온도: 급격하게 변하지는 않으나 정확한 측정이 힘듦
+        \item 누설 전력과 그로 인한 악순환까지 고려한 예측이 힘듦
+        \item Secondary heat path: 상대적으로 뜨거운 chip으로부터 열이 board의 line을 타고 전도
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Other Proactive Techniques}
+\begin{itemize}
+    \item Reinforcement Learning-based Technique
+    \begin{itemize}
+        \item CPU 온도와 power state를 읽고, score이 제일 높은 $f$를 선택하여 power state 조정
+        \item 성능과 온도를 측정하여 score를 갱신
+    \end{itemize}
+    \item Considering Heat conduction from Battery
+    \begin{itemize}
+        \item 배터리는 secondary heat path, ambient 온도 등으로 chip의 온도에 영향을 줌
+        \item 기존의 proactive technique에서 배터리 온도도 고려함
+    \end{itemize}
+    \item Considering Skin Temperature
+    \begin{itemize}
+        \item CPU 온도 말고 skin 온도와 display 온도를 읽어들이고, 이후 온도를 예측
+    \end{itemize}
+\end{itemize}
