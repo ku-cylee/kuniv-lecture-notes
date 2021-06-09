@@ -1,0 +1,159 @@
+\section{Lower Power Research Papers}
+
+\subsection{Mobile AP Thermal Modeling}
+
+\subsubsection*{Thermal Issues in Mobile AP}
+\begin{itemize}
+    \item 온도 문제는 시간이 흐르면서 더욱 심각해지고 있음
+    \item Cooling System (Heat sink, 쿨링 팬, 수냉 등): 공간 부족으로 인해 부적합
+    \item DVFS 등의 DTM: 성능 저하 초래 문제
+    \item 온도 문제는 early-design stage부터 고려되어야 함
+    \begin{itemize}
+        \item Proper thermal model이 반드시 필요함
+        \item Chip의 design 정보와 power trace에 근거하여 모델링하였음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Thermal Modeling Methodology}
+\begin{itemize}
+    \item Target Mobile AP
+    \begin{itemize}
+        \item POP(Package-on-Package)-type mobile AP
+        \item Processor die: 4개의 big core + 4개의 small core, TSMC 22nm 공정
+    \end{itemize}
+    \item 프로세서를 덮고 있는 메모리는 차가움
+    \begin{itemize}
+        \item 메모리와 package를 떼어내고 투명한 crystal package를 씌운 뒤 IR 카메라로 온도 측정하여 모델 구성
+        \item 원본 chip을 이용하여 validation 수행
+    \end{itemize}
+    \item Processor가 더 뜨거운데 아래에 위치하는 이유
+    \begin{itemize}
+        \item 위쪽에 있으면 power 공급이 불안정함 (프로세서에는 치명적)
+        \item DRAM도 온도가 증가하면 refresh rate가 증가함
+        \item 정해진 위치는 없으며, 위에 배치하기도 함
+    \end{itemize}
+    \item Model Design Tool: HotSpot (University of Virginia)
+    \item 제조사로부터 제공된 floorplan, material properties를 이용, 측정한 subsystem별 power trace를 이용
+\end{itemize}
+\begin{figures}
+    \fig{lower-power-computing/images/pop-type-mobile-ap.png}{.8}
+\end{figures}
+
+\subsubsection*{Thermal Modeling Results}
+\begin{itemize}
+    \item Big CPU, Little CPU, MEMC0 등에서는 MAE $\approx$ 2.34 - 3.51$\cel$로 거의 정확
+    \item GPU, CCI 등에서는 MAE $\approx$ 4.55 - 6.05$\cel$로 다소 부정확
+    \begin{itemize}
+        \item 크기가 큰 subsystem은 부분별로 온도가 다를 수 있음 $\Rightarrow$ subsystem별로 하나의 온도만 측정되어 부정확
+        \item Big, thermally critical subsystem을 여러 sublock으로 나누고, 각 core의 $\mathrm{util_{CPU}}$를 통해 소모 전력 예측
+        \item Selective fine-grained modeling
+    \end{itemize}
+    \item GPU, CCI의 MAE $\approx$ 2.08 - 2.56$\cel$로 다소 정확해짐
+\end{itemize}
+
+\subsubsection*{Validation}
+\begin{itemize}
+    \item Real mobile application을 통한 검증
+    \begin{itemize}
+        \item Adobe reader, File compressor, MX Player 등
+        \item 평균 MAE $\approx$ 1.58$\cel$: 정확
+    \end{itemize}
+    \item Thermal sensor를 통한 검증
+    \begin{itemize}
+        \item Modeling 과정과는 달리 package와 메모리를 얹은 채로 진행
+        \item 제조사 제공 floorplan을 통해 열 센서의 위치를 알고있는 상태에서 측정
+        \item 평균 MAE $\approx$ 1.75$\cel$: 정확
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Summary}
+\begin{itemize}
+    \item Mobile AP의 온도 map을 관찰한 첫 연구
+    \item 제시된 model이 온도를 정확하게 예측함
+\end{itemize}
+
+\subsection{M-DTM: Migration-based Dynamic Themral Management}
+
+\subsubsection*{Issues of Conventional DTM}
+\begin{itemize}
+    \item Small core를 사용하지 않음
+    \begin{itemize}
+        \item Thermal emergency를 빠르게 해결하지 못함
+        \item 앱이 big core의 가장 높은 $f$로 충분히 돌 시간이 없음
+    \end{itemize}
+    \item Small core를 사용하여 big core를 냉각시키는 아이디어
+\end{itemize}
+
+\subsubsection*{Proposed Scheme}
+\begin{itemize}
+    \item $T_\mathrm{big}>T_\mathrm{th}$: Task scheduler가 모든 app을 small core로 migrate
+    \item $T_\mathrm{big}\leq T_\mathrm{th}$: Task scheduler가 모든 app을 big core로 migrate
+    \item Scaling governor은 big, small core에서 가장 높은 $f$로 돌게 함 $\Rightarrow$ 성능 저하 다소 cover
+    \item Potential Problems: Migration Overhead
+    \begin{itemize}
+        \item 과거에는 migration overhead가 다소 컸음 (1-5초) $\Rightarrow$ 최근에는 거의 없음
+        \item Big-little migration
+        \begin{itemize}
+            \item Live migration: 수행하던 부분만 먼저 migration하는 방법
+            \item Shared LLC 효과: 현재 수행하고 있는 부분이 DRAM이 아닌 cache에 들어가 있어 훨씬 빠름
+        \end{itemize}
+        \item Big-big migration: 거의 작음 (Performace overhead $\approx$ 0.4\%)
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 성능
+    \begin{itemize}
+        \item 실행 시간: Conv. DTM에 비해 10.6\% 낮음
+        \item Highest $f$로 동작하는 시간: Conv. DTM에 비해 2.5배 높음
+        \item Small core는 pipeline stage가 적고 cache가 작음 $\Rightarrow$ branch misprediction 많고 L2 cache hit이 높을수록 유리
+    \end{itemize}
+    \newpage
+    \item 온도
+    \begin{itemize}
+        \item 평균 온도: 거의 유사
+        \item 최고 온도: Conv. DTM에 비해 7.4$\cel$ 낮음
+    \end{itemize}
+    \item 에너지 소모: Conv. DTM에 비해 3.6\% 낮음
+    \begin{itemize}
+        \item 전력은 Conv. DTM보다 더 소모하나 실행 시간이 대폭 줄어들어 에너지 소모량은 감소
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Migration among Big Cores + M-DTM/DVFS}
+\begin{itemize}
+    \item IPA는 M-DTM보다 효율적인 방법. 그러나 IPA는 예측이 어렵고 부정확하다는 단점이 있음
+    \item Big core간의 migration을 먼저 수행하고, 모든 big core의 온도가 높으면 M-DTM이나 DVFS 수행
+\end{itemize}
+
+\subsubsection*{DTM, Ideal IPA, Advanced M-DTM 성능 비교}
+\begin{itemize}
+    \item 실행 시간
+    \begin{itemize}
+        \item 모든 경우에 대해, Advanced M-DTM \textgreater{} IPA \textgreater{} DTM
+        \item App의 수가 많아지면 M-DTM, Advanced M-DTM의 효과는 저하
+    \end{itemize}
+    \item System-wide EDP (Energy-delay product): M-DTM $\gg$ IPA $\geq$ Advanced M-DTM
+    \item DTM 발생 시간 비율 (= 1 - highest $f$ 작동 시간)
+    \begin{itemize}
+        \item IPA > M-DTM > Advanced M-DTM
+        \item $T_\mathrm{th}$가 높고 app 수가 적으면 migration만으로도 DTM을 거의 없앨 수 있음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Prime core}
+\begin{itemize}
+    \item Prime core는 big core보다도 성능이 좋은 core
+    \item 장점: 성능 향상 / 단점: 면적 overhead, prime core에서의 thermal emergency
+    \item Heatpipe: 액체가 뜨거운 core에서 증발, 차가운 core에서 응결하여 순환하는 냉각 방식
+\end{itemize}
+\begin{figures}
+    \fig{lower-power-computing/images/heatpipe.png}{0.4}
+\end{figures}
+
+\subsection{References}
+\begin{enumerate}
+    \item Young-Ho Gong, Jae Jeong Yoo, and Sung Woo Chung, ``Thermal Modeling and Validation of A Real-World Mobile AP'', IEEE Design \& Test, vol.35, no.1, pp.55-62, February 2018
+    \item Young Geun Kim, Minyong Kim, Jae Min Kim, and Sung Woo Chung, ``M-DTM: Migration-based Dynamic Thermal Management for Heterogeneous Mobile Multi-core Processors'', Design, Automation and Test in Europe Conference (DATE 2015), Grenoble, France, March 2015
+\end{enumerate}
