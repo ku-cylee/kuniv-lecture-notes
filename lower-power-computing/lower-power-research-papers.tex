@@ -117,7 +117,7 @@
     \end{itemize}
     \item 에너지 소모: Conv. DTM에 비해 3.6\% 낮음
     \begin{itemize}
-        \item 전력은 Conv. DTM보다 더 소모하나 실행 시간이 대폭 줄어들어 에너지 소모량은 감소
+        \item 전력은 Conv. DTM보다 더 소모하나 실행 시간이 대폭 줄어들어 에너지 소모는 감소
     \end{itemize}
 \end{itemize}
 
@@ -184,13 +184,13 @@
     \item Consolidation: 서버의 성능에 따라 VM을 모아서 배치하는 방법
     \begin{itemize}
         \item 서버의 누설 전력이 클 때 사용
-        \item 장점: 에너지 소모량 감소
+        \item 장점: 에너지 소모 감소
         \item 단점: 잦은 throttling, 자원 경합, ambient 요소 고려하지 못함
     \end{itemize}
     \item Load balancing: 동적 수행 능력을 고려하여 서버에 VM을 분산 배치하는 방법
     \begin{itemize}
         \item 서버의 누설 전력이 작을 때 사용
-        \item 장점: 에너지 소모량 감소, 성능 증가
+        \item 장점: 에너지 소모 감소, 성능 증가
         \item 단점: ambient 요소 고려하지 못함
     \end{itemize}
 \end{itemize}
@@ -247,7 +247,7 @@
     \end{enumerate}
     \item Hardware level
     \begin{itemize}
-        \item GPU가 메인 메모리에 요청 $\Rightarrow$ 데이터가 L2, L1 캐시, register file등을 거쳐 load $\Rightarrow$ deduplication 수행
+        \item GPU가 메인 메모리에 요청 $\rightarrow$ 데이터가 L2, L1 캐시, register file등을 거쳐 load $\rightarrow$ deduplication 수행
         \item Memory access가 굉장히 많음 (Fingerprinting $\approx$ $2^{25}$, Indexing $\approx$ $2^{52}$)
     \end{itemize}
     \item 장점과 단점
@@ -287,6 +287,106 @@
     \item 전력 소모: Base-die DU는 GPU보다 45.5\% 감소
     \item 온도: Threshold 온도를 넘지 않음
 \end{itemize}
+\newpage
+
+\subsection{Multidimensional Databases Accelerator}
+
+\subsubsection*{Motivation}
+\begin{itemize}
+    \item Conventional storage method: 복잡한 데이터 할당을 방지하기 위해 row-oriented 방식
+    \item 데이터를 load할 때는 필요하지 않은 데이터도 읽힐 수 있음 $\Rightarrow$ 비효율적
+    \item 데이터를 load할 때 CPU가 column-oriented 방식으로 reorganize하는 방법
+    \begin{itemize}
+        \item SSD $\Rightarrow$ 메모리로 raw data, 메모리 $\Rightarrow$ 프로세서로 reorganize 필요한 데이터 $\Rightarrow$ 프로세서에서 메모리로 reorganized 데이터
+        \item CPU 기반 시스템에서는 시간이 오래 걸리고 에너지 소모가 큼
+    \end{itemize}
+    \item SSD에서 데이터가 전송되기 직전 IDRA(In-storage Data Reorg. Accelerator)가 reorganize 수행하는 아이디어
+\end{itemize}
+
+\subsubsection*{Dimension Slice}
+\begin{itemize}
+    \item IDRA에서 사용되는 data reorganization 기법
+    \item 하나의 차원에 존재하는 데이터를 쪼개어서 저장하는 방법
+    \item Early-stopping이 가능 $\Rightarrow$ 빠른 스캔 가능
+    \item Unused zero padding bit으로 인해 fault가 발생 가능 $\Rightarrow$ Lower bit으로 채우도록 수정
+\end{itemize}
+
+\subsubsection*{IDRA Scheme}
+\begin{enumerate}
+    \item 1x2 DEMUX: Data reorganization 여부에 따라 IDRA 실행 여부 판별
+    \item Configuration Register: App에 따른 splitting method를 구성
+    \item Reorganization Module: Data reorganization을 수행
+    \item Output Buffer: 2개의 output buffer를 사용; 한 buffer가 데이터를 모으는 동안 다른 buffer는 export
+    \item Output Module: 원하는 크기만큼 output data가 모이면 export
+\end{enumerate}
+\begin{figures}
+    \fig{lower-power-computing/images/idra-structure.PNG}{.6}
+\end{figures}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 성능 (데이터 재구성 시간)
+    \begin{itemize}
+        \item IDRA 기반 시스템은 Baseline 기반 시스템보다 78.6\% 단축
+        \item Baseline 기반 시스템의 데이터 로드 시간 $\approx$ IDRA 기반 시스템의 데이터 로드 + 재구성 시간
+    \end{itemize}
+    \item 에너지 소모: IDRA 기반 시스템이 Baseline 기반 시스템보다 30.3\% 단축
+\end{itemize}
+
+\subsection{3D Stacked CPU Characterization}
+
+\subsubsection*{TSV-based 3D integration}
+\begin{itemize}
+    \item 공정 미세화 진행 $\Rightarrow$ wire delay overhead 증가 $\Rightarrow$ (TSV-based) 3D integration으로 해결 가능
+    \item 장점
+    \begin{itemize}
+        \item 큰 die가 여러 작은 die로 나누어질 수 있음 $\Rightarrow$ 수율과 비용 절감
+        \item Heterogeneous integration을 가능케 함 $\Rightarrow$ Flexibility 증가
+    \end{itemize}
+    \item 단점: 전력 밀도 증가, 열 발산 저하 $\Rightarrow$ 2D chip에 비해 온도가 높음
+    \item TSV 기반 3D CPU가 항상 2D CPU보다 성능이 높다고 단정할 수 없음
+\end{itemize}
+
+\subsubsection*{Dynamic Thermal Management by Intel}
+\begin{itemize}
+    \item Power Limit 1(PL1): TDP(Thermal Design Power), Base clock $f$
+    \item Power Limit 2(PL2): 최대 전력, Design clock $f$
+    \item Tau: PL2가 유지되는 시간을 나타내는 변수
+    \item 프로세서의 $f$는 Tau 시간동안 PL2를 유지하고, 이후 PL1으로 떨어져 유지
+    \item 문제점
+    \begin{itemize}
+        \item Fluctuation at PL2 phase: 전력 부족, 다른 core의 영향 등
+        \item Safe temperature에서도 PL1 유지: 배터리 수명, skin 온도 등
+    \end{itemize}
+    \item Objective: Intel의 DTM과 DVFS 등이 3D CPU의 온도 관리에 효과적인가?
+\end{itemize}
+\begin{figures}
+    \fig{lower-power-computing/images/intel-dtm-graph.PNG}{.55}
+\end{figures}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 실험군
+    \begin{itemize}
+        \item 2D-DT: DTM 제거 + heat pipe + 작은 fan (Intel\textsuperscript\textregistered Dynamic Tuning Technology 비활성화)
+        \item 3D-PL1: PL1 + heat pipe
+        \item 3D-DVFS: DVFS + PL1 비활성화 + heat pipe
+        \item 3D-DT: DTM 제거 + PL1 비활성화 + heat pipe + 외부 cooling fan
+    \end{itemize}
+    \item 성능: 3D-DT \textgreater{} 3D-DVFS \textgreater{} 2D-DT $\gg$ 3D-PL1
+    \item 전력 소모: 3D-PL1 \textless{} 3D-DVFS $\approx$ 3D-DT \textless{} 2D-DT
+    \item 평균 $f$: 2D-DT $\gg$ 3D-DT $\geq$ 3D-DVFS \textgreater{} 3D-PL1
+    \item 에너지 소모: 3D-DVFS \textgreater{} 3D-PL1 $\approx$ 3D-DT (Fan 전력 미포함)
+    \item 최고 온도: 3D-DVFS \textgreater{} $T_\mathrm{th}$ $\approx$ 3D-PL1 \textgreater{} 3D-DT $\geq$ 2D-DT
+    \item 평균 온도: $T_\mathrm{th}$ $\approx$ 3D-DVFS $\gg$ 3D-PL1 $\geq$ 3D-DT $\geq$ 2D-DT
+\end{itemize}
+
+\subsubsection*{Conclusion}
+\begin{itemize}
+    \item Intel 제시 방법: 제 성능을 내지 못하게 제한하여 온도 문제를 제대로 해결하지 못함
+    \item DVFS: 성능 저하도 발생하면서, 온도가 threshold를 초과함
+    \item 외부 냉각 방식이 동원되어도 3D CPU의 온도 문제는 완전히 해결되지 못함
+\end{itemize}
 
 \subsection{References}
 \begin{enumerate}
@@ -294,4 +394,6 @@
     \item Young Geun Kim, Minyong Kim, Jae Min Kim, and Sung Woo Chung, ``M-DTM: Migration-based Dynamic Thermal Management for Heterogeneous Mobile Multi-core Processors'', Design, Automation and Test in Europe Conference (DATE 2015), Grenoble, France, March 2015.
     \item Hyung Beom Jang, Jinhang Choi, Ikroh Yoon, Sung-Soo Lim, Seungwon Shin, Naehyuck Chang, and Sung Woo Chung, ``Exploiting Application/system-dependent Ambient Temperature for Accurate Microarchitectural Simulation'', IEEE Transactions on Computers, vol.62, no.4, pp.705-715, April 2013.
     \item Young Seo Lee, Kyung Min Kim, Ji Heon Lee, Jeong Hwan Choi, and Sung Woo Chung, ``A High-Performance Processing-in-Memory Accelerator for Inline Data Deduplication'', IEEE International Conference on Computer Design (ICCD 2019), Abu Dhabi, UAE, November 2019.
+    \item Seon Young Kim, Yon Dohn Chung, and Sung Woo Chung, ``IDRA: An In-storage Data Reorganization Accelerator for Multidimensional Databases'', IEEE Embedded Systems Letters, accepted.
+    \item Ji Hun Kwon, Seung Hun Choi, and Sung Woo Chung, ``Characterizing the On-chip Temperature of an Off-the-shelf TSV-based 3D Stacked CPU'', IEEE Intersociety Conference on Thermal and Thermalmechanical Phenomena in Electronic Systems (ITherm 2021), June 2021.
 \end{enumerate}
