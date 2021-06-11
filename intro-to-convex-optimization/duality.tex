@@ -1,0 +1,241 @@
+\section{Duality}
+
+\subsection{Lagrangian and the Dual Problem}
+
+\subsubsection*{Lagrangian}
+\begin{itemize}
+    \item Standard form problem
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~f_0(x) \\
+            \mathrm{subject~to}~~&~~f_i(x) \leq 0,~i=1,2,\cdots,m \\
+                &~~h_i(x) = 0,~i=1,2,\cdots,p
+        \end{aligned} $$
+    \item Lagrangian $L:~\mathbb{R}^n\times\mathbb{R}^m\times\mathbb{R}^p\rightarrow\mathbb{R}$
+        $$ L(x,\lambda,\nu) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x) $$
+    \begin{itemize}
+        \item Weighted sum of objective and constraint functions
+        \item $\lambda_i$: Lagrange multiplier associated with $f_i(x)\leq 0$
+        \item $\nu_i$: Lagrange multiplier associated with $h_i(x)=0$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Lagrange Dual Function}
+\begin{itemize}
+    \item Lagrange dual function $g:~\mathbb{R}^m\times\mathbb{R}^p\rightarrow\mathbb{R}$
+        $$ g(\lambda,\nu) = \inf_{x\in\mathbb{R}^n}L(x,\lambda,\nu)
+            = \inf_{x\in\mathbb{R}^n}\left(f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x)\right) $$
+    \begin{itemize}
+        \item Affine function of $\lambda$, $\nu$
+        \item $g$: Pointwise infimum of affine functions $\Rightarrow$ $g$: concave
+        \item Unconstrained maximization over $x$
+    \end{itemize}
+    \item Lower bound property: $\lambda\succeq 0$ $\Rightarrow$ $g(\lambda,\nu)\leq p^{\ast}$
+    \begin{itemize}
+        \item 모든 $g(\lambda,\nu)$ 값은 원래 문제의 optimal value 이하
+        \item Proof: $\forall~\tilde{x}$, $f_0(\tilde{x})\geq f_0(\tilde{x})+\sum_{i=1}^m\lambda_if_i(\tilde{x})+\sum_{i=1}^p\nu_ih_i(\tilde{x})=L(\tilde{x},\lambda,\nu)\geq\inf_{x\in\mathbb{R}^n}L(x,\lambda,\nu)=g(\lambda,\nu)$
+        \item $\lambda\succeq 0$, $\nu$에 대해 Lagrange dual을 해결 $\Rightarrow$ 원래 문제의 optimal value의 lower bound 찾음
+    \end{itemize}
+    \item Interpretation
+    \begin{itemize}
+        \item Infinite irritation 함수 도입 $\Rightarrow$ Objective: $f_0(x)+\sum_iI_-(f_i(x))+\sum_iI_0(h_i(x))$
+        \begin{itemize}
+            \item $I_-(x)$: $0$ if $x<0$, $\infty$ if $x\geq 0$
+            \item $I_0(x)$: $0$ if $x=0$, $\infty$ $x\neq 0$
+        \end{itemize}
+        \item $\lambda_ix\leq I_-(x)$, $\nu_ix\leq I_0(x)$ $\Rightarrow$ 약간의 penalty $\Rightarrow$ $g(\lambda,\nu)\leq p^{\ast}$
+    \end{itemize}
+    \begin{figures}
+        \fig{intro-to-convex-optimization/images/infinite-irritation.PNG}{.45}
+    \end{figures}
+\end{itemize}
+
+\subsubsection*{The dual problem}
+\begin{itemize}
+    \item Lagrange dual problem
+        $$ \begin{aligned}
+            \mathrm{maximize}~~&~~g(\lambda,\nu) \\
+            \mathrm{subject~to}~~&~~\lambda\succeq 0
+        \end{aligned} $$
+    \item Original problem is called the \textit{primal problem}
+    \item Always a convex optimization problem
+    \item Dual optimal value $d^\ast$ $\leq$ Primal optimal value $p^\ast$
+    \item $\lambda\succeq 0$, $(\lambda,\nu)\in\mathcal{D}(g)$ $\Rightarrow$ $\lambda$, $\nu$: dual feasible
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Least-norm solution of linear equations
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~x^Tx \\
+            \mathrm{subject~to}~~&~~Ax = b
+        \end{aligned} $$
+    \begin{itemize}
+        \item Lagrangian: $L(x,\nu) = x^Tx + \nu^T(Ax-b)$
+        \item Minimization: $0 = \nabla_xL(x^\ast,\nu) = 2x^\ast+A^T\nu$ $\Rightarrow$ $x^\ast=-\frac{1}{2}A^T\nu$
+        \item Dual function: $g(\nu)=L(x^\ast,\nu)=-\frac{1}{4}\nu^TAA^T\nu-b^T\nu$
+    \end{itemize}
+    \item Linear Programming
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~c^Tx \\
+            \mathrm{subject~to}~~&~~Ax = b,~x\succeq 0
+        \end{aligned} $$
+    \begin{itemize}
+        \item Lagrangian: $L(x,\lambda,\nu)=c^Tx+\nu^T(Ax-b)-\lambda^Tx = -b^T\nu+(c+A^T\nu-\lambda)^Tx$
+        \item Dual function: $L$: affine in $x$ $\Rightarrow$ $g = -b^T\nu$ if $A^T\nu-\lambda+c=0$, else $-\infty$
+        \item Lower bound property: $p^\ast\geq-b^T\nu$ if $A^T\nu + c \succeq 0$
+    \end{itemize}
+    \item Equality constrained norm minimization
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\Vert x \Vert \\
+            \mathrm{subject~to}~~&~~Ax = b
+        \end{aligned} $$
+    \begin{itemize}
+        \item Lagrangian: $L(x,\nu)=\Vert x\Vert+\nu^T(Ax-b) = \Vert x\Vert + (A^T\nu)^Tx - b^T\nu$
+        \item Minimization: $L(x,\nu)\geq\Vert x\Vert -\Vert A^T\nu\Vert_\ast \Vert x\Vert - b^T\nu = (1-\Vert A^T\nu\Vert_\ast)\Vert x\Vert-b^T\nu$
+        \item Dual function: $p^\ast\geq-b^T\nu$ if $\Vert A^T\nu\Vert_\ast\leq 1$
+    \end{itemize}
+    \item Entropy maximization
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\sum_{i=1}^n x_i\log(x_i) \\
+            \mathrm{subject~to}~~&~~\mathbf{1}^Tx = 1,~Ax\leq b
+        \end{aligned} $$
+    \begin{itemize}
+        \item Lagrangian: $L(x,\lambda,\nu)=\sum_{i=1}^nx_i\log(x_i)+\nu(\mathbf{1}^Tx-1)+\lambda^T(Ax-b)$
+        \item Minimization: $0 = \nabla_x L(x^\ast,\lambda,\nu)=1+\log x_i^\ast+\nu+a_i^T\lambda$ $\Rightarrow$ $x_i^\ast=\exp(-\nu-a_i^T\lambda - 1)$
+        \item Dual function: $g(\lambda,\nu)=L(x^\ast,\lambda,\nu)=-b^T\lambda-\nu-\sum_{i=1}^n\exp(-1-\nu-a_i^T\lambda)$
+    \end{itemize}
+\end{itemize}
+\newpage
+
+\subsubsection*{Weak and Strong Duality}
+\begin{itemize}
+    \item Weak duality: $d^\ast\leq p^\ast$
+    \begin{itemize}
+        \item 모든 최적화 문제에 대해 성립
+    \end{itemize}
+    \item Strong duality: $d^\ast = p^\ast$
+    \begin{itemize}
+        \item 일반적인 경우 성립하지 않음, 대부분의 convex problems에서는 성립
+        \item Constraint qualifications: Convex problem의 strong duality를 보장하는 조건
+    \end{itemize}
+    \item Duality gap: $p^\ast - d^\ast$
+\end{itemize}
+
+\subsubsection*{Slater's Condition}
+\begin{itemize}
+    \item Strong duality holds for a convex problem if it is \textbf{strictly feasible}
+        $$ \begin{aligned}
+            \mathrm{maximize}~~&~~g(\lambda,\nu) \\
+            \mathrm{subject~to}~~&~~\lambda\succeq 0
+        \end{aligned} $$
+    \item Strictly feasible: $\exists~x\in\mathrm{int}~\mathcal{F}$, i.e. $f_i(x)<0$, $Ax=b$
+    \item Dual optimal이 존재함이 보장됨
+    \item Real-world convex problem에 대해서는 거의 대부분 적용할 수 있음
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Inequality form LP
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~c^Tx \\
+            \mathrm{subject~to}~~&~~Ax\preceq 0
+        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+            \mathrm{minimize}~~&~~-b^T\lambda \\
+            \mathrm{subject~to}~~&~~A^T\lambda + c = 0,~\lambda\preceq 0
+        \end{aligned} $$
+    \begin{itemize}
+        \item Slater's condition: $\exists~\tilde{x}$ s.t. $A\tilde{x}\prec b$ $\Rightarrow$ $p^\ast=d^\ast$
+        \item $p^\ast=d^\ast$ always hold except when primal and dual are infeasible
+    \end{itemize}
+\end{itemize}
+
+\subsection{KKT Condition}
+\subsubsection*{Complementary slackness}
+\begin{itemize}
+    \item Strong duality holds, $x^\ast$, $\lambda^\ast$, $\nu^\ast$: optimal
+    $$ \begin{aligned}
+        f_0(x^\ast)=g(\lambda^\ast,\nu^\ast) &= \inf_{x} \left(f_0(x)+\sum_{i}\lambda_i^\ast f_i(x)+\sum_i \nu_i^\ast h_i(x)\right) \\
+            &\leq f_0(x^\ast)+\sum_{i}\lambda_i^\ast f_i(x^\ast)+\sum_i \nu_i^\ast h_i(x^\ast) \\
+            &= f_0(x^\ast)+\sum_{i}\lambda_i^\ast f_i(x^\ast)~~(\because~h_i(x^\ast)=0) \\
+            &\leq f_0(x^\ast)~~(\because~\lambda_i^\ast f_i(x^\ast)\leq 0)
+    \end{aligned} $$
+    \item $\forall~i=1,2,\cdots,m,~\lambda_i f_i(x) = 0$: complementary slackness $\Rightarrow$ $f_0(x^\ast) = L(x^\ast,\lambda^\ast,\nu^\ast)$
+    \item $\lambda_i^\ast>0~\Rightarrow~f_i(x_i^\ast)=0$, $f_i(x^\ast)<0~\Rightarrow~\lambda_i^\ast=0$
+\end{itemize}
+
+\subsubsection*{KKT(Karush-Kuhn-Tucker) Condition}
+\begin{enumerate}
+    \item Primal constraints: $\forall~i=1,2,\cdots,m,~f_i(x)\leq 0$, $\forall~i=1,2,\cdots,p,~h_i(x)=0$
+    \begin{itemize}
+        \item $x$ is primal feasible
+    \end{itemize}
+    \item Dual constraints: $\lambda\succeq 0$
+    \item Complementary slackness: $\forall~i=1,2,\cdots,m,~\lambda_i f_i(x) = 0$
+    \item Gradient of Lagrangian w.r.t. $x$ vanishes: $\nabla_x L(x,\lambda,\nu) = 0$
+\end{enumerate}
+
+\subsubsection*{KKT Condition and Optimality}
+\begin{itemize}
+    \item Strong duality holds, $x^\ast$, $\lambda^\ast$, $\nu^\ast$: optimal $\Rightarrow$ $x^\ast$, $\lambda^\ast$, $\nu^\ast$ satisfy KKT condition, strong duality
+    \begin{itemize}
+        \item $x^\ast$: primal feasible, $\lambda^\ast$, $\nu^\ast$: dual feasible $\Rightarrow$ Cond 1, Cond 2
+        \item $x^\ast$: local optimal for unconstrained problem $\inf_x L(x,\lambda^\ast,\nu^\ast)$ $\Rightarrow$ Cond 4
+    \end{itemize}
+    \item Problem: convex, $x^\ast$, $\lambda^\ast$, $\nu^\ast$: satisfy KKT condition $\Rightarrow$ $x^\ast$, $\lambda^\ast$, $\nu^\ast$: optimal
+    \begin{itemize}
+        \item Cond 3 $\Rightarrow$ $f_0(x^\ast)=L(x^\ast,\lambda^\ast,\nu^\ast)$
+        \item Cond 4 $\Rightarrow$ $g(\lambda^\ast,\nu^\ast)=\inf_{x}L(x,\lambda^\ast,\nu^\ast)=L(x^\ast,\lambda^\ast,\nu^\ast)$
+        \item From Cond 3 and Cond 4, $f_0(x^\ast) = g(\lambda^\ast,\nu^\ast)$
+    \end{itemize}
+    \item Strong duality and convex, $x$: optimal $\Leftrightarrow$ $\exists~\lambda,\nu$ s.t. satisfies KKT condition
+\end{itemize}
+
+\subsubsection*{Examples}
+\begin{itemize}
+    \item Equality constrained QP
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\frac{1}{2}x^TPx + q^Tx + r \\
+            \mathrm{subject~to}~~&~~Ax = b
+        \end{aligned} $$
+    \begin{itemize}
+        \item KKT 1: $Ax^\ast = b$, KKT 4: $Px^\ast + q + A^T\nu = 0$ i.e.
+            $$ \begin{mtx}{cc}P&A^T\\A&0\end{mtx}\begin{mtx}{c}x^\ast\\\nu^\ast\end{mtx}=\begin{mtx}{c}-q\\b\end{mtx} $$
+    \end{itemize}
+    \item Waterfalling
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~-\sum{i=1}^n \log(x_i + \alpha_i) \\
+            \mathrm{subject~to}~~&~~x\succeq 0,~\mathbf{1}^Tx = 1
+        \end{aligned} $$
+    \begin{itemize}
+        \item $x$라는 자원을 $\alpha_i$만큼의 자원을 갖고 있는 $n$명에게 나누어주어 utility(welfare, satisfaction)을 최대화
+        \item KKT 1: $x\succeq 0$, $\mathbf{1}^Tx = 1$, KKT 2: $\lambda\succeq 0$, KKT 3: $\lambda_i x_i = 0$, KKT 4: $\frac{1}{x_i+\alpha_i}+\lambda_i=\nu$
+        \item $\nu<\frac{1}{\alpha_i}$ $\Rightarrow$ $\lambda_i=0$, $x_i = \frac{1}{\nu}-\alpha_i$, $\nu\geq\frac{1}{\alpha_i}$ $\Rightarrow$ $x_i = 0$
+        \item $\therefore$ $x_i = \max(0, \frac{1}{\nu}-\alpha_i) = \left[\frac{1}{\nu}-\alpha_i\right]^+$
+    \end{itemize}
+    \begin{figures}
+        \fig{intro-to-convex-optimization/images/waterfalling.PNG}{.55}
+    \end{figures}
+\end{itemize}
+
+\subsubsection*{Problem Reformulation}
+\begin{itemize}
+    \item Common reformulations
+    \begin{itemize}
+        \item Introduce new variables and equality constraints
+        \item Make implicit constraints explicit and vice versa
+        \item Transform objective or constraint functions: replace $f(x)$ by $\phi(f_0(x))$ with $\phi$ convex, increasing
+    \end{itemize}
+    \item Example: Norm minimization
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\Vert Ax+b \Vert \\ {}
+        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+            \mathrm{minimize}~~&~~\Vert y\Vert\lambda \\
+            \mathrm{subject~to}~~&~~y = Ax + b
+        \end{aligned} $$
+    \begin{itemize}
+        \item Lagrangian: $L(x;y,\nu) = \Vert y\Vert-\nu(Ax+b-y) = \Vert y\Vert-y^T\nu+x^TA^T\nu+b^T\nu = (A^T\nu)^Tx + \Vert y\Vert - y^T\nu + b^T\nu$
+        \item Dual function: $g(\nu) = \inf_{x}(A^T\nu)^Tx + \inf_{y}\left[\Vert y\Vert - y^T\nu\right] + b^T\nu$
+        \item Optimizing by $x$: $g(\nu) = \inf_{y}\left[\Vert y\Vert - y^T\nu\right] + b^T\nu$ ($A^T\nu = 0$)
+        \item Optimizing by $y$: $g(\nu)\geq\inf_{y}\left[\Vert y\Vert - \Vert y\Vert\Vert\nu\Vert_\ast\right]+b^T\nu = b^T\nu$ ($A^T\nu = 0$, $\Vert\nu\Vert_\ast\leq 1$)
+    \end{itemize}
+\end{itemize}
