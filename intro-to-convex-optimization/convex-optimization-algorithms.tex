@@ -1,0 +1,154 @@
+\section{Convex Optimization Algorithms}
+
+\subsection{Unconstrained Optimization}
+
+\subsubsection*{Unconstrained Problem}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f(x)
+\end{aligned} $$
+\begin{itemize}
+    \item Problem assumptions
+    \begin{itemize}
+        \item $f$: convex, twice differentiable
+        \item optimal value $p^\ast = \inf_x f(x)$: Obtained, finite
+    \end{itemize}
+    \item $\nabla f(x^\ast) = 0$인 점을 찾는 iterative method로 해석될 수 있음
+    \item Algorithm assumptions
+    \begin{itemize}
+        \item Initial point: $x^{(0)}\in\mathcal{D}(f)$
+        \item Sublevel set $S = \{x|f(x)\leq f(x^{(0)})\}$: closed
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Strong Convexity and Implications}
+\begin{itemize}
+    \item $\forall~x\in S$, $\exists~m>0$ s.t. $\nabla^2 f(x)\succeq mI$ $\Rightarrow$ $f$: strongly convex on $S$
+    \item Stopping criterion: $f(x)-p^\ast\leq\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
+    \begin{itemize}
+        \item Taylor's Theorem: $f(y)=f(x)+\nabla f(x)^T(y-x)+\frac{1}{2}(y-x)^T\nabla^2f(c)(y-x)$
+        \item Strict convexity: $f(y)\geq f(x)+\nabla f(x)^T(y-x)+\frac{m}{2}\Vert y-x\Vert_2^2$
+        \item Minimization of $f(y)$ over $y$: $0=\nabla f(y)=\nabla f(x)+m(y-x)$ $\Rightarrow$ $y=x-\frac{1}{m}\nabla f(x)$
+        \item Substituting back: $f(y)\geq f(x)-\nabla f(x)^T\left(\frac{1}{m}\nabla f(x)\right)+\frac{m}{2}\left(\frac{1}{m^2}\Vert\nabla f(x)\Vert_2^2\right)=f(x)-\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
+        \item Stopping criterion: $f(x)-p^\ast\leq\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
+        \item Limitations: Deciding $m$ is not known in general
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Descent Methods}
+$$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
+\begin{itemize}
+    \item $\Delta x$: step, search direction
+    \item $t>0$: step size, step length
+    \item Convexity $\Rightarrow$ $f(x^{(k+1)})<f(x^{(k)})$ $\Leftrightarrow$ $\nabla f(x^{(k)})^T\Delta x^{(k)}<0$
+    \item General Descent Method
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Determine a descent direction $\Delta x$
+            \item \textit{Line search} Choose a step size $t>0$
+            \item \textit{Update} $x:=x+t\Delta x$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+\end{itemize}
+
+\subsubsection*{Gradient Descent (GD) Method}
+\begin{itemize}
+    \item $\Delta x = -\nabla f(x)$
+    \item Exact line search
+        $$t = \arg\min_{t>0}f(x+t\Delta x) = \arg\min_{t>0}f(x-t\nabla f(x))$$
+    \begin{itemize}
+        \item Step을 줄일 수는 있지만 복잡함
+    \end{itemize}
+    \item Backtracking line search
+    \begin{itemize}
+        \item Parameters $\alpha\in\left(0,\frac{1}{2}\right)$, $\beta\in(0,1)$
+        \item Starting at $t=1$, repeat $t=\beta t$ until
+            $$ f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^T\Delta x $$
+        \item Guarantees $f(x^{(k)})<f(x^{(k+1)})$ since $\nabla f(x)^T\Delta x<0$
+    \end{itemize}
+    \item Gradient Descent Method: General descent method with $\Delta x = -\nabla f(x)$
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, tolerance $\epsilon>0$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Determine a descent direction $\Delta x=-\nabla f(x)$
+            \item \textit{Line search} Choose a step size $t>0$ via exact/backtracking method
+            \item \textit{Update} $x:=x+t\Delta x$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied; usually $\Vert\nabla f(x)\Vert_2\leq\epsilon$
+    \end{description}
+    \item Pros of GD
+    \begin{itemize}
+        \item Convergence result: $f(x^{(k)})-p^\ast\leq c^k\left(f(x^{(0)})-p^\ast\right)$, $c\in(0,1)$
+        \item 수렴함이 보장됨, exponential 수렴이므로 매우 빠름 ($c\rightarrow 1$이면 느림)
+        \item (대체로) 간단하고 효과적인 알고리즘
+    \end{itemize}
+    \item Cons of GD: Myopic algorithm $\Rightarrow$ 문제에 따라 매우 느릴 수 있음
+\end{itemize}
+
+\subsubsection*{Steepest Descent Method}
+\begin{itemize}
+    \item Normalized steepest Descent Direction
+        $$ \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left(\nabla f(x)^T v\right) $$
+    \begin{itemize}
+        \item Interpretation: for $v\ll 1$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
+        \item $\Delta x_{\mathrm{nsd}}$: most negative directional derivative
+    \end{itemize}
+    \item (Unnormalized) Steepest Descent Direction
+        $$ \Delta x_\mathrm{sd}=\Vert\nabla f(x)\Vert_\ast\Delta x_\mathrm{nsd} $$
+    \begin{itemize}
+        \item Interpretation: $\nabla f(x)^Tv\leq\Vert\nabla f(x)^T\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
+        \item General form of GD. GD if $\Vert v\Vert_2\leq 1$
+    \end{itemize}
+    \item Examples
+    \begin{itemize}
+        \item 2-norm: $\Delta x_\mathrm{sd} = -\nabla f(x)$
+        \item Quadratic norm $\Vert x\Vert_P=(x^TPx)^{1/2}$ ($P\in S_{++}^n$): $\Delta x_\mathrm{sd}=-P^{-1}\nabla f(x)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Newton's Method}
+\begin{itemize}
+    \item Newton Step
+        $$ \Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x) $$
+    \begin{itemize}
+        \item $\Delta x_\mathrm{nt}$ minimizes second-order approx. over $v$: $f(x+v)=f(x)+\nabla f(x)^Tv+\frac{1}{2}v^T\nabla^2f(x)v$
+        \item Steepest descent direction at $x$ in local Hessian norm $\Vert u\Vert_{\nabla^2 f(x)}=\left(u^T\nabla^2 f(x)u\right)^{1/2}$
+    \end{itemize}
+    \item Newton decrement: Newton step 방향 벡터에 대한 qudratic norm
+        $$ \lambda(x) = \left(\nabla f(x)^T\nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2} $$
+    \begin{itemize}
+        \item $\lambda(x)=\Vert\Delta x_\mathrm{nt}\Vert_{\nabla^2f}=(\Delta x_\mathrm{nt}^T~\nabla^2f~\Delta x_\mathrm{nt})^{1/2}=\left(((\nabla^2 f)^{-1}\nabla f)^T\nabla^2 f((\nabla^2 f)^{-1}\nabla f)\right)^{1/2}$
+        \item $\hat{f}$: quadratic approx $\Rightarrow$ $f(x)-p^\ast\approx f(x)-\inf_y\hat{f}(y)=\frac{1}{2}\lambda^2$
+        \item Newton direction으로의 방향도 미분: $\nabla f(x)^T\Delta x_\mathrm{nt}=-\lambda^2$
+    \end{itemize}
+    \item Algorithm
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, tolerance $\epsilon>0$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Compute Newton step and decrement: $\Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x)$, $\lambda^2=\Delta x_\mathrm{nt}^T~\nabla^2f(x)~\Delta x_\mathrm{nt}$
+            \item \textit{Stopping criterion}: quit if $\frac{1}{2}\lambda^2<\epsilon$
+            \item \textit{Line search} Choose a step size $t>0$ via backtracking line search
+            \item \textit{Update} $x:=x+t\Delta x_\mathrm{nt}$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+    \item Phases of Newton's Method
+    \begin{itemize}
+        \item Damped Newton Phase: slow convergence; bottleneck ($\Vert\nabla f(x)\Vert_2\geq\eta$)
+        \begin{itemize}
+            \item 대부분 step은 backtracking 필요, 함수값이 적어도 $\gamma$만큼 감소
+            \item Optimal value: finite $\Rightarrow$ 적어도 $\frac{f(x^{(0)})-p^\ast}{\gamma}$회 이내에 종료
+        \end{itemize}
+        \item Quadratically Convergent Phase: fast convergence ($\Vert\nabla f(x)\Vert_2<\eta$)
+        \begin{itemize}
+            \item 모든 step의 $t=1$, $\Vert\nabla f(x)\Vert_2$ converges to 0 quadratically
+            \item 적어도 $\log_2\log_2\left(\frac{\epsilon_0}{\epsilon}\right)$회 이내에 종료; Almost constant
+        \end{itemize}
+    \end{itemize}
+    \item $f(x)-p^\ast\leq\epsilon$까지의 반복 횟수는 최대 $\frac{f(x^{(0)})-p^\ast}{\gamma}+\log_2\log_2\left(\frac{\epsilon_0}{\epsilon}\right)$회
+    \item High cost, but high convergence speed $\Rightarrow$ tradeoff
+\end{itemize}
