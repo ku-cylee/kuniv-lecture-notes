@@ -181,7 +181,7 @@
 \begin{itemize}
     \item 여러 task를 여러 core에 걸쳐 에너지 효율을 가장 높이도록 잘 분배하여 scheduling하는 방법
     \item Task scheduling 없이 DVFS만 실행하는 것은 하나의 core만 optimize하는 것
-    \item Task scheduler가 task를 core에 할당하고, DVFS/DPM governor가 $\mathrm{util\_{CPU}}$를 기반으로 power state 조정
+    \item Task scheduler가 task를 core에 할당하고, DVFS/DPM governor가 $\mathrm{util_{CPU}}$를 기반으로 power state 조정
     \item 예시: Assume 3 tasks $T_1$, $T_2$, $T_3$
     \begin{itemize}
         \item $T_1$, $T_2$간 상호작용이 많음: $T_1$, $T_2$를 같은 core에 배치, $T_3$는 다른 core에 배치
@@ -246,7 +246,7 @@
 \begin{itemize}
     \item Average frequency
     \begin{itemize}
-        \item $P_\mathrm{dyn}\varpropto V^2f$, Jensen 부등식: $f_1^3 + f_2^3 \geq \left(\frac{f_1+f_2}{2}\right)^3$
+        \item $P_\mathrm{dyn}\varpropto V^2f\varpropto f^3$, Jensen 부등식: $f_1^3 + f_2^3 \geq \left(\frac{f_1+f_2}{2}\right)^3$
         \item 평균 $f$의 전력 소모량은 두 $f$의 평균 전력 소모량보다 항상 작거나 같음
         \item 초창기 proactive techniques
     \end{itemize}
@@ -316,7 +316,7 @@
     \item Gain/Loss의 예측이 관건
     \begin{itemize}
         \item Offline Profiling-based Table: 모든 app을 profiling하는 것은 불가능
-        \item 연산 규모, 전송 데이터 크기 등을 기반으로 선형 회기 기법으로 예측
+        \item 연산 규모, 전송 데이터 크기 등을 기반으로 선형 회귀 기법으로 예측
         \item 인터넷 신호 세기 역시 영향: 신호 강도가 약하면 input 데이터를 보낼 때 더 많은 에너지를 소모
     \end{itemize}
 \end{itemize}

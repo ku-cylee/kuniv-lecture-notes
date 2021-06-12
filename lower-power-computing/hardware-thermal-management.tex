@@ -216,14 +216,14 @@
     \item HotFloorplan (Sankaranarayanan et al. [2005])
     \begin{itemize}
         \item 최고 온도, Chip 면적, Wire delay 등을 고려한 2D floorplanning tool
-        \item min. $(\mathrm{Obj}) = (A + \lambda W)T$
+        \item minimize $(\mathrm{Obj}) = (A + \lambda W)T$
         \begin{itemize}
             \item A: Chip 면적, T: 최고 온도, W: $\sum$ weighted wire 길이
         \end{itemize}
     \end{itemize}
     \item 3D Floorplanning
     \begin{itemize}
-        \item 3D stakcing: 여러 die가 여러 layer를 구성
+        \item 3D stacking: 여러 die가 여러 layer를 구성
         \item Vertical 열 전도가 발생하므로 2D에 비해 열 발산이 힘듦 $\Rightarrow$ 열 문제가 더 심각
     \end{itemize}
 \end{itemize}
@@ -270,7 +270,7 @@
     \begin{itemize}
         \item For embedded: 에너지 reduction이 목표
         \item Real-time: QoS(deadline 내에 task 완료)를 보장하는 것이 목표
-        \item 온도, energy/QOS, 성능 등을 같이 고려해야 함
+        \item 온도, energy/QoS, 성능 등을 같이 고려해야 함
     \end{itemize}
 \end{itemize}
 
