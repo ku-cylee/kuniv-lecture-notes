@@ -1,13 +1,11 @@
 \usepackage{enumitem}
 
-\setlist[itemize]{
+\renewcommand{\labelitemii}{$\circ$}
+\renewcommand{\labelitemiii}{$\cdot$}
+\renewcommand{\labelitemiv}{-}
+
+\setlist{
     itemsep=-5pt,
     topsep=-10pt,
-    itemindent=-10pt,
-}
-
-\setlist[enumerate]{
-    itemsep=-5pt,
-    topsep=-3pt,
     itemindent=-10pt,
 }
