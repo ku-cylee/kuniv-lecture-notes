@@ -157,7 +157,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 
 \subsubsection*{Equality Constrained Problem}
 $$ \begin{aligned}
-    \mathrm{maximize}~~&~~f(x) \\
+    \mathrm{minimize}~~&~~f(x) \\
     \mathrm{subject~to}~~&~~Ax=b
 \end{aligned} $$
 \begin{itemize}
@@ -165,7 +165,7 @@ $$ \begin{aligned}
     \begin{itemize}
         \item $f$: convex, twice differentiable
         \item $A\in\mathbb{R}^{p\times n}$, $\mathrm{rank}A=p$, i.e. $A$: fat matrix
-        \item optimal value $p^\ast = \inf_x f(x)$: Obtained, finite
+        \item Optimal value $p^\ast = \inf_x f(x)$: Obtained, finite
     \end{itemize}
     \newpage
     \item Optimality conditions: $x^\ast$: optimal $\Leftrightarrow$ $\exists~\nu^\ast$ s.t.
@@ -246,8 +246,7 @@ $$ \begin{aligned}
 \subsubsection*{Solving KKT Matrix}
 $$ K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g\\h\end{mtx} $$
 \begin{itemize}
-    \item $K$: KKT matrix
-    \item KKT: nonsingular $\Leftrightarrow$ $\nexists~x\neq 0$ s.t. $Hx=0$, $Ax=0$ $\Leftrightarrow$ $H\succ 0$
+    \item KKT matrix ($K$): nonsingular $\Leftrightarrow$ $\nexists~x\neq 0$ s.t. $Hx=0$, $Ax=0$ $\Leftrightarrow$ $H\succ 0$
     \begin{itemize}
         \item $x\neq 0$, $Ax=0$ $\Rightarrow$ $x\in\mathcal{N}(A)$ $\Rightarrow$ $Hx\neq 0$ $\Rightarrow$ $x^THx\neq 0$ $\Rightarrow$ $x^THx>0$ $\Rightarrow$ $H\succ 0$
         \item $H+A^TA>0$ also holds
@@ -266,4 +265,102 @@ $$ K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}
         \item $H+A^TA\succ 0$ $\Rightarrow$ Rewrite KKT equation, and apply elimination
         $$ \begin{mtx}{cc}H+A^TA&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g+A^Th\\h\end{mtx} $$
     \end{itemize}
+\end{itemize}
+
+\subsection{Inequality Constrained Optimization}
+
+\subsubsection*{Inequality Constrained Problem}
+$$ \begin{aligned}
+    \mathrm{minimize}~~&~~f(x) \\
+    \mathrm{subject~to}~~&~~f_i(x)\leq 0~~(i=1,2,\cdots,m) \\
+        &~~Ax=b
+\end{aligned} $$
+\begin{itemize}
+    \item Problem assumptions
+    \begin{itemize}
+        \item $f$: convex, twice differentiable
+        \item $A\in\mathbb{R}^{p\times n}$, $\mathrm{rank}A=p$, i.e. $A$: fat matrix
+        \item optimal value $p^\ast = \inf_x f(x)$: Obtained, finite
+        \item Problem is strictly feasible, i.e. $\exists~x\in\mathcal{D}(f_0)$, $f_i(x)<0$, $Ax=b$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Logarithmic Barrier}
+\begin{itemize}
+    \item Elminating inequality constraints by introducing irritation function (blue, dashed)
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~f_0(x)+\sum_{i=1}^mI_-(f_i(x)) \\
+            \mathrm{subject~to}~~&~~Ax=b
+        \end{aligned} $$
+    \begin{itemize}
+        \item $I_-(x)$: $0$ if $x<0$, $\infty$ if $x\geq 0$
+        \item Irritation function is difficult to handle in mathematical manner
+    \end{itemize}
+    \item Logarithmic Barrier (red, solid)
+        $$ \phi(x)=-\sum_{i=1}^m\log(-f_i(x)),~~~~\mathcal{D}(\phi)=\{x|f_1(x)<0,f_2(x)<0,\cdots,f_m(x)<0\} $$
+    \begin{itemize}
+        \item $f_i$: convex $\Rightarrow$ $\phi(x)$ is convex
+        \item $\nabla\phi(x)=-\sum_{i=1}^{m}\frac{1}{f_i(x)}\nabla f_i(x)$
+        \item $\nabla^2\phi(x)=\sum_{i=1}^{m}\left(\frac{1}{f_i(x)^2}\nabla f_i(x)\nabla f_i(x)^T-\frac{1}{f_i(x)}\nabla^2f_i(x)\right)$
+    \end{itemize}
+    \item Approximation via Logarithmic Barrier
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~tf_0(x)+\phi(x) \\
+            \mathrm{subject~to}~~&~~Ax=b
+        \end{aligned} $$
+    \begin{itemize}
+        \item An equality constrained problem
+        \item For $t>0$, $-\frac{1}{t}\phi(x)$ is a smooth approximation of $I_-$
+        \item Boundary points cannot be a solution; Not a big problem in an engineering problem
+        \item Approximation improves as $t\rightarrow\infty$
+    \end{itemize}
+    \begin{figures}
+        \fig{intro-to-convex-optimization/images/log-barrier.PNG}{.4}
+    \end{figures}
+\end{itemize}
+
+\subsubsection*{Dual points on Central path}
+\begin{itemize}
+    \item Central path: $\{x^\ast(t)|t>0\}$
+    \begin{itemize}
+        \item $x^\ast(t)$: Solution of the problem $f(x)=tf_0(x)+\phi(x)$ s.t. $Ax=b$ (Assume $\forall~t>0$, $\exists!~x^\ast(t)$)
+    \end{itemize}
+    \item $\exists~w$ s.t. $Ax=b$, $t\nabla f_0(x)+\sum_{i=1}^m\frac{1}{-f_i(x)}\nabla f_i(x)+A^Tw = 0$ $\Rightarrow$ $x=x^\ast(t)$
+    \item Lagrangian: $L(x,\lambda^\ast(t),\nu^\ast)=f_0(x)+\sum_{i=1}^{m}\lambda_i^\ast(t)f_i(x)+\nu^\ast(t)^T(Ax-b)$
+    \item $x^\ast(t)$ minimizes $L$ where $\lambda_i^\ast(t)=-\frac{1}{tf_i(x^\ast(t))}$, $\nu^\ast(t)=\frac{w}{t}$
+    \item $p^\ast\geq g(\lambda^\ast,\nu^\ast)=L(x^\ast,\lambda^\ast,\nu^\ast)=f_0(x^\ast)-\sum_{i=1}^m\frac{f_i(x^\ast)}{tf_i(x^\ast)}+\nu^{\ast T}(Ax-b)=f_0(x^\ast)-\frac{m}{t}$
+    \item $f_0(x^\ast)-p^\ast\leq\frac{m}{t}\rightarrow 0$ when $t\rightarrow\infty$
+\end{itemize}
+
+\subsubsection*{Interpretation via KKT conditions}
+\begin{itemize}
+    \item Primal constraints: $f_i(x)<0\leq 0$
+    \item Dual constraints: $\lambda=-\frac{1}{tf_i(x^\ast)}>0$ ($\because$ primal constraints)
+    \item \textit{Approximate} complementary slackness: $\lambda_if_i(x)=-\frac{1}{t}\rightarrow 0$ when $t\rightarrow\infty$
+    \item Lagrangian gradient holds
+\end{itemize}
+
+\subsubsection*{Barrier Method}
+\begin{itemize}
+    \item Algorithm
+    \begin{description}
+        \item[given] a strictly feasible starting point $x$, $t:=t^{(0)}>0$, $\mu>1$ with tolerance $\epsilon>0$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item \textit{Centering step}: Compute $x^\ast$ by minimizing $tf_0+\phi$ s.t. $Ax=b$: Another loop
+            \item \textit{Update}: $x=x^\ast(t)$
+            \item \textit{Stopping criterion}: quit if $\frac{m}{t}<\epsilon$
+            \item \textit{Increase $t$}: $t:=\mu t$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+    \item \textit{Centering} is usually done by Newton's method, starting at current $x$, i.e. $x^\ast$ of prev. step
+    \item Choice of $\mu$ $\Rightarrow$ tradeoff
+    \begin{itemize}
+        \item Large $\mu$: fewer outer iterations, more inner iterations
+        \item Small $\mu$: more outer iterations, fewer inner iterations
+        \item Typical $\mu=10~-~20$
+    \end{itemize}
+    \item Number of outer iterations
+        $$ \left\lceil\frac{\log(\frac{m}{\epsilon t^{(0)}})}{\log\mu}\right\rceil~+~\mathrm{initial~centering~step} $$
 \end{itemize}
