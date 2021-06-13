@@ -1,0 +1,91 @@
+\section{Applications: Machine Learning}
+
+\subsection{Stochastic Gradient Descent}
+
+\subsubsection*{Learning from Data}
+\begin{itemize}
+    \item Sample data (blue points) $(a_i, b_i)$: $a_i$ is input, $b_i$ is output
+    \item Assume $b=f(a)+\epsilon$; $f$: unknown function, $\epsilon$: random error
+    \item Estimation (red line) $\hat{f}(a;x)\approx f(a)$, $x$: some parameters
+\end{itemize}
+\begin{figures}
+    \fig{intro-to-convex-optimization/images/learning-from-data.PNG}{.5}
+\end{figures}
+
+\subsubsection*{Linear Regression}
+\begin{itemize}
+    \item Linear explanation
+        $$ b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx $$
+    \begin{itemize}
+        \item Independent (explanatory, input) variable: $a_1,a_2,\cdots,a_m\in\mathbb{R}^n$
+        \item Dependent (observation, output) variable: $b_1,b_2,\cdots,b_m$
+        \item $x_0$: bias, $\tilde{a}_i=(1,a_i)$와 같이 parameter로 간주됨 $\Rightarrow$ Linear combination of $\mathbb{R}^{n+1}$
+    \end{itemize}
+    \item Objective: Minimize Loss function $L$
+        $$ L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2 $$
+    \begin{itemize}
+        \item Mean Square Error (MSE), Adjust $x$ to minimize $L$ $\Rightarrow$ QP for MSE
+        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^Tx$ $\Rightarrow$ Linear regression
+        \item $\hat{f}(a_i;x)$: estimation, $b_i$: true explanation
+        \item Solution: $\nabla L(x^\ast)=0$ $\Rightarrow$ $x^\ast=(A^TA)^{-1}A^Tb$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Stochastic Gradient Descent (SGD)}
+\begin{itemize}
+    \item Motivation
+    \begin{itemize}
+        \item Machine Learning: Accepts very large dataset and number of variables
+        \item Assume linear regression $L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2$
+        \item GD update: $x\leftarrow x-\gamma\frac{1}{m}\sum_{i=1}^{m}\nabla\left(\hat{f}(a_i;x)-b_i\right)^2=x-\gamma\frac{2}{m}\sum_{i=1}^ma_i(a_i^Tx-b_i)$
+        \item $m$이 매우 크면 step별 계산이 너무 많아짐
+    \end{itemize}
+    \newpage
+    \item Randomized, simplified version of GD (원래 GD는 Batch GD라고 불림)
+    \item Method
+    \begin{enumerate}
+        \item Select \textbf{one} data sample randomly: choose $j$ from $1,2,\cdots,m$
+        \item Update $x^{(k+1)}\leftarrow x^{(k)}+\gamma^{(k)}\nabla L_j(x^{(k)})$
+    \end{enumerate}
+    \item MSE minimization: $x\leftarrow x-2\gamma\left(\hat{f}(a_j;k)-b_j\right)\nabla\hat{f}(a_j;x)$
+    \item $\nabla L_j$: a noisy, inaccurate estimate of true gradient $\nabla L$
+    \begin{itemize}
+        \item $\mathbb{E}_j[\nabla L_j(x)]=\nabla L(x)$
+        \item an unbiased estimator, i.e. Long-term에서는 올바른 방향으로 가고 있음
+        \item SGD may not converge, but oscillate nearby optimum
+    \end{itemize}
+    \item Single update의 연산 비용: GD는 $O(mn)$, SGD는 $O(n)$
+    \item Step이 항상 descent direction은 아님
+    \begin{itemize}
+        \item Descent direction인지 확인하려면 $\nabla L$을 계산함 $\Rightarrow$ SGD 채택하는 의미가 없음
+        \item Non-convex problem에서 global optimal이 아닌 local optimal에 빠지는 것을 방지
+    \end{itemize}
+    \item Convergence
+    \begin{itemize}
+        \item Suppose $f$: strongly convex, $\nabla f$: Lipschitz continuous (빠르게 변하지 않음)
+        \item Batch GD: $f(x^{(k)})-p^\ast\leq O\left(c^k\right)$ ($c\in(0,1)$)
+        \item SGD: $\mathbb{E}(f(x^{(k)}))-p^\ast\leq O\left(\frac{1}{k}\right)$ where $\sum_k\gamma_k=\infty$, $\sum_k\gamma_k<\infty$
+        \item 수렴 속도는 Batch GD가 훨씬 빠름
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Mini-batch SGD}
+\begin{itemize}
+    \item Choose a random subset of dataset: Select $b$ samples, and use their mean gradient
+    \begin{itemize}
+        \item 메모리 접근의 효율성을 위해 대체로 $2^N$($N\in\mathbb{N}$)개 사용 (Typically, $N=5,6,\cdots,9$)
+        \item $b=1$: SGD / $b=m$: Batch GD
+    \end{itemize}
+    \item Method
+    \begin{enumerate}
+        \item Select a subset of data sample randomly: choose $B\in\{1,2,\cdots,m\}$
+        \item Update $x^{(k+1)}\leftarrow x^{(k)}+\gamma^{(k)}\frac{1}{|B|}\sum_{j\in B}\nabla L_j(x^{(k)})$
+    \end{enumerate}
+    \item Also an unbiased estimator of $\nabla L$ $\Rightarrow$ Long-term에서 올바른 방향으로 감
+    \item Complexity per update: $O(bn)$
+    \item Convergence: Lower variance as $|B|$ grows
+    \item Mini-batch SGD is a sufficiently good solution
+\end{itemize}
+\begin{figures}
+    \fig{intro-to-convex-optimization/images/sgd-graph.png}{.33}
+\end{figures}
