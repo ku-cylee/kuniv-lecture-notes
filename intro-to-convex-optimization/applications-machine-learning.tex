@@ -89,3 +89,67 @@
 \begin{figures}
     \fig{intro-to-convex-optimization/images/sgd-graph.png}{.33}
 \end{figures}
+
+\subsection{Regularization}
+
+\subsubsection*{Overfitting}
+\begin{itemize}
+    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^Tx$ where $\psi_i(a)=a^i$
+    \item Suppose 10 samples (graphs below) in second-order polynomial relation
+    \begin{itemize}
+        \item Low order ($M=0,1$) does not fit the samples accurately
+        \item Near order ($M=3$) represents the samples approximately
+        \item High order ($M=9$) fits the samples perfectly, but does not represent the overall relation well
+    \end{itemize}
+    \item Overfitting: Sample에 지나치게 fit하는 model은 오히려 모집단의 성격을 나타내지 못할 수 있음
+\end{itemize}
+\begin{figures}
+    \subfig{intro-to-convex-optimization/images/overfitting-order-0.png}{.23}
+    \subfig{intro-to-convex-optimization/images/overfitting-order-1.png}{.23}
+    \subfig{intro-to-convex-optimization/images/overfitting-order-3.png}{.23}
+    \subfig{intro-to-convex-optimization/images/overfitting-order-9.png}{.23}
+\end{figures}
+
+\subsubsection*{Regularization}
+\begin{itemize}
+    \item Method to supress overfitting
+    \begin{itemize}
+        \item Overfitting의 현상: Parameters $x$ becomes very large
+        \item Idea: supress overfitting by minimizing $\Vert x\Vert$
+    \end{itemize}
+    \item Problem becomes solving two optimization problems
+    \begin{itemize}
+        \item minimize $\Vert Ax-b\Vert_2$: Data Loss
+        \item minimize $\Vert x\Vert_2$: Regulation Loss
+    \end{itemize}
+    \item Ridge regression: Multi-objective optimization
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2
+        \end{aligned} $$
+    \begin{itemize}
+        \item Unconstrained QP
+        \item $\lambda>0$: hyperparameter; $\lambda\ll1$: Data loss 중시; $\lambda\gg1$: Regulation loss 중시
+        \item Optimality condition: $x=\left(A^TA+\lambda I\right)^{-1}A^Tb$
+    \end{itemize}
+    \begin{figures}
+        \subfig{intro-to-convex-optimization/images/regularization-small-lambda.png}{.4}
+        \subfig{intro-to-convex-optimization/images/regularization-large-lambda.png}{.4}
+    \end{figures}
+    \newpage
+    \item $L_1$ Regularization: Supress $x$ by by L1-norm
+        $$ \begin{aligned}
+            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_1 \\ {}
+        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\sum t_i \\
+            \mathrm{subject~to}~~&~~t_i\geq x_i,~t_i\geq -x_i
+        \end{aligned} $$
+    \begin{itemize}
+        \item Equivalent to a QP by introducing epigraph
+        \item Solution often has zero entries $\Rightarrow$ ``Sparse'' $x$ is oftenly obtained (Image below)
+        \item Often used to approximate $L_0$ regularization ($\Vert x\Vert_0$: \# of nonzero elements in $x$; nonconvex)
+    \end{itemize}
+    \begin{figures}
+        \subfig{intro-to-convex-optimization/images/l1-norm.png}{.23}
+        \subfig{intro-to-convex-optimization/images/l2-norm.png}{.23}
+    \end{figures}
+\end{itemize}
