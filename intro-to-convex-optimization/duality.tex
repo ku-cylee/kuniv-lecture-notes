@@ -72,7 +72,7 @@
     \begin{itemize}
         \item Lagrangian: $L(x,\nu) = x^Tx + \nu^T(Ax-b)$
         \item Minimization: $0 = \nabla_xL(x^\ast,\nu) = 2x^\ast+A^T\nu$ $\Rightarrow$ $x^\ast=-\frac{1}{2}A^T\nu$
-        \item Dual function: $g(\nu)=L(x^\ast,\nu)=-\frac{1}{4}\nu^TAA^T\nu-b^T\nu$
+        \item Dual function: $g(\nu)=L(x^\ast,\nu)=-\frac{1}{4}\Vert A^T\nu\Vert_2^2-b^T\nu$
     \end{itemize}
     \item Linear Programming
         $$ \begin{aligned}
@@ -80,7 +80,7 @@
             \mathrm{subject~to}~~&~~Ax = b,~x\succeq 0
         \end{aligned} $$
     \begin{itemize}
-        \item Lagrangian: $L(x,\lambda,\nu)=c^Tx+\nu^T(Ax-b)-\lambda^Tx = -b^T\nu+(c+A^T\nu-\lambda)^Tx$
+        \item Lagrangian: $L(x,\lambda,\nu)=c^Tx-\lambda^Tx+\nu^T(Ax-b)=-b^T\nu+(A^T\nu-\lambda+c)^Tx$
         \item Dual function: $L$: affine in $x$ $\Rightarrow$ $g = -b^T\nu$ if $A^T\nu-\lambda+c=0$, else $-\infty$
         \item Lower bound property: $p^\ast\geq-b^T\nu$ if $A^T\nu + c \succeq 0$
     \end{itemize}
@@ -124,11 +124,8 @@
 \subsubsection*{Slater's Condition}
 \begin{itemize}
     \item Strong duality holds for a convex problem if it is \textbf{strictly feasible}
-        $$ \begin{aligned}
-            \mathrm{maximize}~~&~~g(\lambda,\nu) \\
-            \mathrm{subject~to}~~&~~\lambda\succeq 0
-        \end{aligned} $$
     \item Strictly feasible: $\exists~x\in\mathrm{int}~\mathcal{F}$, i.e. $f_i(x)<0$, $Ax=b$
+    \item Affine ineq. $Ax\preceq b$는 $Ax\prec b$(strict)와 $Ax=b$(equality)로 나누어짐 $\Rightarrow$ 굳이 strictly feasible할 필요 없음
     \item Dual optimal이 존재함이 보장됨
     \item Real-world convex problem에 대해서는 거의 대부분 적용할 수 있음
 \end{itemize}
@@ -159,11 +156,12 @@
             &= f_0(x^\ast)+\sum_{i}\lambda_i^\ast f_i(x^\ast)~~(\because~h_i(x^\ast)=0) \\
             &\leq f_0(x^\ast)~~(\because~\lambda_i^\ast f_i(x^\ast)\leq 0)
     \end{aligned} $$
-    \item $\forall~i=1,2,\cdots,m,~\lambda_i f_i(x) = 0$: complementary slackness $\Rightarrow$ $f_0(x^\ast) = L(x^\ast,\lambda^\ast,\nu^\ast)$
+    \item $\forall~i=1,2,\cdots,m,~\lambda_i^\ast f_i^\ast(x) = 0$: complementary slackness $\Rightarrow$ $f_0(x^\ast) = L(x^\ast,\lambda^\ast,\nu^\ast)$
     \item $\lambda_i^\ast>0~\Rightarrow~f_i(x_i^\ast)=0$, $f_i(x^\ast)<0~\Rightarrow~\lambda_i^\ast=0$
 \end{itemize}
+\newpage
 
-\subsubsection*{KKT(Karush-Kuhn-Tucker) Condition}
+\subsubsection*{KKT (Karush-Kuhn-Tucker) Condition}
 \begin{enumerate}
     \item Primal constraints: $\forall~i=1,2,\cdots,m,~f_i(x)\leq 0$, $\forall~i=1,2,\cdots,p,~h_i(x)=0$
     \begin{itemize}
@@ -201,9 +199,9 @@
         \item KKT 1: $Ax^\ast = b$, KKT 4: $Px^\ast + q + A^T\nu = 0$ i.e.
             $$ \begin{mtx}{cc}P&A^T\\A&0\end{mtx}\begin{mtx}{c}x^\ast\\\nu^\ast\end{mtx}=\begin{mtx}{c}-q\\b\end{mtx} $$
     \end{itemize}
-    \item Waterfalling
+    \item Waterfilling
         $$ \begin{aligned}
-            \mathrm{minimize}~~&~~-\sum{i=1}^n \log(x_i + \alpha_i) \\
+            \mathrm{minimize}~~&~~-\sum_{i=1}^n \log(x_i + \alpha_i) \\
             \mathrm{subject~to}~~&~~x\succeq 0,~\mathbf{1}^Tx = 1
         \end{aligned} $$
     \begin{itemize}
@@ -213,7 +211,7 @@
         \item $\therefore$ $x_i = \max(0, \frac{1}{\nu}-\alpha_i) = \left[\frac{1}{\nu}-\alpha_i\right]^+$
     \end{itemize}
     \begin{figures}
-        \fig{intro-to-convex-optimization/images/waterfalling.PNG}{.55}
+        \fig{intro-to-convex-optimization/images/waterfalling.PNG}{.4}
     \end{figures}
 \end{itemize}
 
@@ -229,7 +227,7 @@
         $$ \begin{aligned}
             \mathrm{minimize}~~&~~\Vert Ax+b \Vert \\ {}
         \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
-            \mathrm{minimize}~~&~~\Vert y\Vert\lambda \\
+            \mathrm{minimize}~~&~~\Vert y\Vert \\
             \mathrm{subject~to}~~&~~y = Ax + b
         \end{aligned} $$
     \begin{itemize}

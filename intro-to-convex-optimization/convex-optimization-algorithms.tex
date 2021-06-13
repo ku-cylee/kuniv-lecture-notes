@@ -40,7 +40,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
     \item $\Delta x$: step, search direction
     \item $t>0$: step size, step length
     \item Convexity $\Rightarrow$ $f(x^{(k+1)})<f(x^{(k)})$ $\Leftrightarrow$ $\nabla f(x^{(k)})^T\Delta x^{(k)}<0$
-    \item General Descent Method
+    \item General Algorithm
     \begin{description}
         \item[given] a starting point $x\in\mathcal{D}(f)$
         \item[repeat] \phantom{}
@@ -68,7 +68,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
             $$ f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^T\Delta x $$
         \item Guarantees $f(x^{(k)})<f(x^{(k+1)})$ since $\nabla f(x)^T\Delta x<0$
     \end{itemize}
-    \item Gradient Descent Method: General descent method with $\Delta x = -\nabla f(x)$
+    \item Algorithm: General descent method with $\Delta x = -\nabla f(x)$
     \begin{description}
         \item[given] a starting point $x\in\mathcal{D}(f)$, tolerance $\epsilon>0$
         \item[repeat] \phantom{}
@@ -91,7 +91,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 \subsubsection*{Steepest Descent Method}
 \begin{itemize}
     \item Normalized steepest Descent Direction
-        $$ \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left(\nabla f(x)^T v\right) $$
+        $$ \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^T v\right\} $$
     \begin{itemize}
         \item Interpretation: for $v\ll 1$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
         \item $\Delta x_{\mathrm{nsd}}$: most negative directional derivative
@@ -99,7 +99,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
     \item (Unnormalized) Steepest Descent Direction
         $$ \Delta x_\mathrm{sd}=\Vert\nabla f(x)\Vert_\ast\Delta x_\mathrm{nsd} $$
     \begin{itemize}
-        \item Interpretation: $\nabla f(x)^Tv\leq\Vert\nabla f(x)^T\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
+        \item Interpretation: $\nabla f(x)^Tv\leq\Vert\nabla f(x)\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
         \item General form of GD. GD if $\Vert v\Vert_2\leq 1$
     \end{itemize}
     \item Examples
@@ -171,7 +171,7 @@ $$ \begin{aligned}
     \item Optimality conditions: $x^\ast$: optimal $\Leftrightarrow$ $\exists~\nu^\ast$ s.t.
     \begin{itemize}
         \item KKT 1: $Ax^\ast=b$
-        \item KKT 4: $\nabla f(x^\ast)+A^T\nu=0$
+        \item KKT 4: $\nabla f(x^\ast)+A^T\nu^\ast=0$
     \end{itemize}
     \item Objective: residual(error) functions $\rightarrow~0$
     \begin{itemize}
@@ -188,7 +188,7 @@ $$ \begin{aligned}
     \mathrm{minimize}~~&~~\tilde{f}(z)=f(Fz+\hat{x}) \\ {}
 \end{aligned} $$
 \begin{itemize}
-    \item Columns of $F\in\mathbb{R}^{n\times(n-p)}$ form basis of $\mathcal{N}(A)$; $\mathrm{rank}F = n-p$, $AF=0$
+    \item Columns of $F\in\mathbb{R}^{n\times(n-p)}$ form basis of $\mathcal{N}(A)$; $\mathrm{rank}F = n-p$, $AF=O$
     \item $\hat{x}$: any particular solution of $Ax=b$
     \item An unconstrained convex problem over variable $z\in\mathbb{R}^{n\times(n-p)}$
     \item Optimality condition
@@ -212,7 +212,7 @@ $$ \begin{aligned}
 \subsubsection*{Newton's Method}
 \begin{itemize}
     \item Newton step
-        $$ \begin{mtx}{cc}\nabla^2f(x)&A^T\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}\nabla f(x)\\0\end{mtx} $$
+        $$ \begin{mtx}{cc}\nabla^2f(x)&A^T\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}-\nabla f(x)\\0\end{mtx} $$
     \begin{itemize}
         \item Coefficient matrix is called KKT matrix
         \item Interpretation
@@ -220,6 +220,7 @@ $$ \begin{aligned}
             \item $v=\Delta x_\mathrm{nt}$ solves 2nd-order approx. $\hat{f}(x+v)=f(x)+\nabla f(x)^Tv+\frac{1}{2}v^T\nabla^2 f(x)v$ s.t. $A(x+v)=b$
             \item $\Delta x_\mathrm{nt}$ satisfies KKT cond 4: $\nabla f(x+v)+A^Tw\approx\nabla f(x)+\nabla^2 f(x)v+A^Tw=\nabla f(x)+(-\nabla f(x))=0$
         \end{itemize}
+        \item $x+\Delta x_\mathrm{nt}$, $w$: a good estimate of $x^\ast$ and $\nu^\ast$ when $f$ is nearly quadratic
     \end{itemize}
     \item Newton decrement
         $$ \lambda(x)=\left(-\nabla f(x)^T\Delta x_\mathrm{nt}\right)^{1/2} $$
@@ -294,7 +295,7 @@ $$ \begin{aligned}
         \end{aligned} $$
     \begin{itemize}
         \item $I_-(x)$: $0$ if $x<0$, $\infty$ if $x\geq 0$
-        \item Irritation function is difficult to handle in mathematical manner
+        \item Irritation function is difficult to handle in a mathematical manner
     \end{itemize}
     \item Logarithmic Barrier (red, solid)
         $$ \phi(x)=-\sum_{i=1}^m\log(-f_i(x)),~~~~\mathcal{D}(\phi)=\{x|f_1(x)<0,f_2(x)<0,\cdots,f_m(x)<0\} $$
@@ -321,7 +322,7 @@ $$ \begin{aligned}
 
 \subsubsection*{Dual points on Central path}
 \begin{itemize}
-    \item Central path: $\{x^\ast(t)|t>0\}$
+    \item Central path: $\{x^\ast(t)~|~t>0\}$
     \begin{itemize}
         \item $x^\ast(t)$: Solution of the problem $f(x)=tf_0(x)+\phi(x)$ s.t. $Ax=b$ (Assume $\forall~t>0$, $\exists!~x^\ast(t)$)
     \end{itemize}
@@ -337,7 +338,7 @@ $$ \begin{aligned}
     \item Primal constraints: $f_i(x)<0\leq 0$
     \item Dual constraints: $\lambda=-\frac{1}{tf_i(x^\ast)}>0$ ($\because$ primal constraints)
     \item \textit{Approximate} complementary slackness: $\lambda_if_i(x)=-\frac{1}{t}\rightarrow 0$ when $t\rightarrow\infty$
-    \item Lagrangian gradient holds
+    \item Zero Lagrangian gradient holds
 \end{itemize}
 
 \subsubsection*{Barrier Method}
@@ -362,5 +363,5 @@ $$ \begin{aligned}
         \item Typical $\mu=10~-~20$
     \end{itemize}
     \item Number of outer iterations
-        $$ \left\lceil\frac{\log(\frac{m}{\epsilon t^{(0)}})}{\log\mu}\right\rceil~+~\mathrm{initial~centering~step} $$
+        $$ \left\lceil\frac{\log\frac{m}{\epsilon t^{(0)}}}{\log\mu}\right\rceil~+~\mathrm{initial~centering~step} $$
 \end{itemize}

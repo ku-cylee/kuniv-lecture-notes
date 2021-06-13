@@ -64,7 +64,7 @@
     \begin{itemize}
         \item Suppose $f$: strongly convex, $\nabla f$: Lipschitz continuous (빠르게 변하지 않음)
         \item Batch GD: $f(x^{(k)})-p^\ast\leq O\left(c^k\right)$ ($c\in(0,1)$)
-        \item SGD: $\mathbb{E}(f(x^{(k)}))-p^\ast\leq O\left(\frac{1}{k}\right)$ where $\sum_k\gamma_k=\infty$, $\sum_k\gamma_k<\infty$
+        \item SGD: $\mathbb{E}(f(x^{(k)}))-p^\ast\leq O\left(\frac{1}{k}\right)$ where $\sum_k\gamma_k=\infty$, $\sum_k\gamma_k^2<\infty$
         \item 수렴 속도는 Batch GD가 훨씬 빠름
     \end{itemize}
 \end{itemize}
@@ -124,7 +124,7 @@
     \end{itemize}
     \item Ridge regression: Multi-objective optimization
         $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2
+            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2^2
         \end{aligned} $$
     \begin{itemize}
         \item Unconstrained QP
@@ -217,8 +217,8 @@
     \begin{itemize}
         \item Separating points into two sets: $X=\{x_1,x_2,\cdots,x_N\}$ and $Y=\{y_1,y_2,\cdots,y_M\}$
         \item 경계에 가장 가까운 $X$, $Y$의 점: $\hat{x}$, $\hat{y}$ $\Rightarrow$ $\exists~a,b$ s.t. $a^T\hat{x}+b=1$, $a^T\hat{y}+b=-1$
-        \item $\forall~x\in X$, $a^Tx\geq1$, $\forall~y\in Y$, $a^Ty\leq-1$
-        \item Boundary hyperplane $a^Tx=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
+        \item $\forall~x\in X$, $a^Tx+b\geq1$, $\forall~y\in Y$, $a^Ty+b\leq-1$
+        \item Boundary hyperplane $a^Tx+b=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
     \end{itemize}
     \newpage
     \item Robust linear classifier
