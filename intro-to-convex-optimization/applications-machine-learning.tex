@@ -141,7 +141,7 @@
             \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_1 \\ {}
         \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
             \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\sum t_i \\
-            \mathrm{subject~to}~~&~~t_i\geq x_i,~t_i\geq -x_i
+            \mathrm{subject~to}~~&~~t\succeq x,~t\succeq -x
         \end{aligned} $$
     \begin{itemize}
         \item Equivalent to a QP by introducing epigraph
@@ -159,7 +159,7 @@
 \subsubsection*{Classification}
 \begin{itemize}
     \item Assume $a_1$ characteristics are \textit{generally} classified into $c_1$, $a_2$ into $c_2$
-    \item But, here is a chance $a_2$ characteristic corresponds to $c_1$, and vice versa
+    \item But, there is a chance $a_2$ characteristic corresponds to $c_1$, and vice versa
     \item Calculating probability of $a_1$ data being classified into $c_1$, $a_2$ into $c_2$ is critical
 \end{itemize}
 

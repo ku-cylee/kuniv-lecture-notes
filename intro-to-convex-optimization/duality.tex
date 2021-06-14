@@ -97,7 +97,7 @@
     \item Entropy maximization
         $$ \begin{aligned}
             \mathrm{minimize}~~&~~\sum_{i=1}^n x_i\log(x_i) \\
-            \mathrm{subject~to}~~&~~\mathbf{1}^Tx = 1,~Ax\leq b
+            \mathrm{subject~to}~~&~~\mathbf{1}^Tx = 1,~Ax\preceq b
         \end{aligned} $$
     \begin{itemize}
         \item Lagrangian: $L(x,\lambda,\nu)=\sum_{i=1}^nx_i\log(x_i)+\nu(\mathbf{1}^Tx-1)+\lambda^T(Ax-b)$
@@ -135,10 +135,10 @@
     \item Inequality form LP
         $$ \begin{aligned}
             \mathrm{minimize}~~&~~c^Tx \\
-            \mathrm{subject~to}~~&~~Ax\preceq 0
+            \mathrm{subject~to}~~&~~Ax\preceq b
         \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
             \mathrm{minimize}~~&~~-b^T\lambda \\
-            \mathrm{subject~to}~~&~~A^T\lambda + c = 0,~\lambda\preceq 0
+            \mathrm{subject~to}~~&~~A^T\lambda+c=0,~\lambda\succeq 0
         \end{aligned} $$
     \begin{itemize}
         \item Slater's condition: $\exists~\tilde{x}$ s.t. $A\tilde{x}\prec b$ $\Rightarrow$ $p^\ast=d^\ast$
@@ -231,7 +231,7 @@
             \mathrm{subject~to}~~&~~y = Ax + b
         \end{aligned} $$
     \begin{itemize}
-        \item Lagrangian: $L(x;y,\nu) = \Vert y\Vert-\nu(Ax+b-y) = \Vert y\Vert-y^T\nu+x^TA^T\nu+b^T\nu = (A^T\nu)^Tx + \Vert y\Vert - y^T\nu + b^T\nu$
+        \item Lagrangian: $L(x;y,\nu) = \Vert y\Vert+\nu^T(Ax+b-y) = \Vert y\Vert-y^T\nu+x^TA^T\nu+b^T\nu = (A^T\nu)^Tx + \Vert y\Vert - y^T\nu + b^T\nu$
         \item Dual function: $g(\nu) = \inf_{x}(A^T\nu)^Tx + \inf_{y}\left[\Vert y\Vert - y^T\nu\right] + b^T\nu$
         \item Optimizing by $x$: $g(\nu) = \inf_{y}\left[\Vert y\Vert - y^T\nu\right] + b^T\nu$ ($A^T\nu = 0$)
         \item Optimizing by $y$: $g(\nu)\geq\inf_{y}\left[\Vert y\Vert - \Vert y\Vert\Vert\nu\Vert_\ast\right]+b^T\nu = b^T\nu$ ($A^T\nu = 0$, $\Vert\nu\Vert_\ast\leq 1$)

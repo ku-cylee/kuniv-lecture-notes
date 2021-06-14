@@ -93,7 +93,7 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
     \item Normalized steepest Descent Direction
         $$ \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^T v\right\} $$
     \begin{itemize}
-        \item Interpretation: for $v\ll 1$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
+        \item Interpretation: for a very small $v$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
         \item $\Delta x_{\mathrm{nsd}}$: most negative directional derivative
     \end{itemize}
     \item (Unnormalized) Steepest Descent Direction
@@ -146,10 +146,10 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
         \item Quadratically Convergent Phase: fast convergence ($\Vert\nabla f(x)\Vert_2<\eta$)
         \begin{itemize}
             \item 모든 step의 $t=1$, $\Vert\nabla f(x)\Vert_2$ converges to 0 quadratically
-            \item 적어도 $\log_2\log_2\left(\frac{\epsilon_0}{\epsilon}\right)$회 이내에 종료; Almost constant
+            \item 적어도 $\log_2\log_2\frac{\epsilon_0}{\epsilon}$회 이내에 종료; Almost constant
         \end{itemize}
     \end{itemize}
-    \item $f(x)-p^\ast\leq\epsilon$까지의 반복 횟수는 최대 $\frac{f(x^{(0)})-p^\ast}{\gamma}+\log_2\log_2\left(\frac{\epsilon_0}{\epsilon}\right)$회
+    \item $f(x)-p^\ast\leq\epsilon$까지의 반복 횟수는 최대 $\frac{f(x^{(0)})-p^\ast}{\gamma}+\log_2\log_2\frac{\epsilon_0}{\epsilon}$회
     \item High cost, but high convergence speed $\Rightarrow$ tradeoff
 \end{itemize}
 
