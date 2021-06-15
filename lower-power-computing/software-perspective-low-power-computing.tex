@@ -77,7 +77,7 @@
     \item Example: \textit{ondemand} governor의 동작
     \begin{enumerate}
         \item Pre-defined period($\approx$ 10ms) 동안 $\mathrm{util_{CPU}}$ 샘플
-        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$($\approx$ 70\textasciitilde{}90\%)와 비교
+        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$($\approx$ 70 - 90\%)와 비교
         \item IF $\mathrm{util_{CPU}}>\mathrm{util_{th}}$: CPU 처리량이 많은 상태이므로 $f_{\mathrm{CPU}}$를 최대로 올림
         \item IF $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$: 할 일이 적을때 낮추어야 사용자가 덜 불편하므로 $f_{\mathrm{CPU}}$를 한 단계씩 내림
         \item Highest $f_{\mathrm{CPU}}$ s.t. $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$ 찾을 때까지 반복
@@ -334,7 +334,7 @@
 
 \subsubsection*{Other Processing Units}
 \begin{itemize}
-    \item 연산 능력: CPU < GPU < DSP < NPU
+    \item 연산 능력: CPU $<$ GPU $<$ DSP $<$ NPU
     \item 연산 능력이 더 좋은 chip에게 delegate하고, CPU는 저전력 상태에 머묾
     \item Pipelining 형태의 scheme이 사용됨
 \end{itemize}
@@ -353,7 +353,7 @@
     \item Multimedia Content
     \begin{enumerate}
         \item 현재 frame과 다음 frame을 픽셀 단위로 분석함
-        \item Difference > threshold: Rate $\Uparrow$
+        \item Difference $>$ threshold: Rate $\Uparrow$
         \item Difference $\leq$ threshold: Rate를 $\Downarrow$ $\Rightarrow$ 사용자는 거의 체감 못함
     \end{enumerate}
     \item Relying on Scrolling speed: 스크롤 중일때 사용자가 더 sensitive하다는 가정

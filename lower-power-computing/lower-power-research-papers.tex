@@ -131,13 +131,13 @@
 \begin{itemize}
     \item 실행 시간
     \begin{itemize}
-        \item 모든 경우에 대해, Advanced M-DTM \textgreater{} IPA \textgreater{} DTM
+        \item 모든 경우에 대해, Advanced M-DTM $>$ IPA $>$ DTM
         \item App의 수가 많아지면 M-DTM, Advanced M-DTM의 효과는 저하
     \end{itemize}
     \item System-wide EDP (Energy-delay product): M-DTM $\gg$ IPA $\geq$ Advanced M-DTM
     \item DTM 발생 시간 비율 (= 1 - highest $f$ 작동 시간)
     \begin{itemize}
-        \item IPA > M-DTM > Advanced M-DTM
+        \item IPA $>$ M-DTM $>$ Advanced M-DTM
         \item $T_\mathrm{th}$가 높고 app 수가 적으면 migration만으로도 DTM을 거의 없앨 수 있음
     \end{itemize}
 \end{itemize}
@@ -226,10 +226,10 @@
         \item LV: Load-balancing with VM characteristics
         \item AB: Ambient-aware VM allocation
     \end{itemize}
-    \item 성능 (속도): AB \textgreater{} LV $\approx$ LB $\gg$ CS
-    \item 평균 온도: AB \textless{} LB $\approx$ LV \textless{} CS
-    \item 최고 온도: AB \textless{} CS $\leq$ LB $\approx$ LV
-    \item 에너지 소모: LV \textless{} LB \textless{} AB $\ll$ CS
+    \item 성능 (속도): AB $>$ LV $\approx$ LB $\gg$ CS
+    \item 평균 온도: AB $>$ LB $\approx$ LV $>$ CS
+    \item 최고 온도: AB $>$ CS $\leq$ LB $\approx$ LV
+    \item 에너지 소모: LV $>$ LB $>$ AB $\ll$ CS
 \end{itemize}
 
 \subsection{Inline Data Deduplication Accelerator}
@@ -240,7 +240,7 @@
     \item 필요성: 오늘날 연간 데이터 생산량은 매우 높으며(44ZB at 2020) 70\% 정도의 데이터가 중복 데이터
     \item Overall scheme
     \begin{enumerate}
-        \item Chunking: 저장될 데이터 파일을 chunking (\textgreater{} 16KB)
+        \item Chunking: 저장될 데이터 파일을 chunking ($>$ 16KB)
         \item Fingerprinting: 해시 함수 등을 이용하여 해시값 도출
         \item Indexing: Fingerprint를 이용하여 데이터를 찾아봄
         \item Writing: Redundant 데이터는 metadata만 저장, Unique 데이터는 chunk를 저장
@@ -368,16 +368,16 @@
 \begin{itemize}
     \item 실험군
     \begin{itemize}
-        \item 2D-DT: DTM 제거 + heat pipe + 작은 fan (Intel\textsuperscript\textregistered Dynamic Tuning Technology 비활성화)
+        \item 2D-DT: DTM 제거 + heat pipe + 작은 fan (Intel\textsuperscript{\textregistered} Dynamic Tuning Technology 비활성화)
         \item 3D-PL1: PL1 + heat pipe
         \item 3D-DVFS: DVFS + PL1 비활성화 + heat pipe
         \item 3D-DT: DTM 제거 + PL1 비활성화 + heat pipe + 외부 cooling fan
     \end{itemize}
-    \item 성능: 3D-DT \textgreater{} 3D-DVFS \textgreater{} 2D-DT $\gg$ 3D-PL1
-    \item 전력 소모: 3D-PL1 \textless{} 3D-DVFS $\approx$ 3D-DT \textless{} 2D-DT
-    \item 평균 $f$: 2D-DT $\gg$ 3D-DT $\geq$ 3D-DVFS \textgreater{} 3D-PL1
-    \item 에너지 소모: 3D-DVFS \textgreater{} 3D-PL1 $\approx$ 3D-DT (Fan 전력 미포함)
-    \item 최고 온도: 3D-DVFS \textgreater{} $T_\mathrm{th}$ $\approx$ 3D-PL1 \textgreater{} 3D-DT $\geq$ 2D-DT
+    \item 성능: 3D-DT $>$ 3D-DVFS $>$ 2D-DT $\gg$ 3D-PL1
+    \item 전력 소모: 3D-PL1 $<$ 3D-DVFS $\approx$ 3D-DT $<$ 2D-DT
+    \item 평균 $f$: 2D-DT $\gg$ 3D-DT $\geq$ 3D-DVFS $>$ 3D-PL1
+    \item 에너지 소모: 3D-DVFS $>$ 3D-PL1 $\approx$ 3D-DT (Fan 전력 미포함)
+    \item 최고 온도: 3D-DVFS $>$ $T_\mathrm{th}$ $\approx$ 3D-PL1 $>$ 3D-DT $\geq$ 2D-DT
     \item 평균 온도: $T_\mathrm{th}$ $\approx$ 3D-DVFS $\gg$ 3D-PL1 $\geq$ 3D-DT $\geq$ 2D-DT
 \end{itemize}
 
