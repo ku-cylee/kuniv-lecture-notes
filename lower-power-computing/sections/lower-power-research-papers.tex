@@ -1,0 +1,399 @@
+\section{Lower Power Research Papers}
+
+\subsection{Mobile AP Thermal Modeling}
+
+\subsubsection*{Thermal Issues in Mobile AP}
+\begin{itemize}
+    \item 온도 문제는 시간이 흐르면서 더욱 심각해지고 있음
+    \item Cooling System (Heat sink, 쿨링 팬, 수냉 등): 공간 부족으로 인해 부적합
+    \item DVFS 등의 DTM: 성능 저하 초래 문제
+    \item 온도 문제는 early-design stage부터 고려되어야 함
+    \begin{itemize}
+        \item Proper thermal model이 반드시 필요함
+        \item Chip의 design 정보와 power trace에 근거하여 모델링하였음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Thermal Modeling Methodology}
+\begin{itemize}
+    \item Target Mobile AP
+    \begin{itemize}
+        \item PoP(Package-on-Package)-type mobile AP
+        \item Processor die: 4개의 big core + 4개의 small core, TSMC 22nm 공정
+    \end{itemize}
+    \item 프로세서를 덮고 있는 메모리는 차가움
+    \begin{itemize}
+        \item 메모리와 package를 떼어내고 투명한 crystal package를 씌운 뒤 IR 카메라로 온도 측정하여 모델 구성
+        \item 원본 chip을 이용하여 validation 수행
+    \end{itemize}
+    \item Processor가 더 뜨거운데 아래에 위치하는 이유
+    \begin{itemize}
+        \item 위쪽에 있으면 power 공급이 불안정함 (프로세서에는 치명적)
+        \item DRAM도 온도가 증가하면 refresh rate가 증가함
+        \item 정해진 위치는 없으며, 위에 배치하기도 함
+    \end{itemize}
+    \item Model Design Tool: HotSpot (University of Virginia)
+    \item 제조사로부터 제공된 floorplan, material properties를 이용, 측정한 subsystem별 power trace를 이용
+\end{itemize}
+\begin{figures}
+    \fig{pop-type-mobile-ap.png}{.8}
+\end{figures}
+
+\subsubsection*{Thermal Modeling Results}
+\begin{itemize}
+    \item Big CPU, Little CPU, MEMC0 등에서는 MAE $\approx$ 2.34 - 3.51$\cel$로 거의 정확
+    \item GPU, CCI 등에서는 MAE $\approx$ 4.55 - 6.05$\cel$로 다소 부정확
+    \begin{itemize}
+        \item 크기가 큰 subsystem은 부분별로 온도가 다를 수 있음 $\Rightarrow$ subsystem별로 하나의 온도만 측정되어 부정확
+        \item Big, thermally critical subsystem을 여러 sublock으로 나누고, 각 core의 $\mathrm{util_{CPU}}$를 통해 소모 전력 예측
+        \item Selective fine-grained modeling
+    \end{itemize}
+    \item GPU, CCI의 MAE $\approx$ 2.08 - 2.56$\cel$로 다소 정확해짐
+\end{itemize}
+
+\subsubsection*{Validation}
+\begin{itemize}
+    \item Real mobile application을 통한 검증
+    \begin{itemize}
+        \item Adobe reader, File compressor, MX Player 등
+        \item 평균 MAE $\approx$ 1.58$\cel$: 정확
+    \end{itemize}
+    \item Thermal sensor를 통한 검증
+    \begin{itemize}
+        \item Modeling 과정과는 달리 package와 메모리를 얹은 채로 진행
+        \item 제조사 제공 floorplan을 통해 열 센서의 위치를 알고있는 상태에서 측정
+        \item 평균 MAE $\approx$ 1.75$\cel$: 정확
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Summary}
+\begin{itemize}
+    \item Mobile AP의 온도 map을 관찰한 첫 연구
+    \item 제시된 model이 온도를 정확하게 예측함
+\end{itemize}
+
+\subsection{M-DTM: Migration-based Dynamic Themral Management}
+
+\subsubsection*{Issues of Conventional DTM}
+\begin{itemize}
+    \item Small core를 사용하지 않음
+    \begin{itemize}
+        \item Thermal emergency를 빠르게 해결하지 못함
+        \item 앱이 big core의 가장 높은 $f$로 충분히 돌 시간이 없음
+    \end{itemize}
+    \item Small core를 사용하여 big core를 냉각시키는 아이디어
+\end{itemize}
+
+\subsubsection*{Proposed Scheme}
+\begin{itemize}
+    \item $T_\mathrm{big}>T_\mathrm{th}$: Task scheduler가 모든 app을 small core로 migrate
+    \item $T_\mathrm{big}\leq T_\mathrm{th}$: Task scheduler가 모든 app을 big core로 migrate
+    \item Scaling governor은 big, small core에서 가장 높은 $f$로 돌게 함 $\Rightarrow$ 성능 저하 다소 cover
+    \item Potential Problems: Migration Overhead
+    \begin{itemize}
+        \item 과거에는 migration overhead가 다소 컸음 (1-5초) $\Rightarrow$ 최근에는 거의 없음
+        \item Big-little migration
+        \begin{itemize}
+            \item Live migration: 수행하던 부분만 먼저 migration하는 방법
+            \item Shared LLC 효과: 현재 수행하고 있는 부분이 DRAM이 아닌 cache에 들어가 있어 훨씬 빠름
+        \end{itemize}
+        \item Big-big migration: 거의 작음 (Performace overhead $\approx$ 0.4\%)
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 성능
+    \begin{itemize}
+        \item 실행 시간: Conv. DTM에 비해 10.6\% 낮음
+        \item Highest $f$로 동작하는 시간: Conv. DTM에 비해 2.5배 높음
+        \item Small core는 pipeline stage가 적고 cache가 작음 $\Rightarrow$ branch misprediction 많고 L2 cache hit이 높을수록 유리
+    \end{itemize}
+    \newpage
+    \item 온도
+    \begin{itemize}
+        \item 평균 온도: 거의 유사
+        \item 최고 온도: Conv. DTM에 비해 7.4$\cel$ 낮음
+    \end{itemize}
+    \item 에너지 소모: Conv. DTM에 비해 3.6\% 낮음
+    \begin{itemize}
+        \item 전력은 Conv. DTM보다 더 소모하나 실행 시간이 대폭 줄어들어 에너지 소모는 감소
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Migration among Big Cores + M-DTM/DVFS}
+\begin{itemize}
+    \item IPA는 M-DTM보다 효율적인 방법. 그러나 IPA는 예측이 어렵고 부정확하다는 단점이 있음
+    \item Big core간의 migration을 먼저 수행하고, 모든 big core의 온도가 높으면 M-DTM이나 DVFS 수행
+\end{itemize}
+
+\subsubsection*{DTM, Ideal IPA, Advanced M-DTM 성능 비교}
+\begin{itemize}
+    \item 실행 시간
+    \begin{itemize}
+        \item 모든 경우에 대해, Advanced M-DTM $>$ IPA $>$ DTM
+        \item App의 수가 많아지면 M-DTM, Advanced M-DTM의 효과는 저하
+    \end{itemize}
+    \item System-wide EDP (Energy-delay product): M-DTM $\gg$ IPA $\geq$ Advanced M-DTM
+    \item DTM 발생 시간 비율 (= 1 - highest $f$ 작동 시간)
+    \begin{itemize}
+        \item IPA $>$ M-DTM $>$ Advanced M-DTM
+        \item $T_\mathrm{th}$가 높고 app 수가 적으면 migration만으로도 DTM을 거의 없앨 수 있음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Prime core}
+\begin{itemize}
+    \item Prime core는 big core보다도 성능이 좋은 core
+    \item 장점: 성능 향상 / 단점: 면적 overhead, prime core에서의 thermal emergency
+    \item Heatpipe: 액체가 뜨거운 core에서 증발, 차가운 core에서 응결하여 순환하는 냉각 방식
+\end{itemize}
+\begin{figures}
+    \fig{heatpipe.png}{0.4}
+\end{figures}
+
+\subsubsection*{Future DTM Researches}
+\begin{itemize}
+    \item Thermal Control
+    \begin{itemize}
+        \item Ambient 온도: Ambient 온도로 인해 같은 환경에서는 성능이 flip될 수 있음
+        \item Ambient 온도, secondary heat path 등으로 인한 side effect 고려해야 함
+        \item Instruction별로 다른 복잡도를 고려해야 함
+    \end{itemize}
+    \item Hardware PID Control
+    \begin{itemize}
+        \item Hardware 단위로 $V$/$f$ 조절 $\Rightarrow$ 더 빠르게 대응할 수 있음 (fine-grain thermal control)
+        \item 예: on-chip voltage regulator
+        \item Gain이 어느 정도일지는 아직 미지수
+    \end{itemize}
+    \item Task Migration
+    \item Overclocking: 하나의 core만 사용할 때는 아주 짧은 시간동안 overclocking
+\end{itemize}
+
+\subsection{Ambient Temperature Aware VM Allocation}
+
+\subsubsection*{Motivation: Data Center}
+\begin{itemize}
+    \item 데이터 센터의 서버는 서버의 특징, workload의 특징에 따라 온도가 다름, 대류로 인해 열이 주변으로 전달됨
+    \item 데이터 센터는 주로 heterogeneous 서버로 구성되어 있음
+    \item Ambient 온도에 의해 성능 저하가 발생할 수 있음 $\Rightarrow$ 이를 고려하여 성능 저하 최소화
+\end{itemize}
+
+\subsubsection*{Related Researches}
+\begin{itemize}
+    \item Consolidation: 서버의 성능에 따라 VM을 모아서 배치하는 방법
+    \begin{itemize}
+        \item 서버의 누설 전력이 클 때 사용
+        \item 장점: 에너지 소모 감소
+        \item 단점: 잦은 throttling, 자원 경합, ambient 요소 고려하지 못함
+    \end{itemize}
+    \item Load balancing: 동적 수행 능력을 고려하여 서버에 VM을 분산 배치하는 방법
+    \begin{itemize}
+        \item 서버의 누설 전력이 작을 때 사용
+        \item 장점: 에너지 소모 감소, 성능 증가
+        \item 단점: ambient 요소 고려하지 못함
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Overall Scheme}
+\begin{itemize}
+    \item Ambient-aware dynamic computing capability estimation model
+    \begin{itemize}
+        \item 주변 온도, $f_\mathrm{CPU}$, LLC 크기, $\mathrm{util_{CPU}}$, $\mathrm{util_{mem}}$ 고려 $\Rightarrow$ 선형 회귀법으로 모델 구성
+        \item 모델을 이용하여 (ambient-aware dynamic computing) capability 계산
+    \end{itemize}
+    \item LLC의 MPKI(Misses Per Kilo-Instruction)를 고려하여 VM의 특성 분류
+    \begin{itemize}
+        \item MPKI 높음 $\Rightarrow$ 메모리 접근 많음 $\Rightarrow$ Memory-intensive VM
+        \item MPKI 낮음 $\Rightarrow$ 메모리 접근 적음 $\Rightarrow$ Compute-intensive VM
+    \end{itemize}
+    \item 컴퓨팅 능력과 VM의 특성을 고려하여 VM과 PM(물리 서버)를 mapping함
+    \begin{enumerate}
+        \item VM은 compute-intensiveness의 내림차순, PM은 capability의 내림차순으로 정렬
+        \item Most compute-intensive VM을 highest-capability PM에 할당 $\Rightarrow$ PM 순서 업데이트
+        \item (2)를 반복하여 Compute-intensive VM을 모두 배치
+        \item Memory-intensive VM은 최대한 분산하여 PM에 배치
+    \end{enumerate}
+    \item VM manager, PM manager, Info.manager를 이용하여 검증
+\end{itemize}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 네 개의 실험군
+    \begin{itemize}
+        \item CS: Consolidation
+        \item LB: Load-balancing
+        \item LV: Load-balancing with VM characteristics
+        \item AB: Ambient-aware VM allocation
+    \end{itemize}
+    \item 성능 (속도): AB $>$ LV $\approx$ LB $\gg$ CS
+    \item 평균 온도: AB $>$ LB $\approx$ LV $>$ CS
+    \item 최고 온도: AB $>$ CS $\leq$ LB $\approx$ LV
+    \item 에너지 소모: LV $>$ LB $>$ AB $\ll$ CS
+\end{itemize}
+
+\subsection{Inline Data Deduplication Accelerator}
+
+\subsubsection*{Data deduplication}
+\begin{itemize}
+    \item 데이터 중복을 없애 저장 장치에 효율적으로 저장하는 기술
+    \item 필요성: 오늘날 연간 데이터 생산량은 매우 높으며(44ZB at 2020) 70\% 정도의 데이터가 중복 데이터
+    \item Overall scheme
+    \begin{enumerate}
+        \item Chunking: 저장될 데이터 파일을 chunking ($>$ 16KB)
+        \item Fingerprinting: 해시 함수 등을 이용하여 해시값 도출
+        \item Indexing: Fingerprint를 이용하여 데이터를 찾아봄
+        \item Writing: Redundant 데이터는 metadata만 저장, Unique 데이터는 chunk를 저장
+    \end{enumerate}
+    \item Hardware level
+    \begin{itemize}
+        \item GPU가 메인 메모리에 요청 $\rightarrow$ 데이터가 L2, L1 캐시, register file등을 거쳐 load $\rightarrow$ deduplication 수행
+        \item Memory access가 굉장히 많음 (Fingerprinting $\approx$ $2^{25}$, Indexing $\approx$ $2^{52}$)
+    \end{itemize}
+    \item 장점과 단점
+    \begin{itemize}
+        \item 장점: 저장 장치에서 차지하는 용량 감소, 쓰기 연산 횟수가 감소하여 수명 연장
+        \item 단점: 저장하는 과정이 오래 걸림
+    \end{itemize}
+    \item Processing-in-Memory (PIM)
+    \begin{itemize}
+        \item 비교적 간단한 연산(Fingerprinting, Indexing)을 메모리 내부에서 수행
+        \item 시간 단축, 발열 억제가 관건
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Locating Deduplication Unit (DU)}
+\begin{itemize}
+    \item Base die
+    \begin{itemize}
+        \item 하단에 위치; 성능에 초점을 맞춘 chip
+        \item 가장 뜨거운 PHY 부분에서 멀리 떨어진 곳에 DU 배치
+    \end{itemize}
+    \item Core die
+    \begin{itemize}
+        \item DRAM cell이 위치; Storage density에 초점을 맞춘 chip
+        \item 각 chip마다 배치
+        \item 접근 시간 단축 (장점), storage density는 감소 (단점) $\Rightarrow$ 실제 메모리 접근 시간은 5배 정도 증가
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item Latency
+    \begin{itemize}
+        \item Base-die DU는 GPU보다 4.3 - 23.7\% 감소
+        \item Core-die DU는 Base-die DU보다 4.2\% 감소; 단, 전체 실행 시간은 500\% 증가
+    \end{itemize}
+    \item 전력 소모: Base-die DU는 GPU보다 45.5\% 감소
+    \item 온도: Threshold 온도를 넘지 않음
+\end{itemize}
+\newpage
+
+\subsection{Multidimensional Databases Accelerator}
+
+\subsubsection*{Motivation}
+\begin{itemize}
+    \item Conventional storage method: 복잡한 데이터 할당을 방지하기 위해 row-oriented 방식
+    \item 데이터를 load할 때는 필요하지 않은 데이터도 읽힐 수 있음 $\Rightarrow$ 비효율적
+    \item 데이터를 load할 때 CPU가 column-oriented 방식으로 reorganize하는 방법
+    \begin{itemize}
+        \item SSD $\Rightarrow$ 메모리로 raw data, 메모리 $\Rightarrow$ 프로세서로 reorganize 필요한 데이터 $\Rightarrow$ 프로세서에서 메모리로 reorganized 데이터
+        \item CPU 기반 시스템에서는 시간이 오래 걸리고 에너지 소모가 큼
+    \end{itemize}
+    \item SSD에서 데이터가 전송되기 직전 IDRA(In-storage Data Reorg. Accelerator)가 reorganize 수행하는 아이디어
+\end{itemize}
+
+\subsubsection*{Dimension Slice}
+\begin{itemize}
+    \item IDRA에서 사용되는 data reorganization 기법
+    \item 하나의 차원에 존재하는 데이터를 쪼개어서 저장하는 방법
+    \item Early-stopping이 가능 $\Rightarrow$ 빠른 스캔 가능
+    \item Unused zero padding bit으로 인해 fault가 발생 가능 $\Rightarrow$ Lower bit으로 채우도록 수정
+\end{itemize}
+
+\subsubsection*{IDRA Scheme}
+\begin{enumerate}
+    \item 1x2 DEMUX: Data reorganization 여부에 따라 IDRA 실행 여부 판별
+    \item Configuration Register: App에 따른 splitting method를 구성
+    \item Reorganization Module: Data reorganization을 수행
+    \item Output Buffer: 2개의 output buffer를 사용; 한 buffer가 데이터를 모으는 동안 다른 buffer는 export
+    \item Output Module: 원하는 크기만큼 output data가 모이면 export
+\end{enumerate}
+\begin{figures}
+    \fig{idra-structure.PNG}{.6}
+\end{figures}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 성능 (데이터 재구성 시간)
+    \begin{itemize}
+        \item IDRA 기반 시스템은 Baseline 기반 시스템보다 78.6\% 단축
+        \item Baseline 기반 시스템의 데이터 로드 시간 $\approx$ IDRA 기반 시스템의 데이터 로드 + 재구성 시간
+    \end{itemize}
+    \item 에너지 소모: IDRA 기반 시스템이 Baseline 기반 시스템보다 30.3\% 단축
+\end{itemize}
+
+\subsection{3D Stacked CPU Characterization}
+
+\subsubsection*{TSV-based 3D integration}
+\begin{itemize}
+    \item 공정 미세화 진행 $\Rightarrow$ wire delay overhead 증가 $\Rightarrow$ (TSV-based) 3D integration으로 해결 가능
+    \item 장점
+    \begin{itemize}
+        \item 큰 die가 여러 작은 die로 나누어질 수 있음 $\Rightarrow$ 수율과 비용 절감
+        \item Heterogeneous integration을 가능케 함 $\Rightarrow$ Flexibility 증가
+    \end{itemize}
+    \item 단점: 전력 밀도 증가, 열 발산 저하 $\Rightarrow$ 2D chip에 비해 온도가 높음
+    \item TSV 기반 3D CPU가 항상 2D CPU보다 성능이 높다고 단정할 수 없음
+\end{itemize}
+
+\subsubsection*{Dynamic Thermal Management by Intel}
+\begin{itemize}
+    \item Power Limit 1(PL1): TDP(Thermal Design Power), Base clock $f$
+    \item Power Limit 2(PL2): 최대 전력, Design clock $f$
+    \item Tau: PL2가 유지되는 시간을 나타내는 변수
+    \item 프로세서의 $f$는 Tau 시간동안 PL2를 유지하고, 이후 PL1으로 떨어져 유지
+    \item 문제점
+    \begin{itemize}
+        \item Fluctuation at PL2 phase: 전력 부족, 다른 core의 영향 등
+        \item Safe temperature에서도 PL1 유지: 배터리 수명, skin 온도 등
+    \end{itemize}
+    \item Objective: Intel의 DTM과 DVFS 등이 3D CPU의 온도 관리에 효과적인가?
+\end{itemize}
+\begin{figures}
+    \fig{intel-dtm-graph.PNG}{.55}
+\end{figures}
+
+\subsubsection*{Experimental Results}
+\begin{itemize}
+    \item 실험군
+    \begin{itemize}
+        \item 2D-DT: DTM 제거 + heat pipe + 작은 fan (Intel\textsuperscript{\textregistered} Dynamic Tuning Technology 비활성화)
+        \item 3D-PL1: PL1 + heat pipe
+        \item 3D-DVFS: DVFS + PL1 비활성화 + heat pipe
+        \item 3D-DT: DTM 제거 + PL1 비활성화 + heat pipe + 외부 cooling fan
+    \end{itemize}
+    \item 성능: 3D-DT $>$ 3D-DVFS $>$ 2D-DT $\gg$ 3D-PL1
+    \item 전력 소모: 3D-PL1 $<$ 3D-DVFS $\approx$ 3D-DT $<$ 2D-DT
+    \item 평균 $f$: 2D-DT $\gg$ 3D-DT $\geq$ 3D-DVFS $>$ 3D-PL1
+    \item 에너지 소모: 3D-DVFS $>$ 3D-PL1 $\approx$ 3D-DT (Fan 전력 미포함)
+    \item 최고 온도: 3D-DVFS $>$ $T_\mathrm{th}$ $\approx$ 3D-PL1 $>$ 3D-DT $\geq$ 2D-DT
+    \item 평균 온도: $T_\mathrm{th}$ $\approx$ 3D-DVFS $\gg$ 3D-PL1 $\geq$ 3D-DT $\geq$ 2D-DT
+\end{itemize}
+
+\subsubsection*{Conclusion}
+\begin{itemize}
+    \item Intel 제시 방법: 제 성능을 내지 못하게 제한하여 온도 문제를 제대로 해결하지 못함
+    \item DVFS: 성능 저하도 발생하면서, 온도가 threshold를 초과함
+    \item 외부 냉각 방식이 동원되어도 3D CPU의 온도 문제는 완전히 해결되지 못함
+\end{itemize}
+
+\subsection{References}
+\begin{enumerate}
+    \item Young-Ho Gong, Jae Jeong Yoo, and Sung Woo Chung, ``Thermal Modeling and Validation of A Real-World Mobile AP'', IEEE Design \& Test, vol.35, no.1, pp.55-62, February 2018.
+    \item Young Geun Kim, Minyong Kim, Jae Min Kim, and Sung Woo Chung, ``M-DTM: Migration-based Dynamic Thermal Management for Heterogeneous Mobile Multi-core Processors'', Design, Automation and Test in Europe Conference (DATE 2015), Grenoble, France, March 2015.
+    \item Hyung Beom Jang, Jinhang Choi, Ikroh Yoon, Sung-Soo Lim, Seungwon Shin, Naehyuck Chang, and Sung Woo Chung, ``Exploiting Application/system-dependent Ambient Temperature for Accurate Microarchitectural Simulation'', IEEE Transactions on Computers, vol.62, no.4, pp.705-715, April 2013.
+    \item Young Seo Lee, Kyung Min Kim, Ji Heon Lee, Jeong Hwan Choi, and Sung Woo Chung, ``A High-Performance Processing-in-Memory Accelerator for Inline Data Deduplication'', IEEE International Conference on Computer Design (ICCD 2019), Abu Dhabi, UAE, November 2019.
+    \item Seon Young Kim, Yon Dohn Chung, and Sung Woo Chung, ``IDRA: An In-storage Data Reorganization Accelerator for Multidimensional Databases'', IEEE Embedded Systems Letters, accepted.
+    \item Ji Hun Kwon, Seung Hun Choi, and Sung Woo Chung, ``Characterizing the On-chip Temperature of an Off-the-shelf TSV-based 3D Stacked CPU'', IEEE Intersociety Conference on Thermal and Thermalmechanical Phenomena in Electronic Systems (ITherm 2021), June 2021.
+\end{enumerate}

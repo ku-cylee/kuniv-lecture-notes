@@ -1,0 +1,379 @@
+\section{Software Perspective Low-power Computing}
+
+\subsection{Introduction}
+
+\subsubsection*{Necessity of SW-Level Management}
+\begin{itemize}
+    \item 모바일 기기 유저의 급격한 증가 (2019년 기준 50.7억명)
+    \item 모바일 기기의 최근 경향
+    \begin{itemize}
+        \item CPU, GPU 등 고성능 프로세서의 도입 $\Rightarrow$ 성능 향상
+        \item 3D 게임, 기계학습 앱 등 연산 집약(compute-intensive) 애플리케이션의 증가
+    \end{itemize}
+    \item 에너지(배터리)의 소모 증가 $\Rightarrow$ 온도 문제로 인한 문제 발생 가능
+    \item 모바일 프로세서에서 에너지/온도 문제 해결 필수
+\end{itemize}
+
+\subsubsection*{Why SW-Level?}
+\begin{itemize}
+    \item 장점
+    \begin{itemize}
+        \item 화면 터치 여부, 영상 길이 등 high-level feature을 얻기 용이
+        \item 하드웨어의 power state 정보에 접근 용이
+        \item HW를 수정하지 않고도 현재 시스템에 적용시키기 용이
+    \end{itemize}
+    \item 단점: 매우 짧은 시간 내에 작동하기 어려움 (ms 단위)
+\end{itemize}
+
+\subsection{Power Management Adjusting Power States of Processors}
+
+\subsubsection*{Power Consumption of Processing Units}
+\begin{itemize}
+    \item $P = P_{\mathrm{dyn}} + P_{\mathrm{leak}}$
+    \begin{itemize}
+        \item 동적 전력: $P_{\mathrm{dyn}} \varpropto \alpha CV^2f$
+        \item 누설 전력: $P_{\mathrm{leak}} \varpropto I_{\mathrm{leak}}V$
+    \end{itemize}
+    \item DVFS-based techniques: 동적 전력 소모를 줄임
+    \item DPM(Dynamic Power Management)-based techniques: 누설 전력 소모를 줄임
+    \begin{itemize}
+        \item Chip의 hibernation 등 power를 on/off하는 방식. HW의 power gating과 유사한 방법
+        \item DVFS와 달리 data retention 발생 $\Rightarrow$ Performance overhead, On/off 추가 전력 overhead
+    \end{itemize}
+    \item DVFS, DPM은 core 별로 다르게 작동함. 현재는 SW scheme이나 앞으로는 HW로 옮겨갈 수 있음
+    \item DVFS, DPM은 성능 저하를 초래 $\Rightarrow$ Resource demand 고려하여 적절한 $V$/$f$, active core 수 결정 필요
+\end{itemize}
+
+\subsubsection*{DVFS-based: Linux Governor}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item CPU utilization 샘플
+        \item Governor가 CPU utilization에 따라 $V$, $f$ 결정
+        \item CPU device driver가 $V$, $f$ 조정
+    \end{enumerate}
+    \newpage
+    \item Governors
+    \begin{itemize}
+        \item \textit{ondemand} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{th}}$ $\Rightarrow$ $f$를 최대로 올림 $\Rightarrow$ $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$인 최대 $f$까지 내림
+            \item Task를 갑자기 실행할 때 유리한 policy
+        \end{itemize}
+        \item \textit{conservative} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{up\_th}}$ $\Rightarrow$ $f$를 한 단계 올림
+            \item $\mathrm{util_{CPU}}<\mathrm{util_{down\_th}}$ $\Rightarrow$ $f$를 한 단계 내림
+            \item Power를 중시하는 policy; threshold 값이 따라 중시하는 요소가 달라질 수는 있음
+        \end{itemize}
+        \item \textit{interactive} governor
+        \begin{itemize}
+            \item $\mathrm{util_{CPU}}>\mathrm{util_{th}}$ $\Rightarrow$ $f$를 최대로 올리고 일정 시간동안 유지 $\Rightarrow$ $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$인 최대 $f$까지 내림
+            \item Performance를 중시하는 policy
+        \end{itemize}
+        \item \textit{powersave} governor: 항상 최저 $f$ 사용; 실험용 policy
+        \item \textit{performance} governor: 항상 최대 $f$ 사용; 실험용 policy
+    \end{itemize}
+    \item Example: \textit{ondemand} governor의 동작
+    \begin{enumerate}
+        \item Pre-defined period($\approx$ 10ms) 동안 $\mathrm{util_{CPU}}$ 샘플
+        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$($\approx$ 70 - 90\%)와 비교
+        \item IF $\mathrm{util_{CPU}}>\mathrm{util_{th}}$: CPU 처리량이 많은 상태이므로 $f_{\mathrm{CPU}}$를 최대로 올림
+        \item IF $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$: 할 일이 적을때 낮추어야 사용자가 덜 불편하므로 $f_{\mathrm{CPU}}$를 한 단계씩 내림
+        \item Highest $f_{\mathrm{CPU}}$ s.t. $\mathrm{util_{CPU}}\leq\mathrm{util_{th}}$ 찾을 때까지 반복
+    \end{enumerate}
+    \item CPU utilization만 고려하므로 CPU와 다른 component 간의 상호작용은 고려하지 못함
+\end{itemize}
+
+\subsubsection*{DVFS-based: Other Components}
+\begin{itemize}
+    \item 가장 간단한 방법: 메모리 접근이 pre-defined threshold보다 높으면 $f_{\mathrm{CPU}}$를 줄임
+    \item Memory, storage, network 등의 resource usage와 CPU utilization을 같이 고려하여 $f_{\mathrm{CPU}}$ 결정
+    \begin{itemize}
+        \item 산업에서 사용될 정도로 general한 scheme은 아님
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: Application Characteristics}
+\begin{itemize}
+    \item Application의 특징을 분석하여 app에 따라 policy를 결정하고 적용
+    \begin{itemize}
+        \item Performance-sensitive app: 많은 CPU 자원 필요 $\Rightarrow$ $f_{\mathrm{CPU}}$ $\Uparrow$
+        \item QoS-sensitive app: QoS가 손상되지 않는 선에서 $f_{\mathrm{CPU}}$ $\Downarrow$ (Multimedia app 등)
+    \end{itemize}
+    \item 데스크탑은 프로그램의 종류가 매우 많아 효율적이지 않음 (슈퍼컴퓨터 제외)
+    \item 모바일은 앱의 수가 제한적이므로 효율적임 (플레이스토어 TOP 100 앱 분석 등)
+    \begin{itemize}
+        \item 앱의 성격을 분석하는 방법이 어렵다는 단점. 파일 확장자를 이용한 분석 방법도 제시됨
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: Users}
+\begin{itemize}
+    \item User의 피드백을 기반으로 power management 수행하는 방식들
+    \item In-app 버튼을 통해 유저가 성능 향상/전력 절약을 선택하게 하여 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \begin{itemize}
+        \item 매우 오래된 방법, 유저를 불편하게 하는 방법 $\Rightarrow$ 최근에는 거의 쓰이지 않음
+    \end{itemize}
+    \item Operation mode를 제시하여 선택한 mode에 따라 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \item 화면 터치 등 가시적 변화를 초래하는 user-triggered event의 발생 여부에 따라 $f_{\mathrm{CPU}}$를 조정하는 방법
+    \item 터치, 움직임 센서, 카메라 등을 기계학습 모델 등을 이용해 inference
+    \begin{itemize}
+        \item 기계학습 모델을 통한 inference도 전력을 소모 $\Rightarrow$ 자주 사용하지는 못함
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS-based: GPU}
+\begin{itemize}
+    \item CPU와 유사하게 GPU utilization을 기반으로 policy 결정. CPU와 매우 유사함
+    \item 게임의 FPS 등은 CPU와 GPU를 동시에 monitoring하여 유지시킬 수 있음
+    \begin{itemize}
+        \item $\mathrm{util_{CPU}}$이 높아 FPS가 낮음 $\Rightarrow$ $f_{\mathrm{CPU}}$ $\Uparrow$
+        \item $\mathrm{util_{GPU}}$이 높아 FPS가 낮음 $\Rightarrow$ $f_{\mathrm{GPU}}$ $\Uparrow$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DPM-based Linux Governor}
+\begin{itemize}
+    \item \textit{hotplug} governor: $\mathrm{util_{CPU}}$ 분석 $\Rightarrow$ Active core 수 조정
+    \item \textit{hotplug} governor가 DVFS governor과는 다른 점
+    \begin{itemize}
+        \item Active core 수를 줄였을 때
+        \item 꺼진 core의 누설 전력은 감소함
+        \item 켜진 core의 동적 전력은 증가 $\Rightarrow$ core의 온도 증가 $\Rightarrow$ 누설 전력이 증가
+        \item Core들의 누설 전력 총합이 반드시 감소한다는 보장 없음
+    \end{itemize}
+    \item Multithread 환경에서 \textit{hotplug} governor의 작동 방식
+    \begin{enumerate}
+        \item Pre-defined period 동안 $\mathrm{util_{CPU}}$ 샘플
+        \item $\mathrm{util_{CPU}}$을 pre-defined $\mathrm{util_{th}}$와 비교
+        \item IF $\mathrm{util_{CPU}} > \mathrm{util_{up\_th}}$: CPU Turn on
+        \item IF $\mathrm{util_{CPU}} \leq \mathrm{util_{down\_th}}$: CPU Turn off
+        \item Highest \# of active cores s.t. $\mathrm{util_{down\_th}}<\mathrm{util_{CPU}}\leq\mathrm{util_{up\_th}}$ 찾을 때까지 반복 (잦은 on/off 방지)
+    \end{enumerate}
+    \item \textit{hotplug} governor는 DVFS 수행 이후에도 power/thermal 문제가 해결되지 않으면 사용됨
+    \begin{itemize}
+        \item $\Rightarrow$ $\mathrm{util_{CPU} = \frac{busy~time~when~full~performance}{sample~time}}$
+    \end{itemize}
+    \item GPU는 대부분 한번에 task가 몰림 $\Rightarrow$ $\mathrm{util_{GPU}}$이 낮고 workload가 없으면 그냥 꺼버려도 됨
+    \begin{itemize}
+        \item 단순하므로 HW-level에서 수행할 수도 있음. SW-level에서 할 이유가 없음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{DVFS- and DPM-based Techniques}
+\begin{itemize}
+    \item CPU utilization History 이용
+    \begin{itemize}
+        \item 이전의 $\mathrm{util_{CPU}}$ history에 근거, 다음 $\mathrm{util_{CPU}}$ 예측
+        \item 다음 $\mathrm{util_{CPU}}$을 기반으로 모든 power state에 대한 동적/누설 전력 예측
+        \item 전력 소모를 최소화하도록 $V$, $f$, active cores 개수 등을 동시에 조정
+    \end{itemize}
+    \item Current CPU utilization과 Power state 이용
+    \begin{itemize}
+        \item 현재 $\mathrm{util_{CPU}}$과 power state 샘플
+        \item 최적 power state를 기계학습 모델을 통해 예측
+    \end{itemize}
+    \item Industry에서는 user-based technique, ML-based technique는 잘 사용되지 않음
+\end{itemize}
+
+\subsubsection*{Task Scheduling-based Techniques}
+\begin{itemize}
+    \item 여러 task를 여러 core에 걸쳐 에너지 효율을 가장 높이도록 잘 분배하여 scheduling하는 방법
+    \item Task scheduling 없이 DVFS만 실행하는 것은 하나의 core만 optimize하는 것
+    \item Task scheduler가 task를 core에 할당하고, DVFS/DPM governor가 $\mathrm{util_{CPU}}$를 기반으로 power state 조정
+    \item 예시: Assume 3 tasks $T_1$, $T_2$, $T_3$
+    \begin{itemize}
+        \item $T_1$, $T_2$간 상호작용이 많음: $T_1$, $T_2$를 같은 core에 배치, $T_3$는 다른 core에 배치
+        \item User attention level이 $T_1>T_2>T_3$: $T_2$, $T_3$를 같은 core에 배치, $T_1$은 다른 core에 배치
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Task Scheduling Hetero. Multi-core Processors}
+\begin{itemize}
+    \item Heterogeneous Multi-core Processors
+    \begin{itemize}
+        \item Big cores: 높은 성능, 높은 전력 소모
+        \item Small cores: 낮은 성능, 낮은 전력 소모
+        \item 앱을 적절한 type의 core에 배치시키는 것이 중요
+    \end{itemize}
+    \item In-Kernel Switcher
+    \begin{itemize}
+        \item 앱을 small core에 할당 $\Rightarrow$ $\mathrm{util_{CPU}}>\mathrm{util_{th}}$이면 big core로, 아니면 small core로 migrate
+        \item Big core로 migrate할 때는 small core의 full performance에서 $\mathrm{util_{CPU}}$ 측정 및 비교
+        \item BigCore $i$ $\Leftrightarrow$ SmallCore $i$, BigCore $i$ $\nLeftrightarrow$ SmallCore $j$ $(i \neq j)$
+    \end{itemize}
+    \item Global Task Scheduling
+    \begin{itemize}
+        \item 각 앱의 $\mathrm{util_{CPU}}$ 계산 $\Rightarrow$ 각 core의 $\mathrm{util_{CPU}}$에 따라 앱 할당 $\Rightarrow$ Energy optimal하게 app을 migrate
+        \item In-Kernel Switcher과는 달리, BigCore $i$ $\Leftrightarrow$ SmallCore $j$ 가능
+    \end{itemize}
+    \item Considering IPC(Instruction per cycle) and LLC(Last level cache) Miss rate
+    \begin{itemize}
+        \item Low LLC, High IPC $\Leftrightarrow$ Low memory/IO usage $\Leftrightarrow$ Compute intensive app $\Rightarrow$ Big core에 할당
+        \item High LLC, Low IPC $\Leftrightarrow$ High memory/IO usage $\Leftrightarrow$ Memory intensive app $\Rightarrow$ Small core에 할당
+    \end{itemize}
+    \item Energy Aware Scheduling (EAS)
+    \begin{itemize}
+        \item Power과 소요 시간(= performance)를 모두 고려하여 scheduling
+        \item Performance-sensitive/QoS-sensitive 등 app의 특성도 같이 고려
+    \end{itemize}
+    \item Considering App Characteristics
+    \begin{itemize}
+        \item Sub-thread list를 기반으로 app 분류
+        \item Multimedia app은 전용 MPEG decoder 등이 있다면 small core, 영상 FPS 따라 할당
+        \item Web browser은 thread의 성격에 따라 서로 다른 core에 할당
+    \end{itemize}
+\end{itemize}
+
+\subsection{Thermal Management Adjusting Power States of Processors}
+
+\subsubsection*{Conventional Reactive Technique}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item Pre-defined period 동안 $T_\mathrm{CPU}$ 샘플
+        \item $T_\mathrm{CPU}$을 pre-defined $T_\mathrm{th}$와 비교
+        \item IF $T_\mathrm{CPU} > T_\mathrm{th}$: Throttles $f_\mathrm{CPU}$ (DVFS + Gating)
+        \item IF $T_\mathrm{CPU} \leq T_\mathrm{th}$: Releases $f_\mathrm{CPU}$ throttle
+        \item $T_\mathrm{CPU}$를 $T_\mathrm{th}$ 근처로 유지시키며 반복
+    \end{enumerate}
+    \item $f_\mathrm{CPU}$ 올릴 때는 power mgmt, 내릴 때는 thermal mgmt가 주도권을 가짐
+    \item $f_\mathrm{CPU}$가 지나치게 많이 변동되는 결과 초래
+\end{itemize}
+
+\subsubsection*{Advanced Reactive Techniques}
+\begin{itemize}
+    \item Average frequency
+    \begin{itemize}
+        \item $P_\mathrm{dyn}\varpropto V^2f\varpropto f^3$, Jensen 부등식: $f_1^3 + f_2^3 \geq \left(\frac{f_1+f_2}{2}\right)^3$
+        \item 평균 $f$의 전력 소모량은 두 $f$의 평균 전력 소모량보다 항상 작거나 같음
+        \item 초창기 proactive techniques
+    \end{itemize}
+    \newpage
+    \item Heterogeneous multi-core 프로세서 사용
+    \begin{itemize}
+        \item $T_\mathrm{CPU} > T_\mathrm{th}$ $\Rightarrow$ 모든 app small core로 migrate $\Rightarrow$ Big core cool down $\Rightarrow$ 모든 app big core로 migrate
+        \item Big core의 온도는 DVFS를 사용하는 경우보다 훨씬 빠르게 내려감
+        \item Task scheduling-based reactive technique
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Intelligent Power Allocation (IPA)}
+\begin{itemize}
+    \item Scheme
+    \begin{enumerate}
+        \item 주기적으로 $T_\mathrm{CPU}$를 샘플링
+        \item $T_\mathrm{CPU} > T_\mathrm{ctrl}$ $\Rightarrow$ 다음 $T_\mathrm{CPUpred}$ 예측 시작
+        \item $T_\mathrm{CPUpred}\leq T_\mathrm{th}$일때까지 $f_\mathrm{CPU}$ 낮춤
+        \item $T_\mathrm{CPU}$를 $T_\mathrm{th}$ 아래로 유지시키면서 반복
+    \end{enumerate}
+    \item Critical Issue: Prediction이 매우 까다로움
+    \begin{itemize}
+        \item Ambient 온도: 급격하게 변하지는 않으나 정확한 측정이 힘듦
+        \item 누설 전력과 그로 인한 악순환까지 고려한 예측이 힘듦
+        \item Secondary heat path: 상대적으로 뜨거운 chip으로부터 열이 board의 line을 타고 전도
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Other Proactive Techniques}
+\begin{itemize}
+    \item Reinforcement Learning-based Technique
+    \begin{itemize}
+        \item CPU 온도와 power state를 읽고, score이 제일 높은 $f$를 선택하여 power state 조정
+        \item 성능과 온도를 측정하여 score를 갱신
+    \end{itemize}
+    \item Considering Heat conduction from Battery
+    \begin{itemize}
+        \item 배터리는 secondary heat path, ambient 온도 등으로 chip의 온도에 영향을 줌
+        \item 기존의 proactive technique에서 배터리 온도도 고려함
+    \end{itemize}
+    \item Considering Skin Temperature
+    \begin{itemize}
+        \item CPU 온도 말고 skin 온도와 display 온도를 읽어들이고, 이후 온도를 예측
+    \end{itemize}
+\end{itemize}
+
+\subsection{Exploiting Other Computing Resources}
+
+\subsubsection*{Offloading-based Techniques}
+\begin{itemize}
+    \item Compute-intensive app을 외부 computing 자원이나 다른 내부 computing 자원에서 실행
+    \item Memory-intensive app에 적용하는 것은 부적절함
+    \item Processing unit을 저전력 상태에 더 오래 머물게 할 수 있음
+    \item 프로세서의 전력 소모 절약으로 인한 이득(gain)과 데이터 전송으로 인한 에너지 손해(loss) 잘 고려해야 함
+\end{itemize}
+
+\subsubsection*{Cloud Server}
+\begin{itemize}
+    \item Scheme
+    \begin{itemize}
+        \item 연산의 input 데이터를 클라우드 서버로 전송 (WiFi, LTE 등): \textit{loss}
+        \item 서버에서 연산 수행, processing unit은 저전력 성태 유지: \textit{gain}
+        \item 클라우드 서버로부터 output 데이터 받음 (WiFi, LTE 등): \textit{loss}
+    \end{itemize}
+    \newpage
+    \item Gain/Loss의 예측이 관건
+    \begin{itemize}
+        \item Offline Profiling-based Table: 모든 app을 profiling하는 것은 불가능
+        \item 연산 규모, 전송 데이터 크기 등을 기반으로 선형 회귀 기법으로 예측
+        \item 인터넷 신호 세기 역시 영향: 신호 강도가 약하면 input 데이터를 보낼 때 더 많은 에너지를 소모
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Another Mobile Device}
+\begin{itemize}
+    \item 모바일 기기에서 연산을 수행하고, wearable device에서 연산 수행 결과를 받음
+    \item Bluetooth vs. Wi-Fi
+    \begin{itemize}
+        \item Bluetooth: 전력 소모 낮음, 작은 대역폭으로 인해 전송 속도 느림
+        \item Wi-Fi: 전력 소모 높음, 큰 대역폭으로 인해 전송 속도 빠름
+        \item QoS만 만족하면 되는 real-time streaming 등은 bluetooth가 유리, 다운로드 등은 Wi-Fi가 유리
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Other Processing Units}
+\begin{itemize}
+    \item 연산 능력: CPU $<$ GPU $<$ DSP $<$ NPU
+    \item 연산 능력이 더 좋은 chip에게 delegate하고, CPU는 저전력 상태에 머묾
+    \item Pipelining 형태의 scheme이 사용됨
+\end{itemize}
+
+\subsection{Considering Interactions with Displays}
+
+\subsubsection*{Why Interactions with Displays}
+\begin{itemize}
+    \item Display는 전력을 많이 소모함 $\Rightarrow$ 반드시 줄여야 함
+    \item 사용자는 display에 매우 예민함 $\Rightarrow$ 연산량이 계속 증가하는 추세
+    \item LED display는 dark mode 등의 사용으로 전력을 save할 수 있음
+\end{itemize}
+
+\subsubsection*{Adjusting Display Refresh Rate}
+\begin{itemize}
+    \item Multimedia Content
+    \begin{enumerate}
+        \item 현재 frame과 다음 frame을 픽셀 단위로 분석함
+        \item Difference $>$ threshold: Rate $\Uparrow$
+        \item Difference $\leq$ threshold: Rate를 $\Downarrow$ $\Rightarrow$ 사용자는 거의 체감 못함
+    \end{enumerate}
+    \item Relying on Scrolling speed: 스크롤 중일때 사용자가 더 sensitive하다는 가정
+    \begin{enumerate}
+        \item 화면의 scrolling speed를 측정
+        \item $s_\mathrm{scroll} > s_\mathrm{th}$: Rate $\Uparrow$
+        \item $s_\mathrm{scroll} \leq s_\mathrm{th}$: Rate $\Downarrow$
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Adjusting Resolution}
+\begin{itemize}
+    \item Distance between display and user: 거리가 멀어지면 사람의 observable pixel이 낮음
+    \begin{itemize}
+        \item $\mathrm{res_{current}} < \mathrm{res_{required}}$: 화질 $\Uparrow$
+        \item $\mathrm{res_{current}}\geq\mathrm{res_{required}}$: 화질 $\Downarrow$
+    \end{itemize}
+    \item Brightness of content
+    \begin{itemize}
+        \item 사용자는 밝은 content를 볼 때 화질에 더 민감함
+        \item 밝은 content는 높은 화질, 어두운 content는 낮은 화질
+    \end{itemize}
+\end{itemize}

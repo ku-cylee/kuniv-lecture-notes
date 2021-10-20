@@ -1,0 +1,115 @@
+\section{Low-Power Memories}
+
+\subsection{SRAM Low-Power Techniques}
+
+\subsubsection*{SRAM (Static RAM)}
+\begin{itemize}
+    \item 속도가 빠르고 밀도가 높음(DRAM보단 낮음) $\Rightarrow$ cache로 이용됨
+    \item SRAM의 장점
+    \begin{itemize}
+        \item Memory cell의 refresh가 불필요
+        \item Differential pair of bit-lines $\Rightarrow$ 빠름
+        \item Row와 column의 address signal이 동시에 load $\Rightarrow$ Operation mode가 더 간단
+        \item 데이터 유지(data retention) 전류가 낮음
+    \end{itemize}
+    \item SRAM의 단점: 면적당 용량이 작음, High cost
+    \item Pins
+    \begin{itemize}
+        \item $\mathrm{R/\overline{W}}$: 1 = read, not write / 0 = write, not read
+        \item $\mathrm{\overline{CS}}$: 1 = Chip not select / 0 = Chip select
+    \end{itemize}
+    \begin{figures}
+        \fig{sram-read-and-write.png}{.9}
+    \end{figures}
+    \item Active(Dynamic) Power and Standby(Leakage) Power Reduction
+    \begin{itemize}
+        \item Active Power 발생 원인: Decoders, Memory 배열, Sense amplifiers, Input/output buffer 등
+        \item Standby Power 발생 원인: Data retention에 필요한 전류 (용량에 비례)
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Active Power Reduction Techniques}
+\begin{itemize}
+    \item $V_{\mathrm{dd}}$를 줄임 $\Rightarrow$ 동적 전력 감소
+    \item Power gating, Clock gating, DVFS 등
+    \item Multi-Stage Row/Column Decoder
+    \begin{itemize}
+        \item Heirachical Word-Line (HWL)
+        \item 상위 몇개 비트를 먼저 비교 (Predecoding)
+        \item 상위 비트에 따라 서로 다른 decoder 사용하여 비교 (Final Decoding)
+        \item Total capacitance 감소 $\Rightarrow$ 동적 전력 감소
+        \item 속도 역시 상승 $\Rightarrow$ 많이 쓰임
+    \end{itemize}
+    \item Pulse Operation Technique: Address Transition Detector (ATD) Circuit
+    \begin{itemize}
+        \item 입력값이 바뀌었을 때만 동작하게 하는 회로
+        \item 예: $a_n$의 값이 0 $\rightarrow$ 1로 바뀌는 경우
+        \item XOR gate 결과: $a_1$, $a_2$, \ldots, $a_{n-1}$: 0, $a_n$에서는 delay로 인해 1이 되는 순간이 있음
+        \item $\phi_{\mathrm{AID}}$ 값이 순간적으로 1이 되고, enable signal로 작동하여 동적 전력 소모 감소
+    \end{itemize}
+    \begin{figures}
+        \fig{atd-circuit.png}{.6}
+    \end{figures}
+\end{itemize}
+
+\subsubsection*{Standby Power Reduction Techniques}
+\begin{itemize}
+    \item Data Retention
+    \begin{itemize}
+        \item DVFS. Drowsy Cache(정해진 전압 공급), Super Drowsy Cache(전압을 생성하여 공급)
+        \item 장점: Low-power mode에서도 데이터 유지, Power Mode간 빠른 switch, 쉬운 구현
+        \item 단점: Process variation에 영향 받음
+        \item $P_{\mathrm{leak}} \approx$ 6.24nW
+    \end{itemize}
+    \item No Data Retention
+    \begin{itemize}
+        \item Gated $V_{\mathrm{dd}}$
+        \item 장점: 전력 절약량 제일 큼, Power Mode간 빠른 switch, 쉬운 구현
+        \item 단점: Low-power mode에서 데이터 유실
+        \item $P_{\mathrm{leak}} \approx$ 0.02nW
+    \end{itemize}
+    \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 온도가 증가하면 누설 전력이 급격히 증가
+    \item 공정미세화가 진행되면서 누설 전력의 비중이 높아지고 있음
+\end{itemize}
+
+\subsection{DRAM Low-Power Techniques}
+
+\subsubsection*{DRAM (Dynamic RAM)}
+\begin{itemize}
+    \item 고밀도 DRAM은 컴퓨터 등의 main memory로 주로 사용됨
+    \item High/Low-Power DRAM
+    \begin{itemize}
+        \item Low-Power DRAM: Active current가 낮음
+        \begin{itemize}
+            \item Capacitance를 줄이면 unstable, capacity(RAM 용량)를 줄이면 performance issue 발생
+        \end{itemize}
+        \item High-Speed DRAM: 빠른 access time을 위해 data retention current 희생
+    \end{itemize}
+    \item DRAM은 row address와 column address가 나누어져서 들어감
+\end{itemize}
+
+\subsubsection*{Power Reduction Techniques}
+\begin{itemize}
+    \item Active(Dynamic) Power
+    \begin{itemize}
+        \item 발생 원인: Decoders, Memory 배열, Sense amplifiers, Other Circuits
+        \item 해결 방법: 모든 capacitance $\downarrow$, 내부 $V_{\mathrm{dd}}$ $\downarrow$, 주변 회로에 필요한 DC 전력 $\downarrow$
+    \end{itemize}
+    \item Data Retention(Leakage) Power
+    \begin{itemize}
+        \item 발생 원인: Data retention을 위한 refresh operation
+        \item 해결 방법: Refresh period $\uparrow$ (오동작 발생 가능), Refresh 돼야하는 cell의 수 $\downarrow$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Advanced Data Retention Power Reduction Techniques}
+\begin{itemize}
+    \item TCSR (Temperature Compensated Self Refresh)
+    \begin{itemize}
+        \item 주변(ambient) 온도가 refresh rate에 영향: $(\mathrm{Refresh~Rate}) \varpropto \frac 1 {t_{\mathrm{retention}}} \varpropto T_{\mathrm{ambient}}$
+        \item Capacitor가 고온에서 전하를 더 빨리 잃기 때문에 발생함
+        \item 저온에서 refresh rate $\downarrow$ $\Rightarrow$ 전력 소모 $\downarrow$
+    \end{itemize}
+    \item PASR (Partial Array Self Refresh): DRAM의 bank마다 refresh rate를 다르게 설정
+    \item DPD (Deep Power Down): 쓰지 않을때는 storage에 flush한 후 power down $\Rightarrow$ soft switch-off
+\end{itemize}

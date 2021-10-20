@@ -1,0 +1,406 @@
+\section{Microarchitecture-Driven Power Management}
+
+\subsection{Power Consumption}
+
+\subsubsection*{Dynamic Power}
+\begin{itemize}
+    \item 동적 전력. Chip이 동작할 때 소모되는 전력
+    \item $P_{\mathrm{dyn}} = \alpha \cdot C_L \cdot V_{\mathrm{dd}}^2 \cdot f$
+    \item $C_L$: Capacitance
+    \begin{itemize}
+        \item 수용 가능한 전하의 총량
+        \item 사용되는 gate의 수(fan-out), 전선 길이, 트랜지스터 크기 등
+        \item 너무 낮으면 0과 1을 구별할 수 없으므로 한계가 있음
+    \end{itemize}
+    \item $V_{\mathrm{dd}}$: Supply voltage
+    \begin{itemize}
+        \item 세대가 지나며 많이 낮아지고 있음
+        \item 반드시 $V_{\mathrm{th}}$(threshold voltage)보단 높아야 함
+    \end{itemize}
+    \item $f$: Frequency. 낮으면 performance가 떨어지므로 낮추기 어려움. 최근에는 계속 증가
+    \item Switching Power, Clock Power 등이 있음
+\end{itemize}
+
+\subsubsection*{Leakage Power}
+\begin{itemize}
+    \item 누설 전력, 정적 전력(static power). Chip이 동작하지 않아도 소모되는 전력
+    \item $P_{\mathrm{leak}} = I_{\mathrm{leak}} \cdot V_{\mathrm{dd}}$
+    \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 공정 미세화가 진행되면 누설전력 급증
+    \item 공정미세화로 인해 Subthreshold Leakage가 dominant $\Rightarrow$ 대부분 $P_{\mathrm{leak}}$을 줄이는 기술은 여기에 집중
+    \begin{figures}
+        \fig{leakage-power-components.PNG}{.4}
+    \end{figures}
+    \item 공정미세화가 진행되면서 누설전력이 급증하는 추세임
+    \item Core는 입력이 있을때만 gate가 작동하지만, cache는 입력이 없어도 F/F 등에 데이터 저장 $\Rightarrow$ 누설 발생
+\end{itemize}
+\newpage
+
+\subsection{Low-Power Interconnect}
+
+\subsubsection*{Interconnect and Power Consumption}
+\begin{itemize}
+    \item Chip간의 interconnect, 즉 버스는 전력 소모의 주 원인
+    \begin{itemize}
+        \item PC는 대부분 버스 구조를 갖는다
+        \item 모바일은 버스 구조를 사용하지 않고, point-to-point 구조 $\Rightarrow$ chip size가 큼
+    \end{itemize}
+    \item Chip의 성능 향상 $\Rightarrow$ 트랜지스터 증가, 전선의 밀도 증가 $\Rightarrow$ $C_L$ 증가
+\end{itemize}
+
+\subsubsection*{Bus Encoding}
+\begin{itemize}
+    \item 버스 인코딩 방식을 바꾸어 switching activity를 줄이는 방법
+    \item 두 값 사이의 hamming distance가 wire 수의 절반 초과 $\Rightarrow$ 대부분 버스가 switch 됨
+    \begin{itemize}
+        \item 예: 0000 $\rightarrow$ 1110: Hamming Distance는 3
+    \end{itemize}
+    \item Bus Inversion
+    \begin{itemize}
+        \item Hamming Distance가 크면 그 다음 수를 invert시킴
+        \item 0000 $\rightarrow$ 1110보다 0000 $\rightarrow$ 0001이 switching activity가 더 적다
+        \item Invert했음을 표시하는 flag bit가 필요함. 1bit만 필요하므로 이득이 될 수 있음
+        \item Inversion 과정에서 overhead 발생 $\Rightarrow$ 느리게 동작하는 storage 등에서 사용
+        \item Hamming distance 계산 과정, En/decode 과정에서 latency가 발생한다는 단점
+    \end{itemize}
+    \item Gray Code Encoding
+    \begin{itemize}
+        \item 다음 수로 넘어갈 때 단 1bit만 바뀌는 인코딩
+        \item 예: $10 = 1111_2$, $11 = 1110_2$
+        \item 장점: Array encoding 등 순차적인 count의 관여가 많으면 동적 전력 감소
+        \item 단점: Switch가 많을수록 에러 확률이 증가하여 noise에 취약함. 순차적인 count가 아니면 오히려 손해
+    \end{itemize}
+    \item One-Hot Encoding
+    \begin{itemize}
+        \item 데이터를 표현할 때 단 하나의 1만 사용됨
+        \item 장점: 임의의 두 수 간에 switch 수는 많아야 2회 $\Rightarrow$ 동적 전력 소모량 감소, Error detection 쉬움
+        \item 단점: Bit수가 지나치게 늘어남 $\Rightarrow$ En/decoder이 복잡, Too much cost
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Crosstalk}
+\begin{itemize}
+    \item Chip의 미세화 $\Rightarrow$ Wire간의 거리가 감소 $\Rightarrow$ 간섭(crosstalk) 발생 가능성 증가
+    \item 간섭이 발생하면 switch에서의 delay, error 등의 발생 가능성 증가
+    \item 해결 방법: 전류가 흐르는 wire 사이에 전류가 흐르지 않는 shield wire 배치
+\end{itemize}
+
+\subsubsection*{Low Swing Buses}
+\begin{figures}
+    \fig{low-swing-buses.PNG}{.6}
+\end{figures}
+\begin{itemize}
+    \item 버스에서 정보를 전달할 때 더 낮은 전압으로 전달하는 방법
+    \item Differential Signaling: 전압이 너무 낮아 detection 힘듦 $\Rightarrow$
+        신호를 원래 신호와 역전시킨 신호로 분리한 후 비교하여 차이를 늘림 $\Rightarrow$ 비교적 detection 쉬움
+    \item 장점: $P_\mathrm{dyn} \varpropto V_{\mathrm{dd}}^2$ $\Rightarrow$ 동적 전력이 감소, Crosstalk 예방, 전압폭 감소 $\Rightarrow$ latency 감소
+    \item 단점: 부가적인 En/decoder 필요, Noise에 취약
+    \item SRAM, DRAM 등에서 사용, North Bridge, South Bridge 등에서 미사용
+\end{itemize}
+
+\subsubsection*{Bus Segmentation}
+\begin{figures}
+    \fig{bus-segmentation.PNG}{.6}
+\end{figures}
+\begin{itemize}
+    \item A $\rightarrow$ C로 보낼 때 A $\rightarrow$ F로 보낼 수 있을 정도의 전압을 걸어야 함 $\Rightarrow$ 전력 낭비
+    \item 버스를 여러 segment로 분할, segment 간에는 traffic을 조절하는 link(F/F)로 연결: Register insertion
+    \item Link에 위치한 F/F에서 신호를 계속 증폭시켜줌
+    \item 장점: Short path에서는 전력 소모, latency 감소 효과
+    \item 단점: Long path에서는 전력 소모, latency가 오히려 증가
+    \item 주로 Mobile AP CPU에서 사용됨
+\end{itemize}
+
+\subsubsection*{Network On Chip (NOC)}
+\begin{figures}
+    \fig{network-on-chip.PNG}{.4}
+\end{figures}
+\begin{itemize}
+    \item 각 Processing unit을 simple CPU router에 붙여서 운용
+    \item Intel의 high-end server CPU에 사용됨
+    \item P2P 구조보다는 성능이 낮지만 hardware cost는 낮음
+\end{itemize}
+\newpage
+
+\subsection{Low-Power Memories}
+
+\subsubsection*{Memories and Power Consumption}
+\begin{itemize}
+    \item Memory에 적용되는 기술들은 RAM, ROM뿐만 아니라 캐시에도 적용될 수 있음
+    \item Types of Memories (빠르고 가격이 비싼 순위)
+    \begin{enumerate}
+        \item Register: F/F의 집합
+        \item Cache: SRAM. 지속적인 전원 공급 필요 $\Rightarrow$ 누설 전력 큼
+        \item Main memory: DRAM
+        \item Storage: SSD, HDD, Magentic Tape, \ldots
+    \end{enumerate}
+    \item 전력 소모를 줄이기 위한 두 가지 접근
+    \begin{itemize}
+        \item Memory 접근당 전력 소모를 줄임
+        \item Memory 접근 횟수를 줄임
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Splitting Memories into Smaller Sub-Systems(Bank)}
+\begin{itemize}
+    \item 메모리를 여러 개의 bank로 나누고 필요한 메모리가 있는 bank만 활성화
+    \item Main Memory는 여러 bank로 나누어져 있음
+    \item Compiler과 OS는 데이터를 최소한의 bank로 나눔 $\Rightarrow$ 다른 bank가 power down하여 전력 소모 줄임
+    \item 단점: Data가 어느 bank에 있는지 알아내면서 latency 발생, Decoder $\cdot$ mux의 필요로 cost 증가
+    \item Banked Cache (Image Below)
+    \begin{itemize}
+        \item Cache address: Tag - Index - Offset의 순서
+        \item Index로 row 탐색 $\Rightarrow$ Tag로 hit/miss 판단 $\Rightarrow$ Offset으로 data 전달
+        \item Bank selection bits 삽입, tag의 bits를 줄임 $\Rightarrow$ Bank selection
+    \end{itemize}
+    \begin{figures}
+        \fig{banked-cache.PNG}{.4}
+    \end{figures}
+    \item Partitoned Power-Aware Instruction Cache
+    \begin{itemize}
+        \item 사용할 때는 bank를 enable하고 사용하지 않을때는 low power mode(DVFS)로 전환
+        \item Prediction을 기반으로 이루어짐
+    \end{itemize}
+\end{itemize}
+\newpage
+
+\subsubsection*{Augmenting the Memory Hierachy with Specialized Cache Structure}
+\begin{itemize}
+    \item L0 Cache (Filter Cache)
+    \begin{itemize}
+        \item CPU와 L1 Cache 사이에 작은 L0 Cache를 삽입. L0 Cache에 먼저 접근, miss 시 L1에 접근
+        \item L0 Cache는 app의 working set의 대부분을 저장 $\Rightarrow$ 대부분의 memory access를 걸러냄
+        \item 전력 소모는 줄어드나 cost는 증가. 단, L0 miss \& L1 hit 발생 시 전력 소모 증가
+    \end{itemize}
+    \item Filter TLB (Translation Lookahead Buffer)
+    \begin{itemize}
+        \item TLB: Page table의 cache와 같은 개념
+        \item Page table: Virtual address와 Physical address의 mapping. Main memory 내에 위치
+    \end{itemize}
+    \item Scratch Pad Memory (SPM)
+    \begin{itemize}
+        \item SPM: Main memory처럼 동작하나 작은 용량의 SRAM($<$1MB)으로 이루어짐
+        \item Main memory는 cache와 달리 hit/miss가 없음. 주소로 접근하면 100\% 원하는 data를 찾음
+        \item 장점: 전력 소모 감소, latency 감소
+        \item 단점: High cost
+    \end{itemize}
+    \item Trace Cache
+    \begin{itemize}
+        \item L1 cache에서 instruction을 compile된 순서로 저장하지 않고 실행된 순서로 저장 (address는 불변)
+        \item Loop에서의 반복 실행이 발생하면 instruction cache hit rate이 높아짐
+        \item Instruction cache access를 줄여 전력 소모가 감소함
+        \item Instruction cache hit rate: $\approx$ 98 - 99\% $\Rightarrow$ $\approx$ 100\%
+    \end{itemize}
+    \item Dynamic Direction Prediction-Based Trace Cache
+    \begin{itemize}
+        \item Instruction을 가져올 때 Branch Prediction을 이용한 방식
+        \item Branch prediction 과정의 latency로 인해 잘 사용되지 않음
+    \end{itemize}
+    \item Selective Trace Cache
+    \begin{itemize}
+        \item Hot Trace: 자주 실행된 trace $\Rightarrow$ Trace cache에 넣어둠
+        \item 컴파일러가 branch instruction 뒤에 hot trace에 대한 힌트 삽입
+        \item ISA 표준 개정 필요 $\Rightarrow$ Too much overhead $\Rightarrow$ 안 쓰임
+    \end{itemize}
+\end{itemize}
+
+\subsection{Low-Power Caches}
+
+\subsubsection*{Caches and Power Consumption}
+\begin{figures}
+    \fig{cache-structure.PNG}{.6}
+\end{figures}
+\begin{itemize}
+    \item Cache의 작동 방식
+    \begin{enumerate}
+        \item Decoder가 cache address의 index 값을 받음 $\Rightarrow$ Word lines 활성화 $\Rightarrow$ Bit lines 뽑음
+        \item Sense Amps: Low power swing을 사용하기 때문에 신호를 다시 증폭시켜야 함
+        \item Comparators: Tag Comparison이 이루어짐 $\Rightarrow$ Hit/miss 판별
+        \item Hit인 경우 데이터 내보냄, miss인 경우 내보내지 않음
+    \end{enumerate}
+    \item 전체 전력 소모의 절반 이상이 cache일 정도로 전력 소모가 큼
+\end{itemize}
+
+\subsubsection*{Dynamically Resizable Instruction (DRI)}
+\begin{itemize}
+    \item Cache의 사이즈를 필요한 만큼만 늘리고 줄여서 사용하는 방식
+    \item $V_{\mathrm{dd}}$를 gating하여 cache의 일부분을 활성화/비활성화함
+    \item App의 cache-miss 패턴을 분석하는 H/W profiler를 이용하여 활성화 여부 결정, Miss rate가 일정 threshold 초과하면 활성화
+    \item 장점: 동적 전력 소모 감소. $I_{\mathrm{leak}}$이 감소하여 누설 전력 소모 감소 효과도 있음
+    \item 단점
+    \begin{itemize}
+        \item 비활성화 시 데이터 휘발
+        \item App history 분석, Cache profiling: Overhead 발생
+        \item Reactivate 과정에서 전력 소모/latency 등 발생
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Cache Decay}
+\begin{itemize}
+    \item 각 cache line을 활성화/비활성화하여 사용하는 방식
+    \item 일정 시간동안 no access $\Rightarrow$ Cache line을 sleep mode로 전환(turn off), 재access시 cache line 재활성화
+    \item 장점: 동적 전력과 누설 전력이 모두 감소
+    \item 단점
+    \begin{itemize}
+        \item 비활성화 시 데이터 휘발
+        \item App history 분석, Cache profiling: Overhead 발생
+        \item Decay 과정에서 latency 발생
+        \item Power line마다 gating하는 것은 매우 큰 overhead 유발
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Drowsy Cache}
+\begin{itemize}
+    \item 사용하지 않는 cache를 turn-off(power gating)하지 않고, DVFS를 통해 low power mode로 전환
+    \item Wake penalty: Low power mode $\rightarrow$ Nominal mode로 전환할때 시간이 걸림. 70nm 공정에선 1 cycle
+    \item 단점: DVFS로 $V_{\mathrm{dd}}$가 $V_{\mathrm{th}}$ 근처까지 줄어들면 error가 발생할 수 있음
+\end{itemize}
+
+\subsubsection*{Dead Block Elimination}
+\begin{itemize}
+    \item App 실행 중 이미 사용이 완료된 block(dead block)을 power-down 해버리는 방식
+    \item Compiler가 dead block hint 등 주어야 함 $\Rightarrow$ ISA 표준 개정 필요 $\Rightarrow$ Too much overhead
+\end{itemize}
+\newpage
+
+\subsection{Adaptive Instruction Queue}
+\begin{itemize}
+    \item Instruction queue가 빠르게 실행되지 않으면 queue size를 줄임
+    \item 여러가지 heuristic algorithm으로 판별함
+\end{itemize}
+
+\subsection{DVFS (Dynamic Voltage Frequency Scaling)}
+
+\subsubsection*{Necessity of Microcontroller}
+\begin{itemize}
+    \item Voltage는 frequency보다 훨씬 느리게 변함
+    \item $f$를 먼저 증가시키면 $V_{\mathrm{dd}}$가 $f$의 증가 속도를 못 따라감
+        $\Rightarrow$ $V_{\mathrm{dd}}-f$ pair 깨짐 $\Rightarrow$ Chip 오동작 가능
+    \item $V_{\mathrm{dd}}$가 증가한 것을 확인한 후 $f$를 올려야 함 $\Rightarrow$ Microcontroller의 task
+\end{itemize}
+
+\subsubsection*{Hardware Scheme and Software Scheme}
+\begin{itemize}
+    \item Hardware Scheme: $\mu$s 단위로 실행, Page보다 작은 단위로 관리
+    \item Software Scheme: ms 단위로 실행, Page 단위로 관리
+\end{itemize}
+
+\subsubsection*{Definition}
+\begin{itemize}
+    \item Clock frequency를 보장할 수 있을 정도로 $V_\mathrm{dd}$를 낮춤 $\Rightarrow$ 전력 소모 감소
+    \item Performance target을 달성할 수 있을 정도로 $f$를 낮춤 $\Rightarrow$ 전력 소모 감소
+\end{itemize}
+
+\subsubsection*{S/W Scheme Based on H/W primitives}
+\begin{itemize}
+    \item H/W: Power mgmt chip 등의 microcontroller로 $V_{\mathrm{dd}}$, $f$ 적용하는 primitive(firmware) 제공
+    \item S/W: Management 담당
+    \begin{itemize}
+        \item Frequency를 제공하는 voltage regulator과 같은 chip은 CPU의 바깥쪽에 존재 $\Rightarrow$ I/O가 수반됨
+        \item Voltage regulator과 같은 chip을 CPU 안으로 가져오면 cost가 매우 커짐 $\Rightarrow$ 손해
+        \item CPU 밖에서 frequency control이 이루어지면 I/O가 수반 $\Rightarrow$ H/W에서 수행하더라도 어차피 느림
+        \item 나중에 기술이 발전하여 CPU 안으로 가져와도 cost가 크게 늘지 않으면 H/W scheme이 될 수 있음
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{System Load (CPU utilization)}
+\begin{itemize}
+    \item Heavy Load: High $f$, $V_{\mathrm{dd}}$, $P$, Low memory access
+    \begin{itemize}
+        \item Hard real-time 작업: Strictly 실시간으로 수행되어야 함. 예: 원자력 발전소 등
+    \end{itemize}
+    \item Soft Load: Low $f$, $V_{\mathrm{dd}}$, $P$, High memory access
+    \begin{itemize}
+        \item Soft real-time 작업: 실시간으로 수행되되, 일정 시간 내에만 수행되면 됨. 예: Multimedia apps 등
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Pros and Cons}
+\begin{itemize}
+    \item Pros
+    \begin{itemize}
+        \item $f$가 증가하면 반드시 $V_\mathrm{dd}$가 증가하여야 함. $f$가 감소하면 $V_\mathrm{dd}$ 낮출 수 있음
+        \item $P \varpropto V_\mathrm{dd}^2 f \varpropto f^3$이므로 전력 소모가 $f^3$에 비례하여 감소? $\Leftarrow$ No
+        \item $P_{\mathrm{dyn}} \varpropto f^3$, 그러나 DVFS의 목적은 $P_{\mathrm{leak}}$의 감소
+    \end{itemize}
+    \item Cons: 앞으로 수행될 작업을 예측하기 힘듦 (unpredictable)
+\end{itemize}
+\newpage
+
+\subsection{Microprocessor and Peripheral Power Management}
+
+\subsubsection*{Misconception of DVFS}
+\begin{itemize}
+    \item Deadline안에 전력을 가장 효율적으로 소모하여 작업을 수행하는 방법이 아님!
+    \item 작업 수행 시간이 증가 $\Rightarrow$ 주변(peripheral) 기기는 계속 작동 $\Rightarrow$ 전력 소모 오히려 증가 가능
+    \item 동적 전력은 감소할 수 있으나 누설 전력은 오히려 증가함
+\end{itemize}
+
+\subsubsection*{Making Use of Memory Wall}
+\begin{itemize}
+    \item Memory access는 시간이 긺 $\Rightarrow$ Memory 값이 필요한 Task 3은 늦게 실행됨
+    \item Task 2가 아무리 일찍 끝나도 memory access가 끝나기 전까지는 Task 3 실행 불가 $\Rightarrow$ Stall
+    \item Memory access가 많은 application은 $f$를 낮추어도 performance의 차이가 거의 없음
+    \item CPU utilization 확인 (낮으면 memory access 많음) $\Rightarrow$ DVFS 적극 사용
+\end{itemize}
+\begin{figures}
+    \fig{memory-wall.PNG}{.55}
+\end{figures}
+
+\subsubsection*{DVFS in Multiple Clock Domain Architecture}
+\begin{itemize}
+    \item GALS: Globally Asynchronous, Locally Synchronous
+    \begin{itemize}
+        \item Synchronous Logic: Logic 내의 모든 F/F register가 하나의 clock으로 동작
+        \item Asynchronous Logic: Logic 내의 모든 F/F register가 하나의 clock으로 동작하는 것은 아님
+    \end{itemize}
+    \item 여러 CPU core를 여러 domain으로 나누고, 각 domain이 각기 다른 clock으로 동작함
+    \item 장점: CPU domain간 전력 소모가 다름 $\Rightarrow$ 신호를 더 작은 영역에 생성
+    \item CPU에서는 GALS를 많이 사용
+    \item GPU는 대부분 하나의 task에 대해 전체 core가 같이 돎 $\Rightarrow$ Load가 거의 비슷 $\Rightarrow$ async로 돌 이유가 없음
+\end{itemize}
+
+\subsubsection*{Resource Hibernation}
+\begin{itemize}
+    \item 유휴 상태의 component를 power down하여 전력 소모 감소
+    \item 디스크, 네트워크 interface, 디스플레이 등에서 많이 사용
+\end{itemize}
+\newpage
+
+\subsection{Commercial Systems}
+
+\subsubsection*{Energy-Flexibility(Generality) Gap}
+\begin{itemize}
+    \item Power과 performance 간의 tradeoff
+    \item Dedicated H/W: High energy efficiency, Low flexibility
+    \item Embedded Processors: Low energy efficiency, High flexibility
+\end{itemize}
+\begin{figures}
+    \fig{energy-flexibity-gap.PNG}{.5}
+\end{figures}
+
+\subsection{Emerging Technologies}
+
+\subsubsection*{Soft Error}
+\begin{itemize}
+    \item 같은 유형의 에러가 다시 발생하지 않을수도 있는 에러 ($\approx 10^{-7}$)
+    \item $V_{\mathrm{dd}}$ 감소 $\Rightarrow$ Soft error 발생 확률 증가
+    \item $\alpha$ 입자, 중성자 등으로 인해 발생
+    \item 해결 방안
+    \begin{itemize}
+        \item Error checking code: Pairity bit, SEC-DED (Single Error Correction-Double Error Detection)
+        \item Thread duplication $\Rightarrow$ Too much overhead $\Rightarrow$ 군수, 우주, 원자력 등에서만 이용
+        \item Idle Pipeline Utilization $\Rightarrow$ Resource conflict 발생 가능
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Process Variation}
+\begin{itemize}
+    \item 공정 미세화 $\Rightarrow$ Design Margin Decrease $\Rightarrow$ 너무 작아서 미세한 변화(latency 등)도 체감이 큼
+    \item 불랑품 발생 가능성 증가 $\Rightarrow$ 수율 감소
+    \item 목표 $f$가 달성되지 않으면 $V_{\mathrm{dd}}$를 높여서 출하하기도 함
+    \item Within die variation: intra-die variation
+    \item Die-to-die variation: inter-die variation
+\end{itemize}
+\begin{figures}
+    \fig{process-variation.PNG}{.5}
+\end{figures}
