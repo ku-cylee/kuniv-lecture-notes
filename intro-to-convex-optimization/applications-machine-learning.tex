@@ -9,7 +9,7 @@
     \item Estimation (red line) $\hat{f}(a;x)\approx f(a)$, $x$: some parameters
 \end{itemize}
 \begin{figures}
-    \fig{intro-to-convex-optimization/images/learning-from-data.PNG}{.5}
+    \fig{learning-from-data.PNG}{.5}
 \end{figures}
 
 \subsubsection*{Linear Regression}
@@ -87,7 +87,7 @@
     \item Mini-batch SGD is a sufficiently good solution
 \end{itemize}
 \begin{figures}
-    \fig{intro-to-convex-optimization/images/sgd-graph.png}{.33}
+    \fig{sgd-graph.png}{.33}
 \end{figures}
 
 \subsection{Regularization}
@@ -104,10 +104,10 @@
     \item Overfitting: Sample에 지나치게 fit하는 model은 오히려 모집단의 성격을 나타내지 못할 수 있음
 \end{itemize}
 \begin{figures}
-    \subfig{intro-to-convex-optimization/images/overfitting-order-0.png}{.23}
-    \subfig{intro-to-convex-optimization/images/overfitting-order-1.png}{.23}
-    \subfig{intro-to-convex-optimization/images/overfitting-order-3.png}{.23}
-    \subfig{intro-to-convex-optimization/images/overfitting-order-9.png}{.23}
+    \subfig{$M=0$}{overfitting-order-0.png}{.23}
+    \subfig{$M=1$}{overfitting-order-1.png}{.23}
+    \subfig{$M=3$}{overfitting-order-3.png}{.23}
+    \subfig{$M=9$}{overfitting-order-9.png}{.23}
 \end{figures}
 
 \subsubsection*{Regularization}
@@ -132,8 +132,8 @@
         \item Optimality condition: $x=\left(A^TA+\lambda I\right)^{-1}A^Tb$
     \end{itemize}
     \begin{figures}
-        \subfig{intro-to-convex-optimization/images/regularization-small-lambda.png}{.4}
-        \subfig{intro-to-convex-optimization/images/regularization-large-lambda.png}{.4}
+        \subfig{$\ln\lambda=-18$}{regularization-small-lambda.png}{.4}
+        \subfig{$\ln\lambda=0$}{regularization-large-lambda.png}{.4}
     \end{figures}
     \newpage
     \item $L_1$ Regularization: Supress $x$ by by L1-norm
@@ -149,8 +149,8 @@
         \item Often used to approximate $L_0$ regularization ($\Vert x\Vert_0$: \# of nonzero elements in $x$; nonconvex)
     \end{itemize}
     \begin{figures}
-        \subfig{intro-to-convex-optimization/images/l1-norm.png}{.2}
-        \subfig{intro-to-convex-optimization/images/l2-norm.png}{.2}
+        \subfig{L1-norm}{l1-norm.png}{.26}
+        \subfig{L0-norm}{l2-norm.png}{.26}
     \end{figures}
 \end{itemize}
 
@@ -180,9 +180,10 @@
         \item $a^Tx=0$, i.e. a hyperplane is a decision boundary
     \end{itemize}
 \end{itemize}
+\newpage
 \begin{figures}
-    \subfig{intro-to-convex-optimization/images/logistic-regression.PNG}{.302}
-    \subfig{intro-to-convex-optimization/images/sigmoid-function.PNG}{.328}
+    \subfig{Logistic Regression}{logistic-regression.PNG}{.302}
+    \subfig{Sigmoid Function}{sigmoid-function.PNG}{.328}
 \end{figures}
 
 \subsubsection*{Maximum Likelihood Estimation}
@@ -223,7 +224,7 @@
     \newpage
     \item Robust linear classifier
     \begin{itemize}
-        \item In case the points can be separated into two sets completely (left image)
+        \item In case the points can be separated into two sets completely
         \item Let $\mathcal{H}_1=\{z~|~a^Tz+b=1\}$, $\mathcal{H}_2=\{z~|~a^Tz+b=-1\}$
         \item Maximize the margin between two sets: $\mathrm{dist}(\mathcal{H}_1,\mathcal{H}_2)=\frac{2}{\Vert a\Vert_2}$
             $$ \begin{aligned}
@@ -234,7 +235,7 @@
     \end{itemize}
     \item Approximate linear classifier
     \begin{itemize}
-        \item In case the points cannot be separated into two sets completely (middle image)
+        \item In case the points cannot be separated into two sets completely
         \item Objective: minimizing \# of missclassified points $\Rightarrow$ L0-norm $\Rightarrow$ Approximate to L1-norm
             $$ \begin{aligned}
                 \mathrm{minimize}~~&~~\mathbf{1}^Tu+\mathbf{1}^Tv \\
@@ -247,7 +248,7 @@
     \end{itemize}
     \item Support Vector Machine (SVM)
     \begin{itemize}
-        \item Tradeoff between robust L.C. and approximate L.C. (right image)
+        \item Tradeoff between robust L.C. and approximate L.C.
         \item Introduces a hyperparameter $\gamma>0$
             $$ \begin{aligned}
                 \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^Tu+\mathbf{1}^Tv) \\
@@ -258,7 +259,7 @@
     \end{itemize}
 \end{itemize}
 \begin{figures}
-    \subfig{intro-to-convex-optimization/images/robust-linear-classifier.PNG}{.309}
-    \subfig{intro-to-convex-optimization/images/approximate-linear-classifier.PNG}{.296}
-    \subfig{intro-to-convex-optimization/images/support-vector-machine.PNG}{.295}
+    \subfig{Robust L.C.}{robust-linear-classifier.PNG}{.309}
+    \subfig{Approximate L.C.}{approximate-linear-classifier.PNG}{.296}
+    \subfig{Support Vector Machine}{support-vector-machine.PNG}{.295}
 \end{figures}

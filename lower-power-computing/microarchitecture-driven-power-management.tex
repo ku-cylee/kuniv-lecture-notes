@@ -28,7 +28,7 @@
     \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 공정 미세화가 진행되면 누설전력 급증
     \item 공정미세화로 인해 Subthreshold Leakage가 dominant $\Rightarrow$ 대부분 $P_{\mathrm{leak}}$을 줄이는 기술은 여기에 집중
     \begin{figures}
-        \fig{lower-power-computing/images/leakage-power-components.PNG}{.4}
+        \fig{leakage-power-components.PNG}{.4}
     \end{figures}
     \item 공정미세화가 진행되면서 누설전력이 급증하는 추세임
     \item Core는 입력이 있을때만 gate가 작동하지만, cache는 입력이 없어도 F/F 등에 데이터 저장 $\Rightarrow$ 누설 발생
@@ -86,7 +86,7 @@
 
 \subsubsection*{Low Swing Buses}
 \begin{figures}
-    \fig{lower-power-computing/images/low-swing-buses.PNG}{.6}
+    \fig{low-swing-buses.PNG}{.6}
 \end{figures}
 \begin{itemize}
     \item 버스에서 정보를 전달할 때 더 낮은 전압으로 전달하는 방법
@@ -99,7 +99,7 @@
 
 \subsubsection*{Bus Segmentation}
 \begin{figures}
-    \fig{lower-power-computing/images/bus-segmentation.PNG}{.6}
+    \fig{bus-segmentation.PNG}{.6}
 \end{figures}
 \begin{itemize}
     \item A $\rightarrow$ C로 보낼 때 A $\rightarrow$ F로 보낼 수 있을 정도의 전압을 걸어야 함 $\Rightarrow$ 전력 낭비
@@ -112,7 +112,7 @@
 
 \subsubsection*{Network On Chip (NOC)}
 \begin{figures}
-    \fig{lower-power-computing/images/network-on-chip.PNG}{.4}
+    \fig{network-on-chip.PNG}{.4}
 \end{figures}
 \begin{itemize}
     \item 각 Processing unit을 simple CPU router에 붙여서 운용
@@ -153,7 +153,7 @@
         \item Bank selection bits 삽입, tag의 bits를 줄임 $\Rightarrow$ Bank selection
     \end{itemize}
     \begin{figures}
-        \fig{lower-power-computing/images/banked-cache.PNG}{.4}
+        \fig{banked-cache.PNG}{.4}
     \end{figures}
     \item Partitoned Power-Aware Instruction Cache
     \begin{itemize}
@@ -207,7 +207,7 @@
 
 \subsubsection*{Caches and Power Consumption}
 \begin{figures}
-    \fig{lower-power-computing/images/cache-structure.PNG}{.6}
+    \fig{cache-structure.PNG}{.6}
 \end{figures}
 \begin{itemize}
     \item Cache의 작동 방식
@@ -343,7 +343,7 @@
     \item CPU utilization 확인 (낮으면 memory access 많음) $\Rightarrow$ DVFS 적극 사용
 \end{itemize}
 \begin{figures}
-    \fig{lower-power-computing/images/memory-wall.PNG}{.55}
+    \fig{memory-wall.PNG}{.55}
 \end{figures}
 
 \subsubsection*{DVFS in Multiple Clock Domain Architecture}
@@ -375,7 +375,7 @@
     \item Embedded Processors: Low energy efficiency, High flexibility
 \end{itemize}
 \begin{figures}
-    \fig{lower-power-computing/images/energy-flexibity-gap.PNG}{.5}
+    \fig{energy-flexibity-gap.PNG}{.5}
 \end{figures}
 
 \subsection{Emerging Technologies}
@@ -402,5 +402,5 @@
     \item Die-to-die variation: inter-die variation
 \end{itemize}
 \begin{figures}
-    \fig{lower-power-computing/images/process-variation.PNG}{.5}
+    \fig{process-variation.PNG}{.5}
 \end{figures}

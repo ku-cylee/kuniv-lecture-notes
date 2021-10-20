@@ -1,14 +1,21 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{currfile}
+
+\def\imgdir{./}
+\newcommand{\setimgdir}{
+    \def\imgdir{\currfiledir/../images/}
+}
 
 \newenvironment{figures}
     {\begin{figure*}[htb]\vspace{10pt}\centering}
     {\end{figure*}}
 
-\newcommand{\fig}[2]{\includegraphics[width=#2\textwidth]{#1}}
+\newcommand{\fig}[2]{\includegraphics[width=#2\textwidth]{\imgdir #1}}
 
-\newcommand{\subfig}[2]{
-    \begin{subfigure}{#2\textwidth}\centering
-        \includegraphics[width=\textwidth]{#1}
+\newcommand{\subfig}[3]{
+    \begin{subfigure}{#3\textwidth}\centering
+        \includegraphics[width=\textwidth]{\imgdir #2}
+        \caption{#1}
     \end{subfigure}
 }
