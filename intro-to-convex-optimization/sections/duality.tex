@@ -5,13 +5,15 @@
 \subsubsection*{Lagrangian}
 \begin{itemize}
     \item Standard form problem
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~f_0(x) \\
-            \mathrm{subject~to}~~&~~f_i(x) \leq 0,~i=1,2,\cdots,m \\
-                &~~h_i(x) = 0,~i=1,2,\cdots,p
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~f_0(x) \\
+        \mathrm{subject~to}~~&~~f_i(x) \leq 0,~i=1,2,\cdots,m \\
+            &~~h_i(x) = 0,~i=1,2,\cdots,p
+    \end{aligned}\end{equation}
     \item Lagrangian $L:~\mathbb{R}^n\times\mathbb{R}^m\times\mathbb{R}^p\rightarrow\mathbb{R}$
-        $$ L(x,\lambda,\nu) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x) $$
+    \begin{equation}
+        L(x,\lambda,\nu) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x)
+    \end{equation}
     \begin{itemize}
         \item Weighted sum of objective and constraint functions
         \item $\lambda_i$: Lagrange multiplier associated with $f_i(x)\leq 0$
@@ -22,8 +24,9 @@
 \subsubsection*{Lagrange Dual Function}
 \begin{itemize}
     \item Lagrange dual function $g:~\mathbb{R}^m\times\mathbb{R}^p\rightarrow\mathbb{R}$
-        $$ g(\lambda,\nu) = \inf_{x\in\mathbb{R}^n}L(x,\lambda,\nu)
-            = \inf_{x\in\mathbb{R}^n}\left(f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x)\right) $$
+    \begin{equation}
+        g(\lambda,\nu) = \inf_{x\in\mathbb{R}^n}L(x,\lambda,\nu)= \inf_{x\in\mathbb{R}^n}\left(f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p\nu_i h_i(x)\right)
+    \end{equation}
     \begin{itemize}
         \item Affine function of $\lambda$, $\nu$
         \item $g$: Pointwise infimum of affine functions $\Rightarrow$ $g$: concave
@@ -52,10 +55,10 @@
 \subsubsection*{The dual problem}
 \begin{itemize}
     \item Lagrange dual problem
-        $$ \begin{aligned}
-            \mathrm{maximize}~~&~~g(\lambda,\nu) \\
-            \mathrm{subject~to}~~&~~\lambda\succeq 0
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{maximize}~~&~~g(\lambda,\nu) \\
+        \mathrm{subject~to}~~&~~\lambda\succeq 0
+    \end{aligned}\end{equation}
     \item Original problem is called the \textit{primal problem}
     \item Always a convex optimization problem
     \item Dual optimal value $d^\ast$ $\leq$ Primal optimal value $p^\ast$
@@ -65,40 +68,40 @@
 \subsubsection*{Examples}
 \begin{itemize}
     \item Least-norm solution of linear equations
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~x^Tx \\
-            \mathrm{subject~to}~~&~~Ax = b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~x^Tx \\
+        \mathrm{subject~to}~~&~~Ax = b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Lagrangian: $L(x,\nu) = x^Tx + \nu^T(Ax-b)$
         \item Minimization: $0 = \nabla_xL(x^\ast,\nu) = 2x^\ast+A^T\nu$ $\Rightarrow$ $x^\ast=-\frac{1}{2}A^T\nu$
         \item Dual function: $g(\nu)=L(x^\ast,\nu)=-\frac{1}{4}\Vert A^T\nu\Vert_2^2-b^T\nu$
     \end{itemize}
     \item Linear Programming
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~c^Tx \\
-            \mathrm{subject~to}~~&~~Ax = b,~x\succeq 0
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~c^Tx \\
+        \mathrm{subject~to}~~&~~Ax = b,~x\succeq 0
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Lagrangian: $L(x,\lambda,\nu)=c^Tx-\lambda^Tx+\nu^T(Ax-b)=-b^T\nu+(A^T\nu-\lambda+c)^Tx$
         \item Dual function: $L$: affine in $x$ $\Rightarrow$ $g = -b^T\nu$ if $A^T\nu-\lambda+c=0$, else $-\infty$
         \item Lower bound property: $p^\ast\geq-b^T\nu$ if $A^T\nu + c \succeq 0$
     \end{itemize}
     \item Equality constrained norm minimization
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\Vert x \Vert \\
-            \mathrm{subject~to}~~&~~Ax = b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert x \Vert \\
+        \mathrm{subject~to}~~&~~Ax = b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Lagrangian: $L(x,\nu)=\Vert x\Vert+\nu^T(Ax-b) = \Vert x\Vert + (A^T\nu)^Tx - b^T\nu$
         \item Minimization: $L(x,\nu)\geq\Vert x\Vert -\Vert A^T\nu\Vert_\ast \Vert x\Vert - b^T\nu = (1-\Vert A^T\nu\Vert_\ast)\Vert x\Vert-b^T\nu$
         \item Dual function: $p^\ast\geq-b^T\nu$ if $\Vert A^T\nu\Vert_\ast\leq 1$
     \end{itemize}
     \item Entropy maximization
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\sum_{i=1}^n x_i\log(x_i) \\
-            \mathrm{subject~to}~~&~~\mathbf{1}^Tx = 1,~Ax\preceq b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\sum_{i=1}^n x_i\log(x_i) \\
+        \mathrm{subject~to}~~&~~\mathbf{1}^Tx = 1,~Ax\preceq b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Lagrangian: $L(x,\lambda,\nu)=\sum_{i=1}^nx_i\log(x_i)+\nu(\mathbf{1}^Tx-1)+\lambda^T(Ax-b)$
         \item Minimization: $0 = \nabla_x L(x^\ast,\lambda,\nu)=1+\log x_i^\ast+\nu+a_i^T\lambda$ $\Rightarrow$ $x_i^\ast=\exp(-\nu-a_i^T\lambda - 1)$
@@ -133,13 +136,13 @@
 \subsubsection*{Examples}
 \begin{itemize}
     \item Inequality form LP
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~c^Tx \\
-            \mathrm{subject~to}~~&~~Ax\preceq b
-        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
-            \mathrm{minimize}~~&~~-b^T\lambda \\
-            \mathrm{subject~to}~~&~~A^T\lambda+c=0,~\lambda\succeq 0
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~c^Tx \\
+        \mathrm{subject~to}~~&~~Ax\preceq b
+    \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+        \mathrm{minimize}~~&~~-b^T\lambda \\
+        \mathrm{subject~to}~~&~~A^T\lambda+c=0,~\lambda\succeq 0
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Slater's condition: $\exists~\tilde{x}$ s.t. $A\tilde{x}\prec b$ $\Rightarrow$ $p^\ast=d^\ast$
         \item $p^\ast=d^\ast$ always hold except when primal and dual are infeasible
@@ -150,12 +153,12 @@
 \subsubsection*{Complementary slackness}
 \begin{itemize}
     \item Strong duality holds, $x^\ast$, $\lambda^\ast$, $\nu^\ast$: optimal
-    $$ \begin{aligned}
+    \begin{equation}\begin{aligned}
         f_0(x^\ast)=g(\lambda^\ast,\nu^\ast) &= \inf_{x} \left(f_0(x)+\sum_{i}\lambda_i^\ast f_i(x)+\sum_i \nu_i^\ast h_i(x)\right) \\
             &\leq f_0(x^\ast)+\sum_{i}\lambda_i^\ast f_i(x^\ast)+\sum_i \nu_i^\ast h_i(x^\ast) \\
             &= f_0(x^\ast)+\sum_{i}\lambda_i^\ast f_i(x^\ast)~~(\because~h_i(x^\ast)=0) \\
             &\leq f_0(x^\ast)~~(\because~\lambda_i^\ast f_i(x^\ast)\leq 0)
-    \end{aligned} $$
+    \end{aligned}\end{equation}
     \item $\forall~i=1,2,\cdots,m,~\lambda_i^\ast f_i^\ast(x) = 0$: complementary slackness $\Rightarrow$ $f_0(x^\ast) = L(x^\ast,\lambda^\ast,\nu^\ast)$
     \item $\lambda_i^\ast>0~\Rightarrow~f_i(x_i^\ast)=0$, $f_i(x^\ast)<0~\Rightarrow~\lambda_i^\ast=0$
 \end{itemize}
@@ -191,19 +194,21 @@
 \subsubsection*{Examples}
 \begin{itemize}
     \item Equality constrained QP
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\frac{1}{2}x^TPx + q^Tx + r \\
-            \mathrm{subject~to}~~&~~Ax = b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\frac{1}{2}x^TPx + q^Tx + r \\
+        \mathrm{subject~to}~~&~~Ax = b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item KKT 1: $Ax^\ast = b$, KKT 4: $Px^\ast + q + A^T\nu = 0$ i.e.
-            $$ \begin{mtx}{cc}P&A^T\\A&0\end{mtx}\begin{mtx}{c}x^\ast\\\nu^\ast\end{mtx}=\begin{mtx}{c}-q\\b\end{mtx} $$
+        \begin{equation}
+            \begin{mtx}{cc}P&A^T\\A&0\end{mtx}\begin{mtx}{c}x^\ast\\\nu^\ast\end{mtx}=\begin{mtx}{c}-q\\b\end{mtx}
+        \end{equation}
     \end{itemize}
     \item Waterfilling
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~-\sum_{i=1}^n \log(x_i + \alpha_i) \\
-            \mathrm{subject~to}~~&~~x\succeq 0,~\mathbf{1}^Tx = 1
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~-\sum_{i=1}^n \log(x_i + \alpha_i) \\
+        \mathrm{subject~to}~~&~~x\succeq 0,~\mathbf{1}^Tx = 1
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item $x$라는 자원을 $\alpha_i$만큼의 자원을 갖고 있는 $n$명에게 나누어주어 utility(welfare, satisfaction)을 최대화
         \item KKT 1: $x\succeq 0$, $\mathbf{1}^Tx = 1$, KKT 2: $\lambda\succeq 0$, KKT 3: $\lambda_i x_i = 0$, KKT 4: $\frac{1}{x_i+\alpha_i}+\lambda_i=\nu$
@@ -224,12 +229,12 @@
         \item Transform objective or constraint functions: replace $f(x)$ by $\phi(f_0(x))$ with $\phi$ convex, increasing
     \end{itemize}
     \item Example: Norm minimization
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\Vert Ax+b \Vert \\ {}
-        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
-            \mathrm{minimize}~~&~~\Vert y\Vert \\
-            \mathrm{subject~to}~~&~~y = Ax + b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax+b \Vert \\ {}
+    \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert y\Vert \\
+        \mathrm{subject~to}~~&~~y = Ax + b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Lagrangian: $L(x;y,\nu) = \Vert y\Vert+\nu^T(Ax+b-y) = \Vert y\Vert-y^T\nu+x^TA^T\nu+b^T\nu = (A^T\nu)^Tx + \Vert y\Vert - y^T\nu + b^T\nu$
         \item Dual function: $g(\nu) = \inf_{x}(A^T\nu)^Tx + \inf_{y}\left[\Vert y\Vert - y^T\nu\right] + b^T\nu$

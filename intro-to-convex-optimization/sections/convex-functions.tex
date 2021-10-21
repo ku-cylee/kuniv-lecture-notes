@@ -6,11 +6,15 @@
 \begin{itemize}
     \item $f~:~\mathbb{R}^n \rightarrow \mathbb{R}$: convex $\Leftrightarrow$
     $\mathcal{D}(f)$: convex and $\forall \theta \in [0,1],~\forall x_1,~x_2 \in \mathcal{D}(f),$
-    $$ f(\theta x_1 + (1 - \theta) x_2 ) \leq \theta f(x_1) + (1 - \theta)f(x_2) $$
+    \begin{equation}
+        f(\theta x_1 + (1 - \theta) x_2 ) \leq \theta f(x_1) + (1 - \theta)f(x_2)
+    \end{equation}
     \item $f~:~\mathbb{R}^n \rightarrow \mathbb{R}$: strictly convex $\Leftrightarrow$
     $\mathcal{D}(f)$: convex and $\forall \theta \in [0,1],
     ~\forall x_1,~x_2 \in \mathcal{D}(f) (x_1 \neq x_2),$
-    $$ f(\theta x_1 + (1 - \theta) x_2 ) < \theta f(x_1) + (1 - \theta)f(x_2) $$
+    \begin{equation}
+        f(\theta x_1 + (1 - \theta) x_2 ) < \theta f(x_1) + (1 - \theta)f(x_2)
+    \end{equation}
     \item $f$: concave $\Leftrightarrow$ $-f$: convex
 \end{itemize}
 
@@ -66,7 +70,9 @@
 \subsubsection*{Gradient}
 \begin{itemize}
     \item Gradient is a vector of partial derivatives of function $f: \mathbb{R}^n \rightarrow \mathbb{R}$
-    $$ \nabla f(\mathbf{x}) = \left(\frac {\partial f(\mathbf{x})} {\partial x_1}, \frac {\partial f(\mathbf{x})} {\partial x_2}, \cdots, \frac {\partial f(\mathbf{x})} {\partial x_n} \right) $$
+    \begin{equation}
+        \nabla f(\mathbf{x}) = \left(\frac {\partial f(\mathbf{x})} {\partial x_1}, \frac {\partial f(\mathbf{x})} {\partial x_2}, \cdots, \frac {\partial f(\mathbf{x})} {\partial x_n} \right)
+    \end{equation}
     \item Taylor expansion: $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^T \Delta \mathbf{x}$
     \item $f(\mathbf{x}) = \mathbf{c}^T\mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = \mathbf{c}$
     \item $f(\mathbf{x}) = \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = 2Q\mathbf{x}$
@@ -76,14 +82,16 @@
 \begin{itemize}
     \item Jacobian is a matrix of partial derivatives of function $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$
         ($f(\mathbf{x}) = (f_1(\mathbf{x}), f_2(\mathbf{x}), \cdots, f_m(\mathbf{x}))$)
-    $$ J_f = \begin{mtx}{c}
-        \nabla f_1(\mathbf{x})^T \\ \nabla f_2(\mathbf{x})^T \\ \vdots \\ \nabla f_m(\mathbf{x})^T
-    \end{mtx} = \begin{mtx}{cccc}
-        \frac {\partial f_1} {\partial x_1} & \frac {\partial f_1} {\partial x_2} & \cdots & \frac {\partial f_1} {\partial x_n} \\
-        \frac {\partial f_2} {\partial x_1} & \frac {\partial f_2} {\partial x_2} & \cdots & \frac {\partial f_2} {\partial x_n} \\
-        \vdots & \vdots & \ddots & \vdots \\
-        \frac {\partial f_m} {\partial x_1} & \frac {\partial f_m} {\partial x_2} & \cdots & \frac {\partial f_m} {\partial x_n}
-    \end{mtx},~\left[ J_f \right]_{ij} = \frac {\partial f_i} {\partial x_j} $$
+    \begin{equation}
+        J_f = \begin{mtx}{c}
+            \nabla f_1(\mathbf{x})^T \\ \nabla f_2(\mathbf{x})^T \\ \vdots \\ \nabla f_m(\mathbf{x})^T
+        \end{mtx} = \begin{mtx}{cccc}
+            \frac {\partial f_1} {\partial x_1} & \frac {\partial f_1} {\partial x_2} & \cdots & \frac {\partial f_1} {\partial x_n} \\
+            \frac {\partial f_2} {\partial x_1} & \frac {\partial f_2} {\partial x_2} & \cdots & \frac {\partial f_2} {\partial x_n} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            \frac {\partial f_m} {\partial x_1} & \frac {\partial f_m} {\partial x_2} & \cdots & \frac {\partial f_m} {\partial x_n}
+        \end{mtx},~\left[ J_f \right]_{ij} = \frac {\partial f_i} {\partial x_j}
+    \end{equation}
     \item $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + J_f \Delta \mathbf{x}$
     \item $f(\mathbf{x}) = A\mathbf{x}$ $\Rightarrow$ $J_f = A$
 \end{itemize}
@@ -91,12 +99,14 @@
 \subsubsection*{Hessian}
 \begin{itemize}
     \item Hessian is a second-order derivative, i.e. Jacobian of $\nabla f$
-    $$ \nabla^2 f(\mathbf{x}) = \begin{mtx}{cccc}
-        \frac {\partial^2 f} {\partial x_1^2} & \frac {\partial^2 f} {\partial x_1 \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_1 \partial x_n} \\
-        \frac {\partial^2 f} {\partial x_2 \partial x_1} & \frac {\partial^2 f} {\partial x_2^2} & \cdots & \frac {\partial^2 f} {\partial x_2 \partial x_n} \\
-        \vdots & \vdots & \ddots & \vdots \\
-        \frac {\partial^2 f} {\partial x_n \partial x_1} & \frac {\partial^2 f} {\partial x_n \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_n^2}
-    \end{mtx},~ \left[ \nabla^2 f \right]_{ij} = \frac {\partial^2 f} {\partial x_i \partial x_j} $$
+    \begin{equation}
+        \nabla^2 f(\mathbf{x}) = \begin{mtx}{cccc}
+            \frac {\partial^2 f} {\partial x_1^2} & \frac {\partial^2 f} {\partial x_1 \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_1 \partial x_n} \\
+            \frac {\partial^2 f} {\partial x_2 \partial x_1} & \frac {\partial^2 f} {\partial x_2^2} & \cdots & \frac {\partial^2 f} {\partial x_2 \partial x_n} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            \frac {\partial^2 f} {\partial x_n \partial x_1} & \frac {\partial^2 f} {\partial x_n \partial x_2} & \cdots & \frac {\partial^2 f} {\partial x_n^2}
+        \end{mtx},~ \left[ \nabla^2 f \right]_{ij} = \frac {\partial^2 f} {\partial x_i \partial x_j}
+    \end{equation}
     \item Taylor Expansion: $f(\mathbf{x} + \Delta \mathbf{x})
         \approx f(\mathbf{x}) + f^{\prime}(\mathbf{x})\Delta\mathbf{x} + \frac 1 2 f^{\prime\prime}(\mathbf{x})\Delta\mathbf{x}^2$
     \item $\nabla f(\mathbf{x} + \Delta \mathbf{x}) \approx \nabla f(\mathbf{x}) + J_{\nabla f}(\mathbf{x}) \Delta \mathbf{x}$
@@ -108,14 +118,18 @@
 \begin{itemize}
     \item $f$ is differentiable: $\mathcal{D}(f)$: open, $\forall x \in \mathcal{D}(f),~\exists\nabla f(x)$
     \item $f$: differentiable, $\mathcal{D}(f)$: convex. $f$: convex $\Leftrightarrow$
-    $$ \forall x, y \in \mathcal{D}(f),~f(y) \geq f(x) + \nabla f(x)^T (y-x) $$
+    \begin{equation}
+        \forall x, y \in \mathcal{D}(f),~f(y) \geq f(x) + \nabla f(x)^T (y-x)
+    \end{equation}
 \end{itemize}
 
 \subsubsection*{Second-order Condition of Convexity}
 \begin{itemize}
     \item $f$ is twice differentiable: $\mathcal{D}(f)$: open, $\forall x \in \mathcal{D}(f),~\exists\nabla^2 f(x)$
     \item $f$: twice differentiable, $\mathcal{D}(f)$: convex. $f$: convex $\Leftrightarrow$
-    $$ \forall x \in \mathcal{D}(f),~\nabla^2 f(x) \succeq 0 $$
+    \begin{equation}
+        \forall x \in \mathcal{D}(f),~\nabla^2 f(x) \succeq 0
+    \end{equation}
     \item $f$ is strictly convex if $\nabla^2 f(x) \succ 0$
 \end{itemize}
 
@@ -130,7 +144,9 @@
 \subsubsection*{Log-sum-exponential}
 \begin{itemize}
     \item Definition
-        $$ f(\mathbf{x}) = \log \sum_{k=1}^n \exp x_k $$
+    \begin{equation}
+        f(\mathbf{x}) = \log \sum_{k=1}^n \exp x_k
+    \end{equation}
     \item Proof
     \begin{itemize}
         \item Let $z_k = \exp x_k$, then
@@ -151,10 +167,14 @@
 \subsection{Sublevel Set and Epigraph}
 \begin{itemize}
     \item $\alpha$-sublevel set of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
-        $$ C_{\alpha} = \{ \mathbf{x} \in \mathcal{D}(f) | f(\mathbf{x}) \leq \alpha \} $$
+    \begin{equation}
+        C_{\alpha} = \{ \mathbf{x} \in \mathcal{D}(f) | f(\mathbf{x}) \leq \alpha \}
+    \end{equation}
     \item $f$: convex function $\Rightarrow$ $\forall \alpha \in \mathbb{R}$, $C_\alpha$: convex set
     \item Epigraph of $f:\mathbb{R}^n \rightarrow \mathbb{R}$
-        $$ \mathrm{epi}(f) = \{ (\mathbf{x},t) \in \mathbb{R}^{n+1}~|~\mathbf{x} \in \mathcal{D}(f),~f(\mathbf{x}) \leq t \} $$
+    \begin{equation}
+        \mathrm{epi}(f) = \{ (\mathbf{x},t) \in \mathbb{R}^{n+1}~|~\mathbf{x} \in \mathcal{D}(f),~f(\mathbf{x}) \leq t \}
+    \end{equation}
     \item $f$: convex function $\Leftrightarrow$ $\mathrm{epi}(f)$: convex set
 \end{itemize}
 
@@ -190,7 +210,9 @@
 \subsubsection*{Pointwise Supremum}
 \begin{itemize}
     \item $\forall \mathbf{y} \in A$, $f(\mathbf{x}, \mathbf{y})$: convex for fixed $\mathbf{y}$, $g$: convex
-        $$ g(x) = \sup_{\mathbf{y} \in A} f(\mathbf{x}, \mathbf{y}) \left( = \max_{\mathbf{y}_i \in A}\{ f(\mathbf{x}, \mathbf{y}_i) \} \right) $$
+    \begin{equation}
+        g(x) = \sup_{\mathbf{y} \in A} f(\mathbf{x}, \mathbf{y}) \left( = \max_{\mathbf{y}_i \in A}\{ f(\mathbf{x}, \mathbf{y}_i) \} \right)
+    \end{equation}
     \item Note: $f(x, y)$ need NOT to be convex both in $x$ and $y$ (Example: $f(x, y) = x^2 \log(1+y)$)
     \item Pointwise Maximum Examples
     \begin{itemize}
@@ -208,7 +230,9 @@
         \item Support function of set $C$: $S_C(\mathbf{x}) = \sup_{\mathbf{y} \in C} \mathbf{y}^T \mathbf{x}$: convex
         \item Distance to farthest point in a set $C$: $f(\mathbf{x}) = \sup_{\mathbf{y}\in C} \Vert \mathbf{x} - \mathbf{y} \Vert$: convex
         \item Maximum eigenvalue: $A \in \mathbb{S}^n$, $f$: convex
-            $$ f(A) = \sup_{\mathbf{x} \in \mathbb{R}^n} \frac {\mathbf{x}^T A\mathbf{x}} {\mathbf{x}^T\mathbf{x}} $$
+        \begin{equation}
+            f(A) = \sup_{\mathbf{x} \in \mathbb{R}^n} \frac {\mathbf{x}^T A\mathbf{x}} {\mathbf{x}^T\mathbf{x}}
+        \end{equation}
     \end{itemize}
 \end{itemize}
 \newpage
@@ -240,7 +264,9 @@
         \item $C \succ 0$, $Q = \begin{mtx}{cc} A & B \\ B^T & C\end{mtx} \succeq 0$,
             $\mathbf{z} = \begin{mtx}{c} \mathbf{x} \\ \mathbf{y} \end{mtx}$,
             $f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^TA\mathbf{x} + 2\mathbf{x}^TB\mathbf{y} + \mathbf{y}^TC\mathbf{y} = Q\mathbf{z}$ $\Rightarrow$ $g$: convex
-            $$ g(\mathbf{x}) = \inf_{\mathbf{y}} f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T (A - BC^{-1}B^T)\mathbf{x} $$
+            \begin{equation}
+                g(\mathbf{x}) = \inf_{\mathbf{y}} f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T (A - BC^{-1}B^T)\mathbf{x}
+            \end{equation}
             \begin{itemize}
                 \item Since $g$: convex, Schur Complement $A - BC^{-1}B^T \succeq 0$
             \end{itemize}
@@ -299,7 +325,7 @@
     \item Summation does NOT preserve quasiconvexity
     \item Nonnegative weighted maximum: $\forall \mathbf{y} \in C$, $w(\mathbf{y}) \geq 0$,
         $g(\mathbf{x}, \mathbf{y})$: quasiconvex in $\mathbf{x}$ $\Leftrightarrow$ $f$: quasiconvex
-        $$ f(\mathbf{x}) = \sup_{\mathbf{y} \in C} w(\mathbf{y})g(\mathbf{x}, \mathbf{y}) $$
+        \begin{equation}f(\mathbf{x}) = \sup_{\mathbf{y} \in C} w(\mathbf{y})g(\mathbf{x}, \mathbf{y})\end{equation}
     \item Composition: $g: \mathbb{R}^n \rightarrow \mathbb{R}$: quasiconvex, $h$: nondecreasing $\Rightarrow$ $h \circ g$: quasiconvex
     \item Minimization: $f(\mathbf{x}, \mathbf{y})$: quasiconvex in  $(\mathbf{x},\mathbf{y})$, $C$: convex
         $\Rightarrow$ $g(\mathbf{x}) = \inf_{\mathbf{y} \in C} f(\mathbf{x}, \mathbf{y})$: quasiconvex
@@ -319,9 +345,13 @@
 \begin{itemize}
     \item Powers: $x^{\alpha}$ ($x \in \mathbb{R}$): log-convex if $\alpha \leq 0$, log-concave if $\alpha \geq 0$
     \item Normal Distribution Probability Density Function: log-concave
-        $$ f(\mathbf{x}) = \frac 1 {\sqrt{(2\pi)^n \det\Sigma}} e^{-\frac 1 2 \left(\mathbf{x} - \mathbf{\overline{x}}\right)^T \Sigma^{-1} \left(\mathbf{x} - \mathbf{\overline{x}}\right)} $$
+    \begin{equation}
+        f(\mathbf{x}) = \frac 1 {\sqrt{(2\pi)^n \det\Sigma}} e^{-\frac 1 2 \left(\mathbf{x} - \mathbf{\overline{x}}\right)^T \Sigma^{-1} \left(\mathbf{x} - \mathbf{\overline{x}}\right)}
+    \end{equation}
     \item Cumulative Gaussian Distribution: log-concave
-        $$ \Phi(x) = \frac 1 {\sqrt{2\pi}} \int_{-\infty}^x e^{-\frac {u^2} 2} du $$
+    \begin{equation}
+        \Phi(x) = \frac 1 {\sqrt{2\pi}} \int_{-\infty}^x e^{-\frac {u^2} 2} du
+    \end{equation}
 \end{itemize}
 
 \subsubsection*{Log-convexity, Convexity and Quasiconvexity}

@@ -3,9 +3,9 @@
 \subsection{Unconstrained Optimization}
 
 \subsubsection*{Unconstrained Problem}
-$$ \begin{aligned}
+\begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f(x)
-\end{aligned} $$
+\end{aligned}\end{equation}
 \begin{itemize}
     \item Problem assumptions
     \begin{itemize}
@@ -35,7 +35,9 @@ $$ \begin{aligned}
 \end{itemize}
 
 \subsubsection*{Descent Methods}
-$$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
+\begin{equation}
+    x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)})
+\end{equation}
 \begin{itemize}
     \item $\Delta x$: step, search direction
     \item $t>0$: step size, step length
@@ -57,7 +59,9 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 \begin{itemize}
     \item $\Delta x = -\nabla f(x)$
     \item Exact line search
-        $$t = \arg\min_{t>0}f(x+t\Delta x) = \arg\min_{t>0}f(x-t\nabla f(x))$$
+    \begin{equation}
+        t = \arg\min_{t>0}f(x+t\Delta x) = \arg\min_{t>0}f(x-t\nabla f(x))
+    \end{equation}
     \begin{itemize}
         \item Step을 줄일 수는 있지만 복잡함
     \end{itemize}
@@ -65,7 +69,9 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
     \begin{itemize}
         \item Parameters $\alpha\in\left(0,\frac{1}{2}\right)$, $\beta\in(0,1)$
         \item Starting at $t=1$, repeat $t=\beta t$ until
-            $$ f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^T\Delta x $$
+        \begin{equation}
+            f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^T\Delta x
+        \end{equation}
         \item Guarantees $f(x^{(k)})<f(x^{(k+1)})$ since $\nabla f(x)^T\Delta x<0$
     \end{itemize}
     \item Algorithm: General descent method with $\Delta x = -\nabla f(x)$
@@ -91,13 +97,17 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 \subsubsection*{Steepest Descent Method}
 \begin{itemize}
     \item Normalized steepest Descent Direction
-        $$ \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^T v\right\} $$
+    \begin{equation}
+        \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^T v\right\}
+    \end{equation}
     \begin{itemize}
         \item Interpretation: for a very small $v$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
         \item $\Delta x_{\mathrm{nsd}}$: most negative directional derivative
     \end{itemize}
     \item (Unnormalized) Steepest Descent Direction
-        $$ \Delta x_\mathrm{sd}=\Vert\nabla f(x)\Vert_\ast\Delta x_\mathrm{nsd} $$
+    \begin{equation}
+        \Delta x_\mathrm{sd}=\Vert\nabla f(x)\Vert_\ast\Delta x_\mathrm{nsd}
+    \end{equation}
     \begin{itemize}
         \item Interpretation: $\nabla f(x)^Tv\leq\Vert\nabla f(x)\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
         \item General form of GD. GD if $\Vert v\Vert_2\leq 1$
@@ -112,13 +122,17 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 \subsubsection*{Newton's Method}
 \begin{itemize}
     \item Newton Step
-        $$ \Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x) $$
+    \begin{equation}
+        \Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x)
+    \end{equation}
     \begin{itemize}
         \item $\Delta x_\mathrm{nt}$ minimizes second-order approx. over $v$: $f(x+v)=f(x)+\nabla f(x)^Tv+\frac{1}{2}v^T\nabla^2f(x)v$
         \item Steepest descent direction at $x$ in local Hessian norm $\Vert u\Vert_{\nabla^2 f(x)}=\left(u^T\nabla^2 f(x)u\right)^{1/2}$
     \end{itemize}
     \item Newton decrement: Newton step 방향 벡터에 대한 qudratic norm
-        $$ \lambda(x) = \left(\nabla f(x)^T\nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2} $$
+    \begin{equation}
+        \lambda(x) = \left(\nabla f(x)^T\nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2}
+    \end{equation}
     \begin{itemize}
         \item $\lambda(x)=\Vert\Delta x_\mathrm{nt}\Vert_{\nabla^2f}=(\Delta x_\mathrm{nt}^T~\nabla^2f~\Delta x_\mathrm{nt})^{1/2}=\left(((\nabla^2 f)^{-1}\nabla f)^T\nabla^2 f((\nabla^2 f)^{-1}\nabla f)\right)^{1/2}$
         \item $\hat{f}$: quadratic approx $\Rightarrow$ $f(x)-p^\ast\approx f(x)-\inf_y\hat{f}(y)=\frac{1}{2}\lambda^2$
@@ -156,10 +170,10 @@ $$ x^{(k+1)}=x^{(k)}+t^{(k)}\Delta x^{(k)}~~~~f(x^{(k+1)})<f(x^{(k)}) $$
 \subsection{Equality Constrained Optimization}
 
 \subsubsection*{Equality Constrained Problem}
-$$ \begin{aligned}
+\begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f(x) \\
     \mathrm{subject~to}~~&~~Ax=b
-\end{aligned} $$
+\end{aligned}\end{equation}
 \begin{itemize}
     \item Problem assumptions
     \begin{itemize}
@@ -181,12 +195,12 @@ $$ \begin{aligned}
 \end{itemize}
 
 \subsubsection*{Eliminating Equality Constraints}
-$$ \begin{aligned}
+\begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f(x) \\
     \mathrm{subject~to}~~&~~Ax=b
 \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
     \mathrm{minimize}~~&~~\tilde{f}(z)=f(Fz+\hat{x}) \\ {}
-\end{aligned} $$
+\end{aligned}\end{equation}
 \begin{itemize}
     \item Columns of $F\in\mathbb{R}^{n\times(n-p)}$ form basis of $\mathcal{N}(A)$; $\mathrm{rank}F = n-p$, $AF=O$
     \item $\hat{x}$: any particular solution of $Ax=b$
@@ -212,7 +226,9 @@ $$ \begin{aligned}
 \subsubsection*{Newton's Method}
 \begin{itemize}
     \item Newton step
-        $$ \begin{mtx}{cc}\nabla^2f(x)&A^T\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}-\nabla f(x)\\0\end{mtx} $$
+    \begin{equation}
+        \begin{mtx}{cc}\nabla^2f(x)&A^T\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}-\nabla f(x)\\0\end{mtx}
+    \end{equation}
     \begin{itemize}
         \item Coefficient matrix is called KKT matrix
         \item Interpretation
@@ -223,7 +239,9 @@ $$ \begin{aligned}
         \item $x+\Delta x_\mathrm{nt}$, $w$: a good estimate of $x^\ast$ and $\nu^\ast$ when $f$ is nearly quadratic
     \end{itemize}
     \item Newton decrement
-        $$ \lambda(x)=\left(-\nabla f(x)^T\Delta x_\mathrm{nt}\right)^{1/2} $$
+    \begin{equation}
+        \lambda(x)=\left(-\nabla f(x)^T\Delta x_\mathrm{nt}\right)^{1/2}
+    \end{equation}
     \begin{itemize}
         \item KKT cond 4: $\nabla f+\nabla^2fv+A^Tw=0$
         \item $0=v^T\nabla f+v^T\nabla^2fv+v^TA^Tw=v^T\nabla f+v^T\nabla^2fv+(Av)^Tw=v^T\nabla f+v^T\nabla^2fv$ $\Rightarrow$ $v^T\nabla^2fv=-\nabla f^Tv$
@@ -245,7 +263,9 @@ $$ \begin{aligned}
 \end{itemize}
 
 \subsubsection*{Solving KKT Matrix}
-$$ K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g\\h\end{mtx} $$
+\begin{equation}
+    K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g\\h\end{mtx}
+\end{equation}
 \begin{itemize}
     \item KKT matrix ($K$): nonsingular $\Leftrightarrow$ $\nexists~x\neq 0$ s.t. $Hx=0$, $Ax=0$ $\Leftrightarrow$ $H\succ 0$
     \begin{itemize}
@@ -264,18 +284,20 @@ $$ K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}
     \begin{itemize}
         \item $Hv+A^Tw=-g$ $\Rightarrow$ $Hv+A^TAw+A^Tw=-g-A^Th$ ($\because~Aw=-h$)
         \item $H+A^TA\succ 0$ $\Rightarrow$ Rewrite KKT equation, and apply elimination
-        $$ \begin{mtx}{cc}H+A^TA&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g+A^Th\\h\end{mtx} $$
+        \begin{equation}
+            \begin{mtx}{cc}H+A^TA&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g+A^Th\\h
+        \end{mtx}\end{equation}
     \end{itemize}
 \end{itemize}
 
 \subsection{Inequality Constrained Optimization}
 
 \subsubsection*{Inequality Constrained Problem}
-$$ \begin{aligned}
+\begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f(x) \\
     \mathrm{subject~to}~~&~~f_i(x)\leq 0~~(i=1,2,\cdots,m) \\
         &~~Ax=b
-\end{aligned} $$
+\end{aligned}\end{equation}
 \begin{itemize}
     \item Problem assumptions
     \begin{itemize}
@@ -289,26 +311,28 @@ $$ \begin{aligned}
 \subsubsection*{Logarithmic Barrier}
 \begin{itemize}
     \item Elminating inequality constraints by introducing irritation function (blue, dashed)
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~f_0(x)+\sum_{i=1}^mI_-(f_i(x)) \\
-            \mathrm{subject~to}~~&~~Ax=b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~f_0(x)+\sum_{i=1}^mI_-(f_i(x)) \\
+        \mathrm{subject~to}~~&~~Ax=b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item $I_-(x)$: $0$ if $x<0$, $\infty$ if $x\geq 0$
         \item Irritation function is difficult to handle in a mathematical manner
     \end{itemize}
     \item Logarithmic Barrier (red, solid)
-        $$ \phi(x)=-\sum_{i=1}^m\log(-f_i(x)),~~~~\mathcal{D}(\phi)=\{x|f_1(x)<0,f_2(x)<0,\cdots,f_m(x)<0\} $$
+    \begin{equation}
+        \phi(x)=-\sum_{i=1}^m\log(-f_i(x)),~~~~\mathcal{D}(\phi)=\{x|f_1(x)<0,f_2(x)<0,\cdots,f_m(x)<0\}
+    \end{equation}
     \begin{itemize}
         \item $f_i$: convex $\Rightarrow$ $\phi(x)$ is convex
         \item $\nabla\phi(x)=-\sum_{i=1}^{m}\frac{1}{f_i(x)}\nabla f_i(x)$
         \item $\nabla^2\phi(x)=\sum_{i=1}^{m}\left(\frac{1}{f_i(x)^2}\nabla f_i(x)\nabla f_i(x)^T-\frac{1}{f_i(x)}\nabla^2f_i(x)\right)$
     \end{itemize}
     \item Approximation via Logarithmic Barrier
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~tf_0(x)+\phi(x) \\
-            \mathrm{subject~to}~~&~~Ax=b
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~tf_0(x)+\phi(x) \\
+        \mathrm{subject~to}~~&~~Ax=b
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item An equality constrained problem
         \item For $t>0$, $-\frac{1}{t}\phi(x)$ is a smooth approximation of $I_-$
@@ -363,5 +387,7 @@ $$ \begin{aligned}
         \item Typical $\mu=10~-~20$
     \end{itemize}
     \item Number of outer iterations
-        $$ \left\lceil\frac{\log\frac{m}{\epsilon t^{(0)}}}{\log\mu}\right\rceil~+~\mathrm{initial~centering~step} $$
+    \begin{equation}
+        \left\lceil\frac{\log\frac{m}{\epsilon t^{(0)}}}{\log\mu}\right\rceil~+~\mathrm{initial~centering~step}
+    \end{equation}
 \end{itemize}

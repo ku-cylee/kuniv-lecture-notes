@@ -15,14 +15,18 @@
 \subsubsection*{Linear Regression}
 \begin{itemize}
     \item Linear explanation
-        $$ b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx $$
+    \begin{equation}
+        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx
+    \end{equation}
     \begin{itemize}
         \item Independent (explanatory, input) variable: $a_1,a_2,\cdots,a_m\in\mathbb{R}^n$
         \item Dependent (observation, output) variable: $b_1,b_2,\cdots,b_m$
         \item $x_0$: bias, $\tilde{a}_i=(1,a_i)$와 같이 parameter로 간주됨 $\Rightarrow$ Linear combination of $\mathbb{R}^{n+1}$
     \end{itemize}
     \item Objective: Minimize Loss function $L$
-        $$ L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2 $$
+    \begin{equation}
+        L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2
+    \end{equation}
     \begin{itemize}
         \item Mean Square Error (MSE), Adjust $x$ to minimize $L$ $\Rightarrow$ QP for MSE
         \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^Tx$ $\Rightarrow$ Linear regression
@@ -123,9 +127,9 @@
         \item minimize $\Vert x\Vert_2$: Regulation Loss
     \end{itemize}
     \item Ridge regression: Multi-objective optimization
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2^2
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2^2
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Unconstrained QP
         \item $\lambda>0$: hyperparameter; $\lambda\ll1$: Data loss 중시; $\lambda\gg1$: Regulation loss 중시
@@ -137,12 +141,12 @@
     \end{figures}
     \newpage
     \item $L_1$ Regularization: Supress $x$ by by L1-norm
-        $$ \begin{aligned}
-            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_1 \\ {}
-        \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
-            \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\sum t_i \\
-            \mathrm{subject~to}~~&~~t\succeq x,~t\succeq -x
-        \end{aligned} $$
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_1 \\ {}
+    \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\sum t_i \\
+        \mathrm{subject~to}~~&~~t\succeq x,~t\succeq -x
+    \end{aligned}\end{equation}
     \begin{itemize}
         \item Equivalent to a QP by introducing epigraph
         \item Solution often has zero entries $\Rightarrow$ ``Sparse'' $x$ is oftenly obtained (Image below)
@@ -166,7 +170,9 @@
 \subsubsection*{Logistic Regression}
 \begin{itemize}
     \item Logistic regression provides \textbf{classifier}
-        $$ \mathbb{P}(b=1)=\sigma(a^Tx)=\frac{1}{1+\exp(-a^Tx)} $$
+    \begin{equation}
+        \mathbb{P}(b=1)=\sigma(a^Tx)=\frac{1}{1+\exp(-a^Tx)}
+    \end{equation}
     \begin{itemize}
         \item Binary classification: output $b$ is either $0$ or $1$
         \item $\hat{f}(a;x)\approx\mathbb{P}(b=1)$: probability of input $a$ classified into $b=1$; $\mathcal{R}(\hat{f})=[0,1]$
@@ -194,7 +200,9 @@
         \item $b=1$일 확률이 $\theta$, $b=0$일 확률이 $1-\theta$
         \item $b$를 observe할 확률: $\theta^b(1-\theta)^{1-b}$
         \item $m$번의 독립 시행으로 $b_1,b_2,\cdots,b_m\in\{0,1\}$을 관찰할 확률
-            $$ \Lambda(\theta)=\prod_{i=1}^m\theta^{b_i}(1-\theta)^{1-b_i} $$
+        \begin{equation}
+            \Lambda(\theta)=\prod_{i=1}^m\theta^{b_i}(1-\theta)^{1-b_i}
+        \end{equation}
         \item $b=1$ 결과를 $k$회 관측 $\Rightarrow$ $\Lambda(\theta)=\theta^k(1-\theta)^{m-k}$
         \item Maximizing $\Lambda(\theta)$ is difficult; Maximize $\log\Lambda(\theta)$: log-likelihood
         \item $0=\frac\partial{\partial\theta}\log\Lambda(\theta)=\frac\partial{\partial\theta}\left(k\log\theta+(m-k)\log(1-\theta)\right)$ $\Rightarrow$ $\theta^\ast=\frac{k}{m}$
@@ -203,11 +211,17 @@
     \begin{itemize}
         \item Observed data: $(a_i,b_i)$ ($i=1,2,\cdots,m$)
         \item Likelihood of observing these data:
-            $$ \Lambda(x)=\prod_{i=1}^m\sigma(a_i^Tx)^{b_i}\left(1-\sigma(a_i^Tx)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^Tx)\right)^{b_i}}{1+\exp(a_i^Tx)} $$
+        \begin{equation}
+            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^Tx)^{b_i}\left(1-\sigma(a_i^Tx)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^Tx)\right)^{b_i}}{1+\exp(a_i^Tx)}
+        \end{equation}
         \item Log-likelihood:
-            $$ \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^Tx)\right)+\sum_{i\in\{i|b_i=1\}}a_i^Tx $$
+        \begin{equation}
+            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^Tx)\right)+\sum_{i\in\{i|b_i=1\}}a_i^Tx
+        \end{equation}
         \item $\log\left(1+\exp(a_i^Tx)\right)$ is a log-sum-exponential of affine transform $\Rightarrow$ convex
-            $$ y_i=\begin{mtx}{c}\mathbf{0}^T\\a_i^T\end{mtx}x=\begin{mtx}{c}0\\a_i^Tx\end{mtx}~\Rightarrow~\log\sum_{k=1}^2\exp y_{i,k}=\log\left(1+\exp(a_i^Tx)\right) $$
+        \begin{equation}
+            y_i=\begin{mtx}{c}\mathbf{0}^T\\a_i^T\end{mtx}x=\begin{mtx}{c}0\\a_i^Tx\end{mtx}~\Rightarrow~\log\sum_{k=1}^2\exp y_{i,k}=\log\left(1+\exp(a_i^Tx)\right)
+        \end{equation}
         \item Objective function is concave $\Rightarrow$ Convex optimization problem
     \end{itemize}
 \end{itemize}
@@ -227,22 +241,22 @@
         \item In case the points can be separated into two sets completely
         \item Let $\mathcal{H}_1=\{z~|~a^Tz+b=1\}$, $\mathcal{H}_2=\{z~|~a^Tz+b=-1\}$
         \item Maximize the margin between two sets: $\mathrm{dist}(\mathcal{H}_1,\mathcal{H}_2)=\frac{2}{\Vert a\Vert_2}$
-            $$ \begin{aligned}
-                \mathrm{minimize}~~&~~\Vert a\Vert_2 \\
-                \mathrm{subject~to}~~&~~a^Tx_i+b\geq1~~(i=1,2,\cdots,N) \\
-                    &~~a^Tx_i+b\leq-1~~(i=1,2,\cdots,M)
-            \end{aligned} $$
+        \begin{equation}\begin{aligned}
+            \mathrm{minimize}~~&~~\Vert a\Vert_2 \\
+            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1~~(i=1,2,\cdots,N) \\
+                &~~a^Tx_i+b\leq-1~~(i=1,2,\cdots,M)
+        \end{aligned}\end{equation}
     \end{itemize}
     \item Approximate linear classifier
     \begin{itemize}
         \item In case the points cannot be separated into two sets completely
         \item Objective: minimizing \# of missclassified points $\Rightarrow$ L0-norm $\Rightarrow$ Approximate to L1-norm
-            $$ \begin{aligned}
-                \mathrm{minimize}~~&~~\mathbf{1}^Tu+\mathbf{1}^Tv \\
-                \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                    &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
-                    &~~u\succeq0,~v\succeq0
-            \end{aligned} $$
+        \begin{equation}\begin{aligned}
+            \mathrm{minimize}~~&~~\mathbf{1}^Tu+\mathbf{1}^Tv \\
+            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+                &~~u\succeq0,~v\succeq0
+        \end{aligned}\end{equation}
         \item $u$, $v$ means \# of missclassified points
         \item At optimum, $u_i=\max\{0,1-a^Tx_i-b\}$, $v_i=\max\{0,1+a^Ty_i+b\}$
     \end{itemize}
@@ -250,12 +264,12 @@
     \begin{itemize}
         \item Tradeoff between robust L.C. and approximate L.C.
         \item Introduces a hyperparameter $\gamma>0$
-            $$ \begin{aligned}
-                \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^Tu+\mathbf{1}^Tv) \\
-                \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                    &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
-                    &~~u\succeq0,~v\succeq0
-            \end{aligned} $$
+        \begin{equation}\begin{aligned}
+            \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^Tu+\mathbf{1}^Tv) \\
+            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+                &~~u\succeq0,~v\succeq0
+        \end{aligned}\end{equation}
     \end{itemize}
 \end{itemize}
 \begin{figures}
