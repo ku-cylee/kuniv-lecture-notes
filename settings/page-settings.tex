@@ -4,7 +4,28 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{8pt}
 \linespread{1.6}
-\geometry{
-    margin=2.2cm,
-    nohead,
+
+\makeatletter
+\@ifclassloaded{book}{
+    \usepackage{fancyhdr}
+
+    \geometry{
+        top=2.0cm,
+        bottom=2.4cm,
+        left=2.2cm,
+        right=2.2cm,
+    }
+
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyfoot[LE]{\thepage\hspace{6pt}\scriptsize\leftmark}
+    \fancyfoot[RO]{\scriptsize\rightmark\hspace{6pt}\normalsize\thepage}
+    \renewcommand\headrulewidth{0pt}
+    \renewcommand\footrulewidth{1pt}
+}{
+    \geometry{
+        margin=2.2cm,
+        nohead,
+    }
 }
+\makeatother

@@ -30,7 +30,9 @@
     {0pt}% space after theorem head
     {}% Manually specify head
 \theoremstyle{codestyle}
-\newtheorem{code}{Code}[section]
+\makeatletter
+\newtheorem{code}{Code}[\@ifclassloaded{book}{chapter}{section}]
+\makeatother
 
 \newenvironment{codeenv}[2]
     {\begin{mdframed}[style=codeframe]\begin{code}[#2]\label{#1}\linespread{1.0}}
