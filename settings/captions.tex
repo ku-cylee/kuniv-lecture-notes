@@ -6,8 +6,14 @@
 \newcommand{\tblref}[1]{\textbf{Table \ref{#1}}}
 \newcommand{\coderef}[1]{\textbf{Code \ref{#1}}}
 
-\numberwithin{equation}{section}
-\renewcommand\theequation{Eq. \arabic{section}.\arabic{equation}}
+\makeatletter
+\@ifclassloaded{book}{
+    \numberwithin{equation}{chapter}
+    \renewcommand\theequation{Eq.\arabic{chapter}.\arabic{equation}}
+}{
+    \numberwithin{equation}{section}
+    \renewcommand\theequation{Eq.\arabic{section}.\arabic{equation}}
+}
 
 \renewcommand{\contentsname}{Table of Contents}
 

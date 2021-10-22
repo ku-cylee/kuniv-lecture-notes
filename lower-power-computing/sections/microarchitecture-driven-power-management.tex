@@ -5,7 +5,9 @@
 \subsubsection*{Dynamic Power}
 \begin{itemize}
     \item 동적 전력. Chip이 동작할 때 소모되는 전력
-    \item $P_{\mathrm{dyn}} = \alpha \cdot C_L \cdot V_{\mathrm{dd}}^2 \cdot f$
+    \begin{equation}
+        P_{\mathrm{dyn}} = \alpha \cdot C_L \cdot V_{\mathrm{dd}}^2 \cdot f
+    \end{equation}
     \item $C_L$: Capacitance
     \begin{itemize}
         \item 수용 가능한 전하의 총량
@@ -24,11 +26,13 @@
 \subsubsection*{Leakage Power}
 \begin{itemize}
     \item 누설 전력, 정적 전력(static power). Chip이 동작하지 않아도 소모되는 전력
-    \item $P_{\mathrm{leak}} = I_{\mathrm{leak}} \cdot V_{\mathrm{dd}}$
+    \begin{equation}
+        P_{\mathrm{leak}} = I_{\mathrm{leak}} \cdot V_{\mathrm{dd}}
+    \end{equation}
     \item $\log P_{\mathrm{leak}} \varpropto T$ $\Rightarrow$ 공정 미세화가 진행되면 누설전력 급증
     \item 공정미세화로 인해 Subthreshold Leakage가 dominant $\Rightarrow$ 대부분 $P_{\mathrm{leak}}$을 줄이는 기술은 여기에 집중
     \begin{figures}
-        \fig{leakage-power-components.PNG}{.4}
+        \fig{leakage-power-components.PNG}{.35}
     \end{figures}
     \item 공정미세화가 진행되면서 누설전력이 급증하는 추세임
     \item Core는 입력이 있을때만 gate가 작동하지만, cache는 입력이 없어도 F/F 등에 데이터 저장 $\Rightarrow$ 누설 발생
