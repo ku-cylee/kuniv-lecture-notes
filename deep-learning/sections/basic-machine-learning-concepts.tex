@@ -1,0 +1,144 @@
+\section{Basic Machine Learning Concepts}
+
+\subsection{Principles of Learning}
+
+\subsubsection*{Learning from Data}
+\begin{equation}
+    y=f(x)+\epsilon
+\end{equation}
+\begin{itemize}
+    \item $x=(x_1,x_2,\cdots,x_n)$: Input/feature/independent variable
+    \item $y$: Output/response/dependent variable
+    \item $\epsilon$: Noise / bias
+    \item Main goal of machine learning: Estimate the unknown $F$ from data
+\end{itemize}
+\begin{figures}
+    \fig{learning-from-data.png}{.5}
+\end{figures}
+
+\subsubsection*{How do we estimate $f$?}
+\begin{itemize}
+    \item All data is not available, ``sampled'' from population
+    \item Estimate $f$ such that
+    \begin{equation}
+        y\approx\hat{f}(x)
+    \end{equation}
+    \item Training: Using data to teach a method to estimate $f$
+    \item Parametric method
+    \begin{itemize}
+        \item Assume certain forms of $f$
+        \item Find parameters that ``best'' approximates $y$
+        \item More parameters, more flexibility
+    \end{itemize}
+    \item Estimating $f$ is important
+    \begin{itemize}
+        \item Make predictions of $y$ at new point $x=x_0$
+        \item Understand how each component $x_i$ affects $y$
+        \item Understand which component $x_i$ is important explaining $y$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Classification and Regression}
+\begin{itemize}
+    \item Regression: Outputs are form of numerical quantity (often continuous)
+    \item Categorical: Outputs are takes a value from classes
+    \item Difference is not necessarily clear (e.g. logistic regression)
+\end{itemize}
+
+\subsubsection*{Linear Regression}
+\begin{itemize}
+    \item Linear explanation
+    \begin{equation}
+        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx
+    \end{equation}
+    \begin{itemize}
+        \item Independent (explanatory, input) variable: $a_1,a_2,\cdots,a_m\in\mathbb{R}^n$
+        \item Dependent (observation, output) variable: $b_1,b_2,\cdots,b_m$
+        \item $x_0$: bias, $\tilde{a}_i=(1,a_i)$와 같이 parameter로 간주됨 $\Rightarrow$ Linear combination of $\mathbb{R}^{n+1}$
+    \end{itemize}
+    \item Objective: Minimize Loss function $L$
+    \begin{equation}
+        L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2
+    \end{equation}
+    \begin{itemize}
+        \item Mean Square Error (MSE), Adjust $x$ to minimize $L$
+        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^Tx$ $\Rightarrow$ Linear regression
+        \item $\hat{f}(a_i;x)$: estimation, $b_i$: true explanation
+    \end{itemize}
+\end{itemize}
+
+\subsection{Regularization}
+
+\subsubsection*{Overfitting}
+\begin{itemize}
+    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^Tx$ where $\psi_i(a)=a^i$
+    \item Suppose 10 samples (graphs below) in second-order polynomial relation
+    \begin{itemize}
+        \item Low order ($M=0,1$) does not fit the samples accurately
+        \item Near order ($M=3$) represents the samples approximately
+        \item High order ($M=9$) fits the samples perfectly, but does not represent the overall relation well
+    \end{itemize}
+    \begin{figures}
+        \subfig{$M=0$}{overfitting-order-0.png}{.22}
+        \subfig{$M=1$}{overfitting-order-1.png}{.22}
+        \subfig{$M=3$}{overfitting-order-3.png}{.22}
+        \subfig{$M=9$}{overfitting-order-9.png}{.22}
+    \end{figures}
+    \item Overfitting
+    \begin{itemize}
+        \item Sample에 지나치게 fit하는 model은 오히려 모집단의 성격을 나타내지 못할 수 있음
+        \item Simple model (Low flexibility): Good interpretation, Bad accuracy
+        \item Complex model (High flexibility): Good accuracy, Bad interpretation
+    \end{itemize}
+    \begin{figures}
+        \subfig{X-Y graph}{flexibility-data.png}{.2256}
+        \subfig{Flexibility-MSE}{flexibility-mse.png}{.2244}
+    \end{figures}
+    \item Test set
+    \begin{itemize}
+        \item Minimizing loss function of training set $\Rightarrow$ overfitting
+        \item Validate the model with ``independent'' test dataset
+        \item High flexibility $\Rightarrow$ $\mathrm{MSE_{Tr}}\to 0$, $\mathrm{MSE_{Te}}\to\infty$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Regularization}
+\begin{itemize}
+    \item Method to supress overfitting
+    \begin{itemize}
+        \item Overfitting의 현상: Parameters $x$ becomes very large
+        \item Idea: supress overfitting by minimizing $\Vert x\Vert$
+    \end{itemize}
+    \item Problem becomes solving two optimization problems
+    \begin{itemize}
+        \item minimize $\Vert Ax-b\Vert_2$: Data Loss
+        \item minimize $\Vert x\Vert_2$: Regulation Loss
+    \end{itemize}
+    \item Ridge regression: Multi-objective optimization
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_2^2
+    \end{aligned}\end{equation}
+    \begin{itemize}
+        \item $\lambda>0$: hyperparameter; $\lambda\ll1$: Data loss 중시; $\lambda\gg1$: Regulation loss 중시
+    \end{itemize}
+    \begin{figures}
+        \subfig{$\ln\lambda=-18$}{regularization-small-lambda.png}{.3}
+        \subfig{$\ln\lambda=0$}{regularization-large-lambda.png}{.3}
+    \end{figures}
+    \item $L_1$ Regularization: Supress $x$ by by L1-norm
+    \begin{equation}\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\Vert x\Vert_1 \\ {}
+    \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
+        \mathrm{minimize}~~&~~\Vert Ax-b\Vert_2^2+\lambda\sum t_i \\
+        \mathrm{subject~to}~~&~~t\succeq x,~t\succeq -x
+    \end{aligned}\end{equation}
+    \begin{itemize}
+        \item Called Lasso
+        \item Solution often has zero entries $\Rightarrow$ ``Sparse'' $x$ is oftenly obtained (Image below)
+        \item Often used to approximate $L_0$ regularization ($\Vert x\Vert_0$: \# of nonzero elements in $x$; nonconvex)
+    \end{itemize}
+    \begin{figures}
+        \subfig{L1-norm}{l1-norm.png}{.24}
+        \subfig{L2-norm}{l2-norm.png}{.24}
+    \end{figures}
+\end{itemize}
