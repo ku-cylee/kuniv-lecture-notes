@@ -1,0 +1,93 @@
+\section{Artifical Neural Networks}
+
+\subsection{Neural Networks}
+
+\subsubsection*{Motivation}
+\begin{itemize}
+    \item Pros and cons of linear classifier
+    \begin{itemize}
+        \item Pros: Simple $\Rightarrow$ Very expressive
+        \item Cons: Not very powerful (e.g. XOR problem)
+    \end{itemize}
+    \item Human's thinking process is hierachial (low level $\rightarrow$ high level)
+    \begin{itemize}
+        \item e.g. Book reading: letters $\rightarrow$ words $\rightarrow$ sentences $\rightarrow$ story
+    \end{itemize}
+    \item Insert non-linear models between linear models $\Rightarrow$ \textbf{Deep Learning}
+    \item Non-linear function $f$ is called ``activation function''
+    \begin{itemize}
+        \item $f$ is elementwise, i.e. $f\left((x_1,x_2,\cdots,x_n)\right)=(f(x_1),f(x_2),\cdots,f(x_n))$
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Nonlinear models}{nonlinear-models.png}{.3808}
+    \subfig{Activation function}{activation-function.png}{.4192}
+\end{figures}
+
+\subsubsection*{Multilayer Neural Network}
+\begin{itemize}
+    \item $n$-layer neural network, or $(n-1)$-hidden-layer neural network
+    \item 1 input layer $\rightarrow$ $(n-1)$ hidden layer $\rightarrow$ 1 output layer
+    \item Scores on hidden layer are called ``intermediate output''
+    \item Every hidden \& output layer has non-linear function $f$
+    \begin{itemize}
+        \item If not, it can be merged to linear model
+    \end{itemize}
+    \item Fully connected layers: Every layers are connected each other
+\end{itemize}
+\begin{figures}
+    \fig{multilayer-neural-network.png}{.45}
+\end{figures}
+\clearpage
+
+\subsubsection*{Computing Neural Network}
+\begin{itemize}
+    \item Consider $k$-th(input) layer has $m$ classes $\Rightarrow$ Scores $x=x_1,x_2,\cdots,x_m$
+    \item Consider $(k+1)$-th(output) layer has $n$ classes $\Rightarrow$ Scores $y=y_1,y_2,\cdots,y_n$
+    \item Let $w_{ij}$ be the parameter from $i$-th input to $j$-th output, $w_j=(w_{1j},w_{2j},\cdots,w_{mj})$
+    \item Let $b_j$ be the bias from input layer to $j$-th output
+    \item Let $f$ be the activation function on output layer
+    \item Then, value of $j$-th output is
+    \begin{equation}
+        y_j=f(w_{1j}x_1+w_{2j}x_2+\cdots+w_{ij}x_i+b_j)=f(w_j^Tx+b_j)
+    \end{equation}
+    \item Let $W=\left(w_1^T,w_2^T,\cdots,w_n^T\right)$ and $b=(b_1,b_2,\cdots,b_n)$, then
+    \begin{equation}
+        y=f(Wx+b),\text{ i.e. }\begin{mtx}{c}
+            y_1 \\ y_2 \\ \vdots \\ y_n
+        \end{mtx}=f\left(\begin{mtx}{cccc}
+            w_{11} & w_{21} & \cdots & w_{n1}\\
+            w_{12} & w_{22} & \cdots & w_{n2}\\
+            \vdots & \vdots & \ddots & \vdots\\
+            w_{1m} & w_{2m} & \cdots & w_{nm}
+        \end{mtx}\begin{mtx}{c}
+            x_1 \\ x_2 \\ \vdots \\ x_m
+        \end{mtx}\right)
+    \end{equation}
+    \item For $k$-layer nerual network, $y=f_k(W_kf_{k-1}(W_{k-1}\cdots f_1(W_1x)))$
+\end{itemize}
+\begin{figures}
+    \fig{neural-network-calculation.png}{.25}
+\end{figures}
+
+\subsubsection*{Activation Functions}
+\begin{itemize}
+    \item ReLU (Rectified Linear Unit)
+    \begin{equation}
+        f(x)=\max\{0,x\}
+    \end{equation}
+    \begin{itemize}
+        \item Filters out $x<0$ $\Rightarrow$ rectifies information
+        \item Simple calculation, similar to linear $\Rightarrow$ 표현력과 최적화 모두 좋음 $\Rightarrow$ Good choice for many problems
+    \end{itemize}
+    \item Sigmoid ($\sigma(x)=\frac{1}{1+e^{-x}}$), Hyper-tangent ($f(x)=\tanh(x)$)
+    \item Maxout ($f(x)=\max\{w_1^Tx+b_1,w_2^Tx+b_2\}$)
+    \item Leaky ReLU ($f(x)=\max\{\alpha x,x\}~(\alpha>0)$), ELU ($f(x)=x~(x\geq 0),~\alpha(e^x-1)~(x<0)$)
+\end{itemize}
+\begin{figures}
+    \subfig{ReLU}{actfunc-relu.jpg}{.18}
+    \subfig{Sigmoid}{actfunc-sigmoid.jpg}{.18}
+    \subfig{tanh}{actfunc-tanh.jpg}{.18}
+    \subfig{Leaky ReLU}{actfunc-leaky-relu.jpg}{.18}
+    \subfig{ELU}{actfunc-elu.jpg}{.18}
+\end{figures}
