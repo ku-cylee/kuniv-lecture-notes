@@ -89,10 +89,11 @@
         \item Sample에 지나치게 fit하는 model은 오히려 모집단의 성격을 나타내지 못할 수 있음
         \item Simple model (Low flexibility): Good interpretation, Bad accuracy
         \item Complex model (High flexibility): Good accuracy, Bad interpretation
+        \item Occamm's razor: If two models explain the same data, simple is better!
     \end{itemize}
     \begin{figures}
-        \subfig{X-Y graph}{flexibility-data.png}{.2256}
-        \subfig{Flexibility-MSE}{flexibility-mse.png}{.2244}
+        \subfig{X-Y graph}{flexibility-data.png}{.1827}
+        \subfig{Flexibility-MSE}{flexibility-mse.png}{.1818}
     \end{figures}
     \item Test set
     \begin{itemize}
@@ -141,6 +142,7 @@
         \subfig{L1-norm}{l1-norm.png}{.24}
         \subfig{L2-norm}{l2-norm.png}{.24}
     \end{figures}
+    \item Elastic net($L_1+L_2$): Set regulariation term to $\beta\Vert x\Vert_2^2+\Vert x\Vert_1$
 \end{itemize}
 
 \subsection{Logistic Regression and Binary Classification}
@@ -234,8 +236,8 @@
     \item Relevant cases: True(ground truth) cases
 \end{itemize}
 \begin{figures}
-    \subfig{Error Cases}{error-cases.png}{.2508}
-    \subfig{Logistic Error Cases}{logistic-error-cases.eps}{.5492}
+    \subfig{Error Cases}{error-cases.png}{.2617}
+    \subfig{Logistic Error Cases}{logistic-error-cases.png}{.5383}
 \end{figures}
 
 \subsubsection*{Performance Metric}
