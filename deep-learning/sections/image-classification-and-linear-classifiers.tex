@@ -1,6 +1,123 @@
-\section{Linear Classifiers}
+\section{Image Classification and Linear Classifiers}
 
-\subsection{Linear Classifier}
+\subsection{Properties of Image Data}
+
+\subsubsection*{Image Classification}
+\begin{itemize}
+    \item Mapping an image to a fixed set of category labels
+    \item Challenges: No clear-cut way to classify an image definitely
+    \begin{itemize}
+        \item Semantic gap: Image는 실제 의미와는 다른 각 픽셀의 R,G,B 값으로 표현됨
+        \item changes in viewpoint, illumination, deformation, occlusion, background clutter
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Original}{cat-original.jpg}{.1002}
+    \subfig{Illumination}{cat-illumination.jpg}{.2209}
+    \subfig{Deformation}{cat-deformation.jpg}{.1977}
+    \subfig{Occlusion}{cat-occlusion.jpg}{.1835}
+    \subfig{Background Clutter}{cat-background-clutter.jpg}{.1978}
+\end{figures}
+
+\subsection{Nearest Neighbor Classifiers}
+
+\subsubsection*{Machine Learning Methods}
+\begin{itemize}
+    \item Data-driven approach
+    \begin{enumerate}
+        \item Collect: Dataset of images and their labels
+        \item Train: Use ML to train a classifier
+        \item Predict: Apply classifier on new images
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Nearest Neighbor(NN) Classifier}
+\begin{itemize}
+    \item Train: Form database of all training images
+    \item Predict
+    \begin{enumerate}
+        \item Calculate distances between a test image and all training images, respectively
+        \begin{equation}\label{eq:dl:l1-distance}\begin{aligned}
+            \text{L1: }d_1(I_1,I_2)&=\sum_{i\in\text{pixels}}|I_{1,i}-I_{2,i}|\\
+            \text{L2: }d_1(I_1,I_2)&=\sqrt{\sum_{i\in\text{pixels}}(I_{1,i}-I_{2,i})^2}
+        \end{aligned}\end{equation}
+        \item Classify the test image as the class of the ``nearest'' (training) image
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{k-Nearest Neighbor(kNN) Classifier}
+\begin{itemize}
+    \item Train: Form database of all training images
+    \item Predict
+    \begin{enumerate}
+        \item Calculate distances(\ref{eq:dl:l1-distance}) between a test image and all training images, respectively
+        \item Select classes of $k$ nearest images
+        \item Classify the test image as mode value of the selected labels
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Setting Hyperparameters}
+\begin{itemize}
+    \item \# of classes to select($k$), Distance(norm) to use $\Rightarrow$ Hyperparameters
+    \begin{itemize}
+        \item Mostly, hparams(hyperparameters) are problem-dependent
+        \item Design choices, not directly learned from training data $\Rightarrow$ train-and-error
+    \end{itemize}
+    \item Idea \#1: Choose hparams that works best on all data
+    \begin{itemize}
+        \item Only learns training data $\Rightarrow$ Overfitting
+        \item $k=1$ will always the best
+    \end{itemize}
+    \item Idea \#2
+    \begin{itemize}
+        \item Method
+        \begin{enumerate}
+            \item dataset $\Rightarrow$ train + test
+            \item Adjust hparams until the model works best for test dataset
+        \end{enumerate}
+        \item Cannot verify the model works well for unseen data
+        \item Test data SHOULD NOT be used for training
+    \end{itemize}
+    \item Idea \#3
+    \begin{itemize}
+        \item Method
+        \begin{enumerate}
+            \item dataset $\Rightarrow$ train + validation + test
+            \item Adjust hparams until the model works best for validation dataset
+            \item Verify model on test dataset
+        \end{enumerate}
+        \item Often used
+    \end{itemize}
+    \item Idea \#4: $k$-fold cross-validation
+    \begin{itemize}
+        \item Method
+        \begin{enumerate}
+            \item dataset $\Rightarrow$ (train+validation) + test
+            \item Partition train+validation set into $k$ folds
+            \item Select 1 fold as validation set, remainder as train set and adjust hparams
+            \item Repeat adjusting hparams by alternating folds
+            \item Set hparams by averaging the results
+            \item Verify on test dataset
+        \end{enumerate}
+        \item Useful for small dataset
+        \item Not often used
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Pros and Cons of kNN Classifier}
+\begin{itemize}
+    \item Pros: Training is fast - Just store all training images
+    \item Cons
+    \begin{itemize}
+        \item Translation: Small translation causes very far distance
+        \item Slow: Prediction is slow: Goes through ALL training images, $O(n)$
+        \item Curse of dimensionality: Small increase of dimension causes tremendous increase of calculation
+    \end{itemize}
+    \item kNN Classifier is a BAD image classifier
+\end{itemize}
+\clearpage
+
+\subsection{Linear Classifiers}
 
 \subsubsection*{Parametric Approach}
 \begin{itemize}
