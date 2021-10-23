@@ -142,3 +142,153 @@
         \subfig{L2-norm}{l2-norm.png}{.24}
     \end{figures}
 \end{itemize}
+
+\subsection{Logistic Regression and Binary Classification}
+
+\subsubsection*{Logistic Regression}
+\begin{itemize}
+    \item Logistic regression provides \textbf{classifier}
+    \begin{equation}\label{eq:dl:logistic-classifier}
+        \mathbb{P}(b=1)=\sigma(a^Tx)=\frac{1}{1+\exp(-a^Tx)}
+    \end{equation}
+    \begin{itemize}
+        \item Binary classification: output $b$ is either $0$(false) or $1$(true)
+        \item $\hat{f}(a;x)\approx\mathbb{P}(b=1)$: probability of input $a$ is true($b=1$); $\mathcal{R}(\hat{f})=[0,1]$
+        \item Obtain ``score'' from linear regression $a^Tx$; $\mathcal{R}(a^Tx)=(-\infty,\infty)$
+        \item Large score $\Rightarrow$ $\mathrm{prob}\approx1$, small score $\Rightarrow$ $\mathrm{prob}\approx0$
+        \item Use sigmoid function $\sigma(t)=\frac{1}{1+\exp(-t)}$ to normalize $(-\infty,\infty)\rightarrow[0,1]$
+    \end{itemize}
+    \begin{figures}
+        \subfig{Logistic Regression}{logistic-regression.PNG}{.302}
+        \subfig{Sigmoid Function}{sigmoid-function.PNG}{.328}
+    \end{figures}
+    \item Decision boundary($s$): 판단을 내리는 기준점
+    \begin{itemize}
+        \item $\sigma(x)>s$ $\Rightarrow$ true($1$), $\sigma(x)\leq s$ $\Rightarrow$ false($0$)
+        \item $a^Tx=\sigma^{-1}(s)$, i.e. a hyperplane is a decision boundary
+    \end{itemize}
+    \item Interpretation
+    \begin{itemize}
+        \item We compare $\mathbb{P}(b=1|a)$ to $\mathbb{P}(b=0|a)$ to decide class
+        \item From Bayes' rule,
+        \begin{equation}
+            \mathbb{P}(b=1|a)=\frac{\mathbb{P}(a|b=1)\mathbb{P}(b=1)}{\mathbb{P}(a)}=\frac{1}{1+\frac{\mathbb{P}(a|b=0)\mathbb{P}(b=0)}{\mathbb{P}(a|b=1)\mathbb{P}(b=1)}}
+        \end{equation}
+        \item $\mathbb{P}(a|b=k)=\mathbb{P}(a_1|b=k)\mathbb{P}(a_2|a_1,b=k)\cdots\mathbb{P}(a_n|a_1,\cdots,a_{n-1},n=k)$: Estimation is difficult
+        \item Assume feature elements are mutually independent conditional on given label
+        \item Na\"ive Bayes: $\mathbb{P}(a|b=k)=\prod_{i=1}^{n}\mathbb{P}(a_i|b=k)$
+        \item Therefore,
+        \begin{equation}
+            \frac{\mathbb{P}(a|b=0)\mathbb{P}(b=0)}{\mathbb{P}(a|b=1)\mathbb{P}(b=1)}=\frac{\mathbb{P}(b=0)}{\mathbb{P}(b=1)}\prod_{i=1}^n\frac{\mathbb{P}(a_i|b=0)}{\mathbb{P}(a_i|b=1)}
+        \end{equation}
+        \item Modeling $\frac{\mathbb{P}(b=0)}{\mathbb{P}(b=1)}=\exp(-x_0)$, $\frac{\mathbb{P}(a_i|b=0)}{\mathbb{P}(a_i|b=1)}=\exp(-a_ix_i)$ gives \ref{eq:dl:logistic-classifier}
+        \item Feature is Gaussian-distributed conditional $\Rightarrow$ exact expression
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Maximum Likelihood Estimation}
+\begin{itemize}
+    \item An example method determining $x$
+    \item Consider Bernouli trials (e.g. biased coin toss) ($b$: result)
+    \begin{itemize}
+        \item $b=1$(true)일 확률이 $\theta$, $b=0$(false)일 확률이 $1-\theta$
+        \item $b$를 observe할 확률: $\theta^b(1-\theta)^{1-b}$
+        \item $m$번의 독립 시행으로 $b_1,b_2,\cdots,b_m\in\{0,1\}$을 관찰할 확률
+        \begin{equation}
+            \Lambda(\theta)=\prod_{i=1}^m\theta^{b_i}(1-\theta)^{1-b_i}
+        \end{equation}
+        \item $b=1$ 결과를 $k$회 관측 $\Rightarrow$ $\Lambda(\theta)=\theta^k(1-\theta)^{m-k}$
+        \item Maximizing $\Lambda(\theta)$ is difficult; Maximize $\log\Lambda(\theta)$: log-likelihood $\Rightarrow$ $\theta^\ast=\frac{k}{m}$
+    \end{itemize}
+    \item Applying Logistic Regression
+    \begin{itemize}
+        \item Observed data: $(a_i,b_i)$ ($i=1,2,\cdots,m$)
+        \item Likelihood of observing these data:
+        \begin{equation}
+            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^Tx)^{b_i}\left(1-\sigma(a_i^Tx)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^Tx)\right)^{b_i}}{1+\exp(a_i^Tx)}
+        \end{equation}
+        \item Log-likelihood:
+        \begin{equation}
+            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^Tx)\right)+\sum_{i\in\{i|b_i=1\}}a_i^Tx
+        \end{equation}
+        \item Log-likelihood function is concave $\Rightarrow$ Convex optimization problem
+        \item Maximizing likelihood $\Rightarrow$ Minimizing cross-entropy loss in deep models
+    \end{itemize}
+\end{itemize}
+
+\subsection{Performance Metric}
+
+\subsubsection*{Errors of Classifier}
+\begin{itemize}
+    \item Classifier may misjudge classes of test data
+    \item Cases Naming
+    \begin{itemize}
+        \item Suppose classifier determines \cd{ground\_truth} as \cd{decision}
+        \item Case name: \textbf{\cd{`\$\{ground\_truth === decision\} \$\{decision ? 'Positive' : 'Negative'\}`}}
+    \end{itemize}
+    \item True Positive (TP; hit): Determines True as True
+    \item False Positive (FP; false alarm; Type I Error): Determines False as True
+    \item False Negative (FN; missed dtection; Type II Error): Determines True as False
+    \item True Negative (TN; correct rejection): Determines False as False
+    \item Selected cases: Positive(decide as True) cases
+    \item Relevant cases: True(ground truth) cases
+\end{itemize}
+\begin{figures}
+    \subfig{Error Cases}{error-cases.png}{.2508}
+    \subfig{Logistic Error Cases}{logistic-error-cases.eps}{.5492}
+\end{figures}
+
+\subsubsection*{Performance Metric}
+\begin{itemize}
+    \item Expresses performance of classifier
+    \item Accuracy: Correct decisions
+    \begin{equation}
+        \text{accuracy}=\frac{\text{TP+TN}}{\text{TP+TN+FP+FN}}
+    \end{equation}
+    \begin{itemize}
+        \item Small \# of relevant cases (class imbalance) $\Rightarrow$ 전부 False로 판별하면 accuracy는 높음
+    \end{itemize}
+    \item Recall(sensitivity): Selected among relevant cases; Positive 판별 능력
+    \begin{equation}
+        \text{recall}=\frac{\text{TP}}{\text{TP+FN}}
+    \end{equation}
+    \begin{itemize}
+        \item 전부 True로 판별하면 recall은 항상 $1$
+    \end{itemize}
+    \item Specificity: Rejected among irrelevant cases; Negative 판별 능력
+    \begin{equation}
+        \text{specificity}=\frac{\text{FP}}{\text{FP+TN}}
+    \end{equation}
+    \item Precision: Relevent among selected
+    \begin{equation}
+        \text{precision}=\frac{\text{TP}}{\text{TP+FP}}
+    \end{equation}
+    \begin{itemize}
+        \item Few elements may cause bad precision
+    \end{itemize}
+    \item F-score(F$_1$-score): Harmonic mean of precision and recall
+    \begin{equation}
+        \text{F-score}=\left(\frac{\text{recall}^{-1}+\text{precision}^{-1}}{2}\right)^{-1}
+    \end{equation}
+    \begin{itemize}
+        \item Combines precision and recall
+        \item HM averages `rates' $\Rightarrow$ One bad measure causes bad F-score
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Receiver Operating Characteristics (ROC)}
+\begin{itemize}
+    \item Illustrates the discriminability(제대로 판별하는 능력) of a model
+    \item ROC curve plots:
+    \begin{equation}
+        (\text{FP~rate},\text{TP~rate})=(1-\text{specificity},\text{recall})=\left(\frac{\text{FP}}{\text{TN+FP}},\frac{\text{TP}}{\text{FN+TP}}\right)
+    \end{equation}
+    \item Ideal point: $(0,1)$ $\Rightarrow$ Closer to $(0,1)$ implies better classifier
+    \item ROC curve always goes through $(0,0)$ and $(1,1)$; Classifier must be better than random classifier ($y=x$)
+    \item Larger AUC(area under curve) implies better classifier ($\text{AUC}>.8$)
+\end{itemize}
+\begin{figures}
+    \subfig{ROC curve}{roc-curve.png}{.3}
+    \subfig{Different ROCs}{roc-diff-curves.png}{.3}
+    \subfig{AUC of ROC}{roc-auc.png}{.3}
+\end{figures}
