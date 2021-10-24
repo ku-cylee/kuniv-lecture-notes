@@ -91,3 +91,81 @@
     \subfig{Leaky ReLU}{actfunc-leaky-relu.jpg}{.18}
     \subfig{ELU}{actfunc-elu.jpg}{.18}
 \end{figures}
+
+\subsection{Optimizing Loss Functions}
+
+\subsubsection*{Optimization}
+\begin{itemize}
+    \item Optimization: to minimize or maximize a function $f:\mathbb{R}^n\to\mathbb{R}$
+    \item $f(x)$ is minimum at $x=x^\ast$ $\Rightarrow$ $x^\ast$: optimal point, $f(x^\ast)$: optimal value
+    \begin{itemize}
+        \item $x=x^\ast$ is (global) optimal: $\forall x\in\mathcal{D}(f)$, $f(x^\ast)\leq f(x)$
+        \item $x=x^\ast$ is local optimal: $\exists~R>0$ s.t. $x^\ast$ is optimal point for $f$ at $\Vert x-x^\ast\Vert\leq R$
+    \end{itemize}
+    \item Optimization methods
+    \begin{itemize}
+        \item If $\exists~f^\prime$, all optimal points $x=x^\ast$ satisfies $\nabla f(x^\ast)=0$
+        \item Produce a sequence of points $x^{(k)}$ for $k=1,2,\cdots$ such that $f\left(x^{(k)}\right)\to f\left(x^\ast\right)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gradient}
+\begin{itemize}
+    \item Gradient is a vector of partial derivatives of function $f:\mathbb{R}^n\rightarrow\mathbb{R}$
+    \begin{equation}
+        \nabla f(x)=\left(\frac{\partial f(x)}{\partial x_1},\frac{\partial f(x)}{\partial x_2},\cdots,\frac{\partial f(x)}{\partial x_n}\right)
+    \end{equation}
+    \item Taylor expansion: $f(x + \Delta x) \approx f(x) + \nabla f(x)^T \Delta x$
+    \item Example
+    \begin{itemize}
+        \item $f(x)=c^Tx$ $\Rightarrow$ $\nabla f(x)=c$
+        \item $f(x)=x^TQx$ $\Rightarrow$ $\nabla f(x)=2Qx$
+    \end{itemize}
+    \item Gradient vector $\nabla f$ points in the direction of greatest increase/decrease of $f$
+    \begin{itemize}
+        \item Directional derivative $\nabla f(x)^T\Delta x$: Rate of change to direction $\Delta x$
+        \item For any $\Vert\Delta x\Vert=1$, $f(x)$ increases the most if $\Delta x=\frac{\nabla f(x)}{\Vert\nabla f(x)\Vert}$
+        \item For any $\Vert\Delta x\Vert=1$, $f(x)$ decreases the most if $\Delta x=-\frac{\nabla f(x)}{\Vert\nabla f(x)\Vert}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gradient Descent (GD) Method}
+\begin{itemize}
+    \item Algorithm: General descent method with $\Delta x = -\nabla f(x)$
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, tolerance $\epsilon>0$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Determine a descent direction $\Delta x=-\nabla f(x)$
+            \item \textit{Line search} Choose a step size $\alpha>0$
+            \item \textit{Update} $x:=x+\alpha\Delta x$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied; usually $\Vert\nabla f(x)\Vert_2\leq\epsilon$
+    \end{description}
+    \item Pros of GD
+    \begin{itemize}
+        \item Convergence result: $f(x^{(k)})-p^\ast\leq c^k\left(f(x^{(0)})-p^\ast\right)$, $c\in(0,1)$
+        \item Convergence is guaranteed and mostly very fast ($\because$ exponential)
+        \item Most cases, simple and efficient
+    \end{itemize}
+    \item Cons of GD
+    \begin{itemize}
+        \item Myopic algorithm: Can be very slow for some problems ($c\to 1$)
+        \item GD may find a local optimal, but not necessarily global optimal
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{GD Algorithm for Optimizing Loss Functions}
+\begin{itemize}
+    \item Objective of deep learning is to optimize loss function $L(W)$
+    \item By applying GD algorithm, repeat
+    \begin{equation}
+        W\leftarrow W-\alpha\nabla L(W)
+    \end{equation}
+    \item GD may fail to find global optimal
+    \begin{itemize}
+        \item But, local optimal values of neural networks are similar
+        \item Not a big problem at neural networks
+    \end{itemize}
+    \item Directly computing $\nabla L(W)$ by differentiation is complicated! $\Rightarrow$ Backpropagation
+\end{itemize}
