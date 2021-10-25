@@ -56,12 +56,14 @@
         y=f(Wx+b),\text{ i.e. }\begin{mtx}{c}
             y_1 \\ y_2 \\ \vdots \\ y_n
         \end{mtx}=f\left(\begin{mtx}{cccc}
-            w_{11} & w_{21} & \cdots & w_{n1}\\
-            w_{12} & w_{22} & \cdots & w_{n2}\\
+            w_{11} & w_{21} & \cdots & w_{m1}\\
+            w_{12} & w_{22} & \cdots & w_{m2}\\
             \vdots & \vdots & \ddots & \vdots\\
-            w_{1m} & w_{2m} & \cdots & w_{nm}
+            w_{1n} & w_{2n} & \cdots & w_{mn}
         \end{mtx}\begin{mtx}{c}
             x_1 \\ x_2 \\ \vdots \\ x_m
+        \end{mtx}+\begin{mtx}{c}
+            b_1 \\ b_2 \\ \vdots \\ b_n
         \end{mtx}\right)
     \end{equation}
     \item For $k$-layer nerual network, $y=f_k(W_kf_{k-1}(W_{k-1}\cdots f_1(W_1x)))$

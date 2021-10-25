@@ -176,7 +176,7 @@
         \begin{equation}
             \mathbb{P}(b=1|a)=\frac{\mathbb{P}(a|b=1)\mathbb{P}(b=1)}{\mathbb{P}(a)}=\frac{1}{1+\frac{\mathbb{P}(a|b=0)\mathbb{P}(b=0)}{\mathbb{P}(a|b=1)\mathbb{P}(b=1)}}
         \end{equation}
-        \item $\mathbb{P}(a|b=k)=\mathbb{P}(a_1|b=k)\mathbb{P}(a_2|a_1,b=k)\cdots\mathbb{P}(a_n|a_1,\cdots,a_{n-1},n=k)$: Estimation is difficult
+        \item $\mathbb{P}(a|b=k)=\mathbb{P}(a_1|b=k)\mathbb{P}(a_2|a_1,b=k)\cdots\mathbb{P}(a_n|a_1,\cdots,a_{n-1},b=k)$: Estimation is difficult
         \item Assume feature elements are mutually independent conditional on given label
         \item Na\"ive Bayes: $\mathbb{P}(a|b=k)=\prod_{i=1}^{n}\mathbb{P}(a_i|b=k)$
         \item Therefore,
