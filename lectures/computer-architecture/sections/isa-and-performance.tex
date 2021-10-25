@@ -1,0 +1,103 @@
+\section{Instruction Set Architecture and Performance}
+
+\subsection{Instruction Set Architecture}
+
+\subsubsection*{Instruction Set Architecture (ISA)}
+\begin{itemize}
+    \item An interface between hardware and (low-level) software
+    \item Functional interface for assembly-language programming
+    \item \textbf{Computer architecture} = ISA + Machine organization (Hardware)
+    \item Modern ISAs: IA-64, IA-32, ARM, PowerPC, \textbf{MIPS}, SPARC
+\end{itemize}
+
+\subsection{Performance}
+
+\subsubsection*{Performance Comparison}
+\begin{itemize}
+    \item Less execution time, more performance, i.e.
+    \begin{equation}
+        \text{performance}\varpropto\frac{1}{\text{execution~time}}
+    \end{equation}
+    \item ``X is $n$ times faster than Y''
+    \begin{equation}
+        n=\frac{\text{perf}_X}{\text{perf}_Y}=\frac{\text{time}_Y}{\text{time}_X}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Clock Cycles}
+\begin{itemize}
+    \item Clock cycle time
+    \begin{itemize}
+        \item Time required for a clock pulse to make transitions (0 $\rightarrow$ 1 $\rightarrow$ 0)
+        \item Time duration between positve(rising) edges or negative(falling) edges
+    \end{itemize}
+    \item Clock frequency (Clock rate)
+    \begin{itemize}
+        \item Inverse of clock cycle time
+        \item \# of times to visit positive(negative) states per second
+    \end{itemize}
+    \item e.g. Clock cycle time 10ns $\Leftrightarrow$ Clock frequency 100MHz
+    \item Longest propagation delay (Critical path delay)
+    \begin{itemize}
+        \item Critical path: A path that takes the longest time delay among combinational paths
+        \item Determines clock cycle time
+    \end{itemize}
+    \item Execution time
+    \begin{equation}
+        \text{Execution~time}=\text{Clock~cycles~from~program}\times\text{Clock~cycle~time}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{CPI}
+\begin{itemize}
+    \item CPI: Clock cycles per instruction; IPC: Instructions per clock cycles
+    \begin{equation}
+        \text{Execution~time}=\text{Instructions}\times\textbf{CPI}\times\text{Clock~cycle~time}
+    \end{equation}
+    \item \# of instructions and clock cycle time has inter-dependency
+    \begin{itemize}
+        \item Instruction 수 감소하려면 instruction 복잡 $\rightarrow$ CPI 증가
+    \end{itemize}
+    \item CPI가 낮아도 clock cycle time이 높을 수 있음 $\Rightarrow$ 절대적 지표가 아님
+    \item Variability: 같은 프로세서에서 instruction의 타입이 다르면 CPI는 다를 수 있음
+    \begin{equation}
+        \text{CPI}=\frac{\sum_{i=1}^{n}\text{CPI}_i\cdot\text{C}_i}{\sum_{i=1}^{n}\text{C}_i}
+    \end{equation}
+    \begin{itemize}
+        \item $\text{CPI}_i$: CPI for $i$-th class instructions
+        \item $\text{C}_i$: \# of $i$-th class instructions
+    \end{itemize}
+    \item Program마다 instruction 구성 다름 $\Rightarrow$ 같은 프로세서에서도 평균 CPI는 다를 수 있음
+\end{itemize}
+
+\subsubsection*{MIPS and MFLOPS}
+\begin{itemize}
+    \item MIPS: Million instructions per second
+    \begin{equation}
+        \text{MIPS}=\frac{\text{Instruction~count}\times 10^{-6}}{\text{Execution time}}
+    \end{equation}
+    \begin{itemize}
+        \item 어떤 compiler는 특정 class의 instruction을 잘 수행하도록 설계되었을 수 있음 $\Rightarrow$ instruction 수가 다를 수 있음
+    \end{itemize}
+    \item MFLOPS: Million Floating-point Operations Per Second
+    \item 모두 instruction set마다 다른 instruction의 복잡도를 고려하지 못함
+\end{itemize}
+
+\subsubsection*{Benchmarks}
+\begin{itemize}
+    \item 프로세서에서 여러 종류의 프로그램을 이용하여 CPI, MIPS 등의 performance metric을 측정하기 위한 프로그램
+    \item SPEC: CPU 산업에서 사용되는 가장 대표적인 benchmark
+    \item Synthetic benchmark
+    \begin{itemize}
+        \item 실제 application을 사용하지 않음
+        \item Whetstone, Dhrystone 등 기계의 성능을 예측하기 쉽게 설계됨
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Amdahl's Law}
+\begin{itemize}
+    \item 컴퓨터 시스템의 일부를 개선할 때 성능 향상의 증가폭(실행 속도의 감소폭)은 향상 정도와 영향받은 부분의 크기와 관련이 있다
+    \begin{equation}
+        \text{Speedup}_\text{overall}=\frac{\text{ExecutionTime}_\text{old}}{\text{ExecutionTime}_\text{new}}=\left(\left(1-\text{Fraction}_\text{enhanced}\right)+\frac{\text{Fraction}_\text{enhanced}}{\text{Speedup}_\text{enhanced}}\right)^{-1}
+    \end{equation}
+\end{itemize}
