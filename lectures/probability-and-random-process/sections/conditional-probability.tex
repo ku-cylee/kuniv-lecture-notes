@@ -1,0 +1,101 @@
+\section{Conditional Probability}
+
+\subsection{Conditional Probability}
+
+\subsubsection*{Conditional Probability}
+\begin{itemize}
+    \item \textbf{Def.} For events $A$, $B$ with $P(B)>0$, probability of $A$ given $B$, $P(A|B)$ is
+    \begin{equation}\label{eq:prp:cond-prob}
+        P(A|B):=\frac{P(A\cap B)}{P(B)}~~(P(B)>0)
+    \end{equation}
+    \item $P(A)$: prior probability
+    \item $P(B)$: evidence probability
+    \item $P(A|B)$: posterior probability
+\end{itemize}
+
+\subsubsection*{Bayes' Rule}
+\begin{itemize}
+    \item $P(A_1,A_2,\cdots,A_n)=P(A_1\cap A_2\cap\cdots A_n)$
+    \item For any events $A$, $B$ with $P(A)>0$ and $P(B)>0$,
+    \begin{equation}\label{eq:prp:cond-prob-both-sides}
+        P(A\cap B)=P(B)P(A|B)=P(A)P(B|A)
+    \end{equation}
+    \begin{itemize}
+        \item Derived from \ref{eq:prp:cond-prob}
+    \end{itemize}
+    \item For any events with $A_1,A_2,\cdots,A_n$ s.t. $P(A_i)>0$,
+    \begin{equation}
+        P(A_1,A_2,\cdots,A_n)=P(A_1)P(A_2|A_1)P(A_3|A_1,A_2)\cdots P(A_n|A_1,\cdots,A_{n-1})
+    \end{equation}
+    \item Bayes' Rule: Derived from \ref{eq:prp:cond-prob-both-sides}
+    \begin{equation}\label{eq:prp:bayes-rule}
+        P(A|B)=\frac{P(B|A)P(A)}{P(B)}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Law of total probability (LOTP)}
+\begin{itemize}
+    \item Let $A_1,A_2,\cdots,A_n$ be a partition of the sample space $S$, i.e. $S=\dot{\bigcup}_{i=1}^nA_i$, then
+    \begin{equation}
+        P(B)=\sum_{i=1}^nP(B|A_i)P(A_i)
+    \end{equation}
+    \item For an event $A\subset S$,
+    \begin{equation}
+        P(B)=P(B|A)P(A)+P(B|A^c)P(A^c)
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Conditional Probability and Likelihood Function}
+\begin{itemize}
+    \item For a given event $E\subset S$ with $P(E)>0$,
+    \item $P(\cdot|E)$ is a probability function
+    \begin{itemize}
+        \item $\because$ $P(S|E)=1$ and satisfies LOTP.
+        \item $P(A^c|E)=1-P(A|E)$, $P(\emptyset|E)=0$, $P(A\cup B|E)=P(A|E)+P(B|E)-P(A\cap B|E)$
+    \end{itemize}
+    \item $P(E|\cdot)$ is NOT a probability function; Instead, a ``likelihood function''
+    \begin{itemize}
+        \item $P(E|\emptyset)$ cannot be defined, $P(E|S)=P(E)\neq 1$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Extra Conditioning}
+\begin{itemize}
+    \item Bayes' rule w/ extra conditioning: $P(A\cap E)>0$ and $P(B\cap E)>0$, then
+    \begin{equation}
+        P(A|B,E)=\frac{P(B|A,E)P(A|E)}{P(B|E)}
+    \end{equation}
+    \begin{itemize}
+        \item \ref{eq:prp:bayes-rule} is when $E=S$
+    \end{itemize}
+    \item LOTP w/ extra conditioning: For $A_i$ s.t. $S=\dot{\bigcup}_{i=1}^nA_i$ and $P(A_i\cap E)>0$,
+    \begin{equation}
+        P(B|E)=\sum_{i=1}^nP(B|A_i,E)P(A_i,E)
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Independence}
+\begin{itemize}
+    \item \textbf{Def.} Events $A$ and $B$ are independent if
+    \begin{equation}
+        P(A\cap B)=P(A)P(B)
+    \end{equation}
+    \begin{itemize}
+        \item $A$, $B$: indep. $\Rightarrow$ $P(A|B)=P(A)$, $P(B|A)=P(B)$
+        \item Mutually exclusive events ($A\cap B=\emptyset$) DOES NOT imply independence
+        \item Mutually exclusive: $P(A|B)=0$, Equal: $P(A|B)=1$, Independent: $P(A|B)=P(A)$
+    \end{itemize}
+    \item $A$, $B$: indep. $\implies$ $A^c$, $B$ / $A$, $B^c$ / $A^c$, $B^c$: indep., respectively
+    \item \textbf{Def.} Indep. of many events: $n$ events $A_1,A_2,\cdots,A_n$ are independent if
+    \begin{equation}
+        \forall~\{i_1,\cdots,i_k\}\subset\{1,\cdots,n\},~P\left(\bigcap_{j=1}^kA_{i_j}\right)=\prod_{j=1}^kP(A_{i_j})
+    \end{equation}
+    \item \textbf{Def.} Conditional indep.: Events $A$, $B$: cond. indep. given $E$ if
+    \begin{equation}
+        P(A\cap B|E)=P(A|E)P(B|E)
+    \end{equation}
+    \begin{itemize}
+        \item Pairwise independence (e.g. $A$-$B$, $B$-$C$, $C$-$A$) $\centernot\implies$ Independence
+        \item Conditional Independence $\centernot\iff$ Independence
+    \end{itemize}
+\end{itemize}
