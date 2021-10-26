@@ -244,7 +244,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert a\Vert_2 \\
             \mathrm{subject~to}~~&~~a^Tx_i+b\geq1~~(i=1,2,\cdots,N) \\
-                &~~a^Tx_i+b\leq-1~~(i=1,2,\cdots,M)
+                &~~a^Ty_i+b\leq-1~~(i=1,2,\cdots,M)
         \end{aligned}\end{equation}
     \end{itemize}
     \item Approximate linear classifier
@@ -254,7 +254,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\mathbf{1}^Tu+\mathbf{1}^Tv \\
             \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+                &~~a^Ty_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
                 &~~u\succeq0,~v\succeq0
         \end{aligned}\end{equation}
         \item $u$, $v$ means \# of missclassified points
@@ -267,7 +267,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^Tu+\mathbf{1}^Tv) \\
             \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~a^Tx_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+                &~~a^Ty_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
                 &~~u\succeq0,~v\succeq0
         \end{aligned}\end{equation}
     \end{itemize}

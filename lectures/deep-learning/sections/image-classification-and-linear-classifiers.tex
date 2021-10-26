@@ -164,7 +164,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert w\Vert_2 \\
             \mathrm{subject~to}~~&~~w^Tx_i+b\geq1\\
-                &~~w^Tx_i+b\leq-1\\
+                &~~w^Ty_i+b\leq-1\\
                 &~~(i=1,2,\cdots,M)
         \end{aligned}\end{equation}
     \end{itemize}
@@ -176,7 +176,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\sum_{i}u_i \\
             \mathrm{subject~to}~~&~~w^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~w^Tx_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
+                &~~w^Ty_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
                 &~~u_i\geq 0
         \end{aligned}\end{equation}
         \item $u_i$: \# of missclassified points; slack variable
@@ -190,7 +190,7 @@
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert w\Vert_2^2+\gamma\sum_{i}u_i \\
             \mathrm{subject~to}~~&~~w^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~w^Tx_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
+                &~~w^Ty_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
                 &~~u_i\geq0
         \end{aligned}\end{equation}
     \end{itemize}
@@ -207,7 +207,7 @@
     \begin{equation}\begin{aligned}
         \mathrm{minimize}~~&~~\Vert w_k\Vert_2^2+\gamma\sum_{i}u_i \\
         \mathrm{subject~to}~~&~~w_k^Tx_i+b_k\geq1-u_i~~(k=y_i) \\
-            &~~w_k^Tx_i+b_k\leq-1+u_i~~(k\neq y_i) \\
+            &~~w_k^Ty_i+b_k\leq-1+u_i~~(k\neq y_i) \\
             &~~u_i\geq0,~\forall i
     \end{aligned}\end{equation}
     \begin{itemize}
