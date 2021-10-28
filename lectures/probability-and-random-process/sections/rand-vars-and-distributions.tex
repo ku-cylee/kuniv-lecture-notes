@@ -75,6 +75,12 @@
         F_X(x):=P(X\leq x)
     \end{equation}
     \item For discrete r.v. $X$, $F_X(x)=\sum_{n=-\infty}^{x}P_X(x_n)$
+    \item Valid CDFs: Any CDF $F$ satisfies
+    \begin{itemize}
+        \item Increasing: $\forall x_1,x_2\in\mathbb{R}$, $x_1\leq x_2\implies F(x_1)\leq F(x_2)$
+        \item Right-continuous: $\forall x_0\in\mathbb{R}$, $F(x_0)=\lim_{x\to a^+}F(x)$
+        \item Convergence to $0$ and $1$: $\lim_{x\to-\infty}F(x)=0$, $\lim_{x\to\infty}F(x)=1$
+    \end{itemize}
 \end{itemize}
 
 \subsubsection*{Functions of Random Variables}
