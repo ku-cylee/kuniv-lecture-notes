@@ -1,0 +1,140 @@
+\section{Random Variables and Distributions}
+
+\subsection{Random Variables and Distributions}
+
+\subsubsection*{Random Variables}
+\begin{itemize}
+    \item Random variable $X$: Sample sapce $S\to\mathbb{R}$
+    \item Range of $X$: $X_S=\{X(s)\mid s\in S\}\subset\mathbb{R}$
+    \item $\{X=x\}$: $X^{-1}(x)=\{s\mid X(s)=x\}\subset S$, $\{X\leq x\}$: $X^{-1}((-\infty,x])=\{s\mid X(s)\leq x\}\subset S$
+    \item Example: Fair two coin tosses
+    \begin{itemize}
+        \item $X$: \# of heads, then $X(HH)=2$, $X(HT)=X(TH)=1$, $X(TT)=0$
+    \end{itemize}
+    \item Discrete Random Variable: A r.v. $X$ is discrete if $X_S$ is discrete(i.e. countable)
+\end{itemize}
+
+\subsubsection*{Probability Mass Function}
+\begin{itemize}
+    \item Probability mass function(PMF) of discrete r.v. $X$ is a function $p_X:\mathbb{R}\to[0,1]$ given by
+    \begin{equation}
+        p_X(x)=P(X=x)=P(\{X=x\})
+    \end{equation}
+    \begin{itemize}
+        \item Prob. function maps $S$ to $[0,1]$, r.v. $X$ maps $S$ to $\mathbb{R}$ $\Rightarrow$ $P=p_X\circ X$
+        \item Sample space에서 정의된 ``확률 함수''
+        \item Random experiment와 확률 법칙 신경 X, $p_X$와 $\mathbb{R}$에만 관심 갖는다
+    \end{itemize}
+    \item Valid PMFs: $X$ be a discrete r.v. with $X_S=\{x_1,x_2,\cdots\}$, then PMF $p_X$ must satisfy:
+    \begin{itemize}
+        \item Nonnegative: $p_X(x)>0$ if $x\in X_S$, $p_X(x)=0$ otherwise
+        \item Sums to $1$: $\sum_{x_i\in X_S}p_X(x_i)=1$
+    \end{itemize}
+    \item For $A\subset\mathbb{R}$, prob. of the event $X^{-1}(A)$ is
+    \begin{equation}
+        P(X\in A)=\sum_{x\in A}p_X(x)
+    \end{equation}
+    \item Indicator random variable: R.v. is $1$ if event $A$ occurs(success) and $0$ otherwise (failure)
+    \begin{equation}
+        I_A(s)=\begin{cases}
+            1 & s\in A\\
+            0 & s\notin A
+        \end{cases}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Distributions}
+\begin{itemize}
+    \item $X$ is ``distributed'' with respect of $p_X$
+    \item Bernoulli Distribution
+    \begin{equation}
+        X\sim\text{Bern}(p)\implies P(X=k)=\begin{cases}
+            p & k=1\\
+            1-p & k=0
+        \end{cases}
+    \end{equation}
+    \begin{itemize}
+        \item $X$: r.v. to have Bernoulli dist. w/ parameter $p$ ($0<p<1$)
+        \item $X$ has two possible values, i.e. $X_S=\{0,1\}$
+        \item Bernoulli trial: An experiment that has only two results, success and failure
+    \end{itemize}
+    \item Binomial Distribution
+    \begin{equation}
+        X\sim\text{Bin}(n,p)\implies P(X=k)=\binom{n}{k}p^k(1-p)^{n-k}~~(k=0,1,\cdots,n)
+    \end{equation}
+    \begin{itemize}
+        \item $X$: \# of successes when $n$ independent Bernoulli trials with parameter $p$
+        \item $P(X=k)=0$ for $k\notin\{0,1,\cdots,n\}$
+        \item $X\sim\text{Bin}(n,p)\implies n-X\sim\text{Bin}(n,1-p)$
+    \end{itemize}
+    \item Discrete Uniform Distribution
+    \begin{equation}
+        X\sim\text{DUnif}(C)\implies P(X=x)=\frac{1}{\abs{C}}~~(x\in C)
+    \end{equation}
+    \begin{itemize}
+        \item $C$: a finite, nonempty set of numbers; All values in $C$ are equally likely
+        \item $X$: a number in $C$ chosen by uniformly at random
+        \item For $A\subset C$, $P(X\in A)=\frac{\abs{A}}{\abs{C}}$: Na\"ive definition of prob.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Cumulative Distribution Functions}
+\begin{itemize}
+    \item Cumulative Distribution Function(CDF) of an r.v. $X$
+    \begin{equation}
+        F_X(x):=P(X\leq x)
+    \end{equation}
+    \item For discrete r.v. $X$, $F_X(x)=\sum_{n=-\infty}^{x}P_X(x_n)$
+\end{itemize}
+
+\subsubsection*{Functions of Random Variables}
+\begin{itemize}
+    \item A new random variable $Y:=g(X)$
+    \begin{itemize}
+        \item A r.v. $X$ with sample space $S$, Function $g:\mathbb{R}\to\mathbb{R}$
+        \item Maps $\forall s\in S$ to $g(X(s))$
+        \item Function $g$ may have more parameters
+    \end{itemize}
+    \item PMF of $Y$ is
+    \begin{equation}
+        P(Y=y)=P(g(X)=x)=\sum_{x:g(x)=y}P(X=x)
+    \end{equation}
+    \begin{itemize}
+        \item $\exists g^{-1}\implies P(Y=y)=P(X=g^{-1}(x))$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Independence of Random Variables}
+\begin{itemize}
+    \item R.v.s $X$ and $Y$ are independent if
+    \begin{equation}
+        \forall~x,y\in\mathbb{R},~P(X\leq x,Y\leq y)=P(X\leq x)P(Y\leq y)
+    \end{equation}
+    \begin{itemize}
+        \item Discrete r.v.s $X$ and $Y$ are independent if $\forall~x,y\in\mathbb{R}$, $P(X=x,Y=y)=P(X=x)P(Y=y)$
+    \end{itemize}
+    \item R.v.s $X_1,X_2,\cdots,X_n$ are independent if $\forall~x_i\in\mathbb{R},~P\left(\bigcap_{i=1}^n\{X_i\leq x_i\}\right)=\prod_{i=1}^nP(X_i\leq x_i)$
+    \item Independent and Identically Distributed (i.i.d)
+    \begin{itemize}
+        \item $X_1,X_2,\cdots,X_n$ are ``i.i.d.'' if all $X_i$'s are independent and have the same distribution (=same PMF)
+    \end{itemize}
+    \item If $X_i$ are i.i.d. $\text{Bern}(p)$ and $X\sim\text{Bin}(n,p)$, $X=\sum_{i=1}^nX_i$
+    \item If $X\sim\text{Bin}(n,p)$, $Y\sim\text{Bin}(m,p)$ and $X\indep Y$, then $X+Y\sim\text{Bin}(n+m,p)$
+\end{itemize}
+
+\subsubsection*{Conditional PMF}
+\begin{itemize}
+    \item Conditional PMF: Function of $x$ for fixed $x$ where $X$ and $Z$ are discrete r.v.s
+    \begin{equation}
+        P_{X\mid Z=z}(x):=P(X=x\mid Z=z)=\frac{P(X=x,Z=z)}{P(Z=z)}
+    \end{equation}
+    \item LOTP: $P(X=x)=\sum_{z\in Z}P(X=x\mid Z=z)P(Z=z)$
+    \item Hyper-geometric Distribution
+    \begin{equation}
+        X\sim\text{HGeom}(n,m,r)\implies P(X=x)=\frac{\binom{n}{x}\binom{m}{r-x}}{\binom{n+m}{r}}
+    \end{equation}
+    \begin{itemize}
+        \item $Y_1\sim\text{Bin}(n,p),~Y_2\sim\text{Bin}(m,p),~Y_1\indep Y_2\implies X=Y_1\mid Y_1+Y_2=r$
+        \item $X$: $m$개의 Class 1 원소, $n$개의 Class 2 원소 중 $r$개를 $p$의 확률로 뽑을 때, 뽑은 Class 1 원소 개수
+    \end{itemize}
+\end{itemize}

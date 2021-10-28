@@ -43,7 +43,7 @@
 
 \subsubsection*{Counting Number of Outcomes}
 \begin{itemize}
-    \item \# of outcomes of a compound(independent) experiment of two experiment $A$ and $B$ is $|A||B|$
+    \item \# of outcomes of a compound(independent) experiment of two experiment $A$ and $B$ is $\abs{A}\abs{B}$
     \item Making $k$ choices from $n$ objects once at a time
     \begin{itemize}
         \item Sampling \textit{with} replacement: $n^k$ possible outcomes
@@ -58,7 +58,7 @@
     \begin{itemize}
         \item $A$: Event for an experiment with a finite sample space $S$; The na\"ive probability of $A$ is
         \begin{equation}
-            P(A)=\frac{|A|}{|S|}
+            P(A)=\frac{\abs{A}}{\abs{S}}
         \end{equation}
         \item Only works for finite $S$ and \textit{equal likelihood} for each outcome
     \end{itemize}
