@@ -1,0 +1,124 @@
+\section{Continuous Random Variables}
+
+\subsection{Continuous Random Variables}
+
+\subsubsection*{Continuous Random Variables}
+\begin{itemize}
+    \item A random variable with a continuous distribution($X_S$)
+    \item A r.v. has a continuous distribution if its CDF($F_X=P(X\leq x)$) is
+    \begin{itemize}
+        \item Differentiable except finitely many points
+        \item Continuous everywhere
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Probability Density Function}
+\begin{itemize}
+    \item Probability density function(PDF) of continuous r.v. $X$ is a derivative of its CDF
+    \begin{equation}
+        f_X(x)=\frac{d}{dx}F_X(x)
+    \end{equation}
+    \item Support of $X$: $\{x\mid f_X(x)>0\}$
+    \item PDF to CDF
+    \begin{equation}
+        F_X(x)=\int_{-\infty}^{x}f_X(t)~dt
+    \end{equation}
+    \item For a given $A\subset\mathbb{R}$,
+    \begin{equation}
+        P(X\in A)=\int_Af_X(x)~dx
+    \end{equation}
+    \begin{itemize}
+        \item Generalization of \ref{eq:prp:discrete-pmf-subset}
+    \end{itemize}
+    \item Valid PDFs: Any PDF $f$ satisfies
+    \begin{itemize}
+        \item Nonnegative: $\forall x\in\mathbb{R},~f(x)\geq 0$
+        \item Integrates to $1$: $\int_{-\infty}^{\infty}f(x)~dx=1$
+    \end{itemize}
+    \item Expectation of continuous r.v.
+    \begin{equation}
+        E(X)=\int_{-\infty}^{\infty}xf_X(x)~dx
+    \end{equation}
+    \begin{itemize}
+        \item Not every dist. has a mean (e.g. Cauchy dist. $f_X(x)=\frac{1}{\pi(1+x^2)}$, $E(X)=\infty$)
+    \end{itemize}
+    \item Continuous LOTUS: $f$ is a PDF of cont. r.v. $X$ and $g:\mathbb{R}\to\mathbb{R}$, then for $Y=g(X)$,
+    \begin{equation}
+        E(Y)=E(g(X))=\int_{-\infty}^{\infty}g(x)f(x)~dx
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Uniform Distribution}
+\begin{equation}
+    X\sim\text{Unif}(a,b)\implies f_X(x)=\begin{cases}
+        \frac{1}{b-a} & x\in(a,b)\\
+        0 & \text{else}
+    \end{cases}
+\end{equation}
+\begin{itemize}
+    \item Mean: $E(U)=\frac{a+b}{2}$
+    \item Variance: $\text{Var}(U)=\frac{1}{12}(b-a)^2$
+\end{itemize}
+
+\subsubsection*{Universality of Uniform}
+\begin{itemize}
+    \item Condition: $F:\mathbb{R}\to(0,1)$ is a valid CDF and $\exists~F^{-1}:(0,1)\to\mathbb{R}$
+    \begin{itemize}
+        \item $\impliedby$ $F$ is continuous, strictly increasing on its support
+    \end{itemize}
+    \item For such $F$,
+    \begin{enumerate}
+        \item $U\sim\text{Unif}(0,1)$, $X=F^{-1}(U)$ $\implies$ $X$ is a r.v. with CDF $F$
+        \item $X$: r.v. with CDF $F$ $\implies$ $F(X)\sim\text{Unif}(0,1)$
+    \end{enumerate}
+    \item We can generate a target distribution from a uniformly distributed data
+    \begin{itemize}
+        \item Limitation: CDF of target dist. must have its inverse
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Normal (Gaussian) Distribution}
+\begin{itemize}
+    \item Standard Normal Distribution
+    \begin{equation}
+        Z\sim\mathcal{N}(0,1)\implies \varphi(z)=\frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}}~~(z\in(-\infty,\infty))
+    \end{equation}
+    \begin{itemize}
+        \item $\varphi$ is a PDF of $Z$
+        \item $E(Z)=0$, $\text{Var}(Z)=1$
+        \item Standard normal CDF: $\Phi(z)=\int_{-\infty}^z\varphi(t)~dt$
+    \end{itemize}
+    \item Normal Distribution
+    \begin{itemize}
+        \item $Z\sim\mathcal{N}(0,1)$ $\implies$ $X=\mu+\sigma Z\sim\mathcal{N}(\mu,\sigma^2)$
+        \item $E(X)=\mu$, $\text{Var}(X)=\sigma^2$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Exponential Distribution}
+\begin{equation}
+    X\sim\text{Expo}(\lambda)\implies f_X(x)=\begin{cases}
+        \lambda e^{-\lambda x} & x>0 \\
+        0 & x\leq 0
+    \end{cases}~~(\lambda>0)
+\end{equation}
+\begin{itemize}
+    \item CDF: $F_X(x)=1-e^{-\lambda x}$ for $x>0$
+    \item $Y=\lambda_0X\sim\text{Expo}\left(\frac{\lambda}{\lambda_0}\right)$
+    \item Expectation and Variance
+    \begin{equation}
+        E(X)=\frac{1}{\lambda},~~\text{Var}(X)=\frac{1}{\lambda^2}
+    \end{equation}
+    \item Exponential dist. is a \textit{continuous} version of Geometric dist.
+    \begin{itemize}
+        \item Parameter $\lambda>0$: Interpreted as a \textit{averaged number} of events occuring during unit time
+        \item $X$: waiting time to see an event occurrence
+    \end{itemize}
+    \item Memoryless Property: Dist. of r.v. $X$ has \textit{memoryless property} if
+    \begin{equation}
+        \forall~s,t>0,~P(X\geq s+t\mid X\geq s)=P(X\geq t)
+    \end{equation}
+    \begin{itemize}
+        \item Exponential dist. and geometric dist. do have memoryless property
+    \end{itemize}
+\end{itemize}

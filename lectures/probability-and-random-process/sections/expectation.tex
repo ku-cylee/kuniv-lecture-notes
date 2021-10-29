@@ -6,7 +6,7 @@
 \begin{itemize}
     \item \textbf{Def.} Expected value(= expectation = mean) of a discrete r.v. $X$ is
     \begin{equation}
-        E(X)=\sum_{i=1}^\infty x_iP(X=x_i)=\sum_{x}xp_x(x)
+        E(X)=\sum_{i=1}^\infty x_iP(X=x_i)=\sum_{x}xp_X(x)
     \end{equation}
     \item $E(X)$ depends only on the distribution of $X$
     \item Linearity of expectation
@@ -72,7 +72,6 @@
     \item $\text{Var}(X)=np(1-p)=npq$
 \end{itemize}
 
-
 \subsubsection*{Geometric Distribution}
 \begin{equation}
     X\sim\text{Geom}(p)\implies P(X=k)=(1-p)^kp~~(k=0,1,\cdots)
@@ -99,7 +98,6 @@
     P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}~~(k=0,1,2,\cdots)
 \end{equation}
 \begin{itemize}
-    \item Parameter $\lambda>0$: Interpreted as a \textit{rate} of occurrence of \textit{rare} events during unit time
     \item $X$: \# of events occurs during the time interval $\lambda$
     \item Expectation and Variance
     \begin{equation}
@@ -109,6 +107,7 @@
     \begin{itemize}
         \item Suppose $X\sim\text{Bin}(n,p)$ and $\lambda=np$
         \item Let $n\to\infty$ and $p\to 0$ with $\lambda$ fixed, then $p_X$ converges to $\text{Pois}(\lambda)$ PMF
+        \item Parameter $\lambda>0$: Interpreted as a \textit{rate} of occurrence of \textit{rare} events during unit time
     \end{itemize}
     \item $X\sim\text{Pois}(\lambda_1)$, $Y\sim\text{Pois}(\lambda_2)$, $X\indep Y$
     \begin{itemize}
