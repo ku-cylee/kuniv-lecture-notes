@@ -1,0 +1,83 @@
+\section{Moments}
+
+\subsection{Moments}
+
+\subsubsection*{Moments}
+\begin{itemize}
+    \item $X$: a r.v. with mean $\mu$ and variance $\sigma^2$
+    \item $n$-th moment of $X$
+    \begin{equation}
+        E\left(X^n\right)
+    \end{equation}
+    \item $n$-th central moment of $X$: $E\left((X-\mu)^n\right)$
+    \item $n$-th standardized moment of $X$: $E\left(\left(\frac{X-\mu}{\sigma}\right)^n\right)$
+    \item $n>0$; $0$-th moment is always $1$
+\end{itemize}
+
+\subsubsection*{Moment Generating Function (MGF)}
+\begin{equation}
+    M_X(t)=E\left(e^{tX}\right)
+\end{equation}
+\begin{itemize}
+    \item Moment generating function(MGF) of a r.v. $X$
+    \item Existence: $\exists~a>0$ s.t. $\forall~t\in(-a,a)$, $M_X(t)$ is finite
+    \begin{itemize}
+        \item For any valid MGF $M$, $M(0)=1$ $\implies$ Interval $(-a,a)$ must contain $0$
+    \end{itemize}
+    \item Moments via derivatives of MGF
+    \begin{equation}
+        E\left(X^n\right)=\frac{d^n}{dt^n}M(t)\Bigr|_{t=0}=M^{(n)}(0)
+    \end{equation}
+    \item For two r.v.s $X$ and $Y$, $\exists~a>0$ s.t. $\forall~t\in(-a,a)$, $M_X(t)=M_Y(t)$ $\implies$ $X=Y$
+    \begin{itemize}
+        \item Converse is also true, trivially
+    \end{itemize}
+    \item For two r.v.s $X$ and $Y$, $X\indep Y\implies M_{X+Y}(t)=M_X(t)M_Y(t)$
+    \item $M_X(t)$: MGF of $X$ $\implies$ $M_{a+bX}=e^{at}M_X(bt)$
+\end{itemize}
+
+\subsubsection*{Moments and MGFs of Distributions}
+\begin{itemize}
+    \item Bernoulli Distribution
+    \begin{equation}
+        X\sim\text{Bern}(p)\implies M(t)=pe^t+q~(p+q=1)
+    \end{equation}
+    \item Binomial Distribution
+    \begin{equation}
+        X\sim\text{Bin}(p)\implies M(t)=(pe^t+q)^n~(p+q=1)
+    \end{equation}
+    \item Uniform Distribution
+    \begin{equation}
+        U\sim\text{Unif}(a,b)\implies M(t)=\begin{cases}
+            \frac{e^{tb}-e^{ta}}{t(b-a)} & t\neq 0\\
+            1 & t=0
+        \end{cases}
+    \end{equation}
+    \item Geometric Distribution
+    \begin{equation}
+        M(t)=\frac{p}{1-(1-p)e^t}~~\left(t\in\left(-\infty,-\log(1-p)\right)\right)
+    \end{equation}
+    \item Normal Distribution
+    \begin{equation}
+        Z\sim\mathcal{N}(0,1)\implies M(t)=e^{\frac{t^2}{2}},~E(Z^n)=\begin{cases}
+            (2k-1)!!=\prod_{i=1}^k(2k-1) & (n=2k:~\text{even})\\
+            0 & (n:~\text{odd})
+        \end{cases}
+    \end{equation}
+    \begin{itemize}
+        \item $X=\mu+\sigma Z\sim\mathcal{N}(\mu,\sigma^2)\implies M_X(t)=\exp\left(\mu t+\frac{1}{2}\sigma^2t^2\right)$
+        \item For two r.v.s $X_1\indep X_2$, $X_1\sim\mathcal(\mu_1,\sigma_1^2),~X_2\sim\mathcal(\mu_2,\sigma_2^2)\iff X_1+X_2\sim\mathcal(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
+    \end{itemize}
+    \item Poisson Distribution
+    \begin{equation}
+        X\sim\text{Pois}(\lambda)\implies M(t)=e^{\lambda(e^t-1)}
+    \end{equation}
+    \begin{itemize}
+        \item Sum of independent Poissons is also Poisson
+        \item $X_1\sim\text{Pois}(\lambda_1),~X_2\sim\text{Pois}(\lambda_2)\implies X_1+X_2\sim\text{Pois}(\lambda_1+\lambda_2)$
+    \end{itemize}
+    \item Exponential Distribution
+    \begin{equation}
+        X\sim\text{Expo}(\lambda)\implies M(t)=\frac{\lambda}{\lambda-t}~(t<\lambda),~E(X^n)=\frac{n!}{\lambda^n}
+    \end{equation}
+\end{itemize}
