@@ -2,6 +2,35 @@
 \usepackage{amssymb}
 \usepackage{centernot}
 
+% cases spacing patch
+\makeatletter
+\newcommand\new@setfontsize[3]{%
+    \ifx\protect\@typeset@protect\let\@currsize #1\fi\fontsize{#2}{#3}\selectfont
+}
+\let\orig@setfontsize\@setfontsize
+\let\orig@cases\cases
+\let\endorig@cases\endcases
+
+\renewenvironment{cases}{%
+    \let\@setfontsize\new@setfontsize
+    \setstretch{\setspace@singlespace}%
+    \let\setfontsize\orig@setfontsize
+    \orig@cases
+}{%
+    \endorig@cases
+}
+\makeatother
+
+% equation numbering patch
+\numberwithin{equation}{section}
+\makeatletter
+\@ifclassloaded{book}{
+    \renewcommand\theequation{Eq.\arabic{chapter}.\arabic{section}.\arabic{equation}}
+}{
+    \renewcommand\theequation{Eq.\arabic{section}.\arabic{equation}}
+}
+\makeatother
+
 % brackets
 \newcommand{\abs}[1]{\left\lvert#1\right\rvert}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
