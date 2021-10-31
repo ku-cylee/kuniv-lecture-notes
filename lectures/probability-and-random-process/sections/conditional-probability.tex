@@ -37,7 +37,7 @@
 \begin{itemize}
     \item Let $A_1,A_2,\cdots,A_n$ be a partition of the sample space $S$, i.e. $S=\dot{\bigcup}_{i=1}^nA_i$, then
     \begin{equation}
-        P(B)=\sum_{i=1}^nP(B\mid A_i)P(A_i)
+        P(B)=\sum_{i=1}^nP(B\cap A_i)=\sum_{i=1}^nP(B\mid A_i)P(A_i)
     \end{equation}
     \item For an event $A\subset S$,
     \begin{equation}
@@ -70,7 +70,7 @@
     \end{itemize}
     \item LOTP w/ extra conditioning: For $A_i$ s.t. $S=\dot{\bigcup}_{i=1}^nA_i$ and $P(A_i\cap E)>0$,
     \begin{equation}
-        P(B\mid E)=\sum_{i=1}^nP(B\mid A_i,E)P(A_i,E)
+        P(B\mid E)=\sum_{i=1}^nP(B\mid A_i,E)P(A_i\mid E)
     \end{equation}
 \end{itemize}
 
