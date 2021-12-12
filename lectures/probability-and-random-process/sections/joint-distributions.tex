@@ -110,6 +110,55 @@
     \end{equation}
     \begin{itemize}
         \item Undefined if $\text{Var}(X)=0$ or $\text{Var}(Y)=0$
-        \item \textit{Normalized} covariance $\implies$ $\forall~X,Y$, $\abs{~\text{Corr}(X,Y)~}\leq 1$
+        \item \textit{Normalized} covariance: $\forall~X,Y$, $\abs{~\text{Corr}(X,Y)~}\leq 1$
     \end{itemize}
+\end{itemize}
+
+\subsubsection*{Joint MGF}
+\begin{itemize}
+    \item Joint MGF of random vector $\mathbf{X}=\left(X_1,X_2,\cdots,X_k\right)$ of $\mathbf{t}=\left(t_1,t_2,\cdots,t_k\right)$ is
+    \begin{equation}
+        M_{\mathbf{X}}(\mathbf{t})=E\left(e^{\mathbf{t}^T\mathbf{X}}\right)=E\left(e^{\sum_{i=1}^kt_iX_i}\right)
+    \end{equation}
+    \begin{itemize}
+        \item MGF for joint distribution
+        \item $\mathbf{X}$: independent r.v.s $\iff$ Joint MGF: given as product of MGFs
+        \begin{equation}
+            M_{\mathbf{X}}(\mathbf{t})=E\left(\prod_{i=1}^ke^{t_iX_i}\right)=\prod_{i=1}^kM_{X_i}(t_i)
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Multivariate Normal (MVN, Jointly Gaussian)}
+\begin{itemize}
+    \item Random vector $\mathbf{X}=\left(X_1,X_2,\cdots,X_k\right)$: MVN distribution if
+    \begin{equation}
+        \forall~t_1,t_2,\cdots,t_k\in\mathbb{R},~\sum_{i=1}^kt_iX_i\sim\mathcal{N}
+    \end{equation}
+    \begin{itemize}
+        \item $k=2$: $\mathbf{X}$ has Bivariate Normal (BVN)
+        \item $\mathbf{X}$: MVN $\implies$ $\forall X_i$: Normal
+        \item $\forall X_i$: Normal $\centernot\implies$ $\mathbf{X}$: MVN
+        \item Within MVN $\mathbf{X}$, $\text{Cov}(X_i,X_j)=0$ $\implies$ $X_i\indep X_j$
+    \end{itemize}
+    \item MVN $\mathbf{X}$ is denoted by
+    \begin{equation}
+        \mathbf{X}\sim\mathcal{N}(\mu,\Sigma_\mathbf{X})
+    \end{equation}
+    \begin{itemize}
+        \item Mean vector $\mu=\left(\mu_1,\mu_2,\cdots,\mu_k\right)$
+        \item Covariance matrix: outer product of $\mathbf{X}-\mu$
+        \begin{equation}
+            \Sigma_\mathbf{X}=E\left((\mathbf{X}-\mu)(\mathbf{X}-\mu)^T\right)=\begin{mtx}{cccc}
+                \text{Var}(X_1) & \text{Cov}(X_1,X_2) & \cdots & \text{Cov}(X_1,X_n) \\
+                \text{Cov}(X_2,X_1) & \text{Var}(X_2) & \cdots & \text{Cov}(X_2,X_n) \\
+                \vdots & \vdots & \ddots & \vdots \\
+                \text{Cov}(X_n,X_1) & \text{Cov}(X_n,X_2) & \cdots & \text{Var}(X_n)
+            \end{mtx}
+        \end{equation}
+    \end{itemize}
+    \item PDF of MVN $\mathbf{X}$
+    \begin{equation}
+        f_{\mathbf{X}}(\mathbf{x})=\frac{1}{\sqrt{(2\pi)^n\abs{\text{det}\Sigma_\mathbf{X}}}}\exp\left(-\frac{1}{2}(\mathbf{x-\mu})^T\Sigma_\mathbf{X}^{-1}(\mathbf{x-\mu})\right)
+    \end{equation}
 \end{itemize}
