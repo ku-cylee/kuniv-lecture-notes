@@ -1,0 +1,143 @@
+\section{Transformations}
+
+\subsection{Transformations}
+
+\subsubsection*{Change of Variables}
+\begin{itemize}
+    \item PDF transformation on $Y=g(X)$
+    \begin{equation}
+        f_{\mathbf{Y}}(\mathbf{y})=\abs{\text{det}\left(\frac{\partial\mathbf{x}}{\partial\mathbf{y}}\right)}f_{\mathbf{X}}\left(\mathbf{x}\right)
+    \end{equation}
+    \begin{itemize}
+        \item $\mathbf{X}=(X_1,X_2,\cdots,X_n)$: continuous r.v. with PDF $f_\mathbf{X}$
+        \item $g:\mathbb{R}^n\to\mathbb{R}^n$: differentiable, strictly increasing $\iff$ \textbf{invertible}
+        \item $\mathbf{Y}=g(\mathbf{X})$, $\mathbf{x}=g^{-1}\left(\mathbf{y}\right)$
+        \item Jacobian matrix
+        \begin{equation}
+            \frac{\partial \mathbf{x}}{\partial \mathbf{y}}=\begin{mtx}{cccc}
+                \frac{\partial x_1}{\partial y_1} & \frac{\partial x_1}{\partial y_2} & \cdots & \frac{\partial x_1}{\partial y_n}\\
+                \frac{\partial x_2}{\partial y_1} & \frac{\partial x_2}{\partial y_2} & \cdots & \frac{\partial x_2}{\partial y_n}\\
+                \vdots & \vdots & \ddots & \vdots \\
+                \frac{\partial x_n}{\partial y_1} & \frac{\partial x_n}{\partial y_2} & \cdots & \frac{\partial x_n}{\partial y_n}
+            \end{mtx}
+        \end{equation}
+    \end{itemize}
+    \item One-dimension $X$ and $Y$
+    \begin{equation}
+        f_Y(y)=f_X(x)\abs{\frac{dx}{dy}}
+    \end{equation}
+    \item Box-Muller Method: Method for generating Normal r.v.s
+    \begin{itemize}
+        \item $U\sim\text{Unif}(0,2\pi)$, $T\sim\text{Expo}(1)$
+        \item $X=\sqrt{2T}\cos{U}$, $Y=\sqrt{2T}\sin{U}$ $\implies$ $X,Y\iidsim\mathcal{N}(0,1)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gamma Distribution}
+\begin{itemize}
+    \item Gamma Function $\Gamma$
+    \begin{equation}
+        \Gamma(a)=\int_0^\infty x^{a-1}e^{-x}dx
+    \end{equation}
+    \begin{itemize}
+        \item $\forall n\in\mathbb{N}$, $\Gamma(n)=(n-1)!$
+        \item $\forall a>0$, $\Gamma(a+1)=a\Gamma(a)$: $\mathbb{R}$ version of factorial
+    \end{itemize}
+    \item Gamma Distribution
+    \begin{equation}
+        X\sim\text{Gamma}(a,\lambda)\implies f_X(x)=\frac{1}{\Gamma(a)}\lambda (\lambda x)^{a-1}e^{-\lambda x}~(x>0)
+    \end{equation}
+    \begin{itemize}
+        \item $\text{Gamma}(a,\lambda)=\frac{1}{\lambda}\text{Gamma}(a,1)$
+        \item $\text{Gamma}(1,\lambda)=\text{Expo}(\lambda)$
+        \item $X_1,X_2,\cdots,X_n\iidsim\text{Expo}(\lambda)$ $\implies$ $\sum_{i=1}^nX_i\sim\text{Gamma}(n,\lambda)$
+        \item $\forall a,b>0$, $\text{Gamma}(a,\lambda)+\text{Gamma}(b,\lambda)=\text{Gamma}(a+b,\lambda)$
+        \item Mean and variance
+        \begin{equation}
+            E(X)=\frac{a}{\lambda},~\text{Var}(X)=\frac{a}{\lambda^2},~E(X^n)=\frac{1}{\lambda^n}\frac{\Gamma(a+n)}{\Gamma(a)}
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+\clearpage
+\begin{figures}
+    \subfig{Gamma Function}{gamma-function.png}{.2035}
+    \subfig{Gamma Distribution}{gamma-distribution.png}{.2965}
+\end{figures}
+
+\subsubsection*{Beta Distribution}
+\begin{itemize}
+    \item Beta Integral
+    \begin{equation}
+        \beta(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}=\frac{(a-1)!(b-1)!}{(a+b-1)!}~~(a,b\in\mathbb{R^+})
+    \end{equation}
+    \item Beta Distribution
+    \begin{equation}
+        X\sim\text{Beta}(a,b)\implies f_X(x)=\frac{1}{\beta(a,b)}x^{a-1}(1-x)^{b-1}~~(a>0,b>0,x\in(0,1))
+    \end{equation}
+    \begin{itemize}
+        \item Often used to model \textit{probability of probability}
+        \item Mean and variance
+        \begin{equation}
+            E(X)=\frac{a}{a+b},~\text{Var}(X)=\frac{ab}{(a+b)^2(a+b+1)},~E\left(X^n\right)=\frac{\Gamma(a+n)\Gamma(a+b)}{\Gamma(a)\Gamma(a+b+n)}
+        \end{equation}
+    \end{itemize}
+    \item Beta-Gamma Connection
+    \begin{equation}
+        X\sim\text{Gamma}(a,\lambda),Y\sim\text{Gamma}(b,\lambda),X\indep Y\implies \frac{X}{X+Y}\sim\text{Beta}(a,b)
+    \end{equation}
+\end{itemize}
+\begin{figures}
+    \subfig{$a=.1,b=.1$}{beta-dist-.1-.1.png}{.25}
+    \subfig{$a=8,b=4$}{beta-dist-8-4.png}{.25}
+\end{figures}
+
+\subsubsection*{Chi-squared Distribution}
+\begin{itemize}
+    \item $X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(0,1)$, then
+    \begin{equation}
+        Z=\sum_{i=1}^nX_i^2\sim\chi^2(n)
+    \end{equation}
+    \begin{itemize}
+        \item $n$: degree of freedom
+        \item Often used to analyze MSE
+    \end{itemize}
+    \item PDF of chi-squared distribution
+    \begin{equation}
+        f_Z(z)=\frac{1}{2^{\frac{n}{2}}\Gamma(\frac{n}{2})}z^{\frac{n}{2}-1}e^{-\frac{z}{2}}
+    \end{equation}
+    \begin{itemize}
+        \item $\chi^2(n)\sim\text{Gamma}\left(\frac{n}{2},\frac{1}{2}\right)$
+        \item $\Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gaussian Sample Variance}
+\begin{itemize}
+    \item $X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(\mu,\sigma^2)$
+    \begin{equation}
+        \bar{X}:=\frac{1}{n}\sum_{i=1}^nX_i,~S:=\sum_{i=1}^n\left(X_i-\bar{X}\right)^2
+    \end{equation}
+    \begin{itemize}
+        \item Sample mean $\bar{X}$: estimate of $\mu$
+        \item Sample variance $\hat{\sigma}^2=\frac{1}{n-1}S$: estimate of $\sigma^2$
+    \end{itemize}
+    \item $S\sim\sigma^2\chi^2(n-1)$: has $n-1$ degree of freedom
+    \item $E\left(\hat{\sigma}^2\right)=\sigma^2$, $\bar{X}\indep\hat{\sigma}^2$
+\end{itemize}
+
+\subsubsection*{$t$ Distribution}
+\begin{itemize}
+    \item $X,X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(0,1)$
+    \begin{equation}
+        T=\frac{X}{\sqrt{\frac{1}{n}\sum_{i=1}^nX_i^2}}\sim t(n)(=\text{Student}(n))
+    \end{equation}
+    \begin{itemize}
+        \item $Y=\sum_{i=1}^nX_i^2\sim\chi^2(n)$
+        \item Normalizes $X$ with stddev of $X_i$s
+        \item Often used to estimate sample mean
+    \end{itemize}
+    \item PDF of $t$ distribution
+    \begin{equation}
+        f_T(t)=\frac{1}{\sqrt{n}}\frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{\pi}\Gamma\left(\frac{n}{2}\right)}\left(1+\frac{t^2}{n}\right)^{-\frac{n+1}{2}}\varpropto\left(1+\frac{t^2}{n}\right)^{-\frac{n+1}{2}}
+    \end{equation}
+\end{itemize}
