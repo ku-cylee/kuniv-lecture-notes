@@ -1,0 +1,444 @@
+\section{Relations of Multiple Random Variables}
+
+\subsection{Joint Distributions}
+
+\subsubsection*{Joint, Marginal, Conditional PMF}
+\begin{itemize}
+    \item Joint CDF of r.v.s $X$ and $Y$
+    \begin{equation}
+        F_{X,Y}(x,y)=P(X\leq x,Y\leq y)
+    \end{equation}
+    \item Joint PMF of discrete r.v.s $X$ and $Y$
+    \begin{equation}
+        p_{X,Y}(x,y)=P(X=x,Y=y)
+    \end{equation}
+    \item Marginal PMF of $X$ for discrete r.v.s $X$ and $Y$
+    \begin{equation}
+        P(X=x)=\sum_yP(X=x,Y=y)
+    \end{equation}
+    \item Conditional PMF of discrete r.v.s $Y$ given $X=x$
+    \begin{equation}
+        P_{Y\mid X=x}(y)=P(Y=y\mid X=x)=\frac{P(X=x,Y=y)}{P(X=x)}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Joint, Marginal, Conditional PDF}
+\begin{itemize}
+    \item Joint PDF of continuous r.v. $X$, $Y$ is a derivative of its CDF
+    \begin{equation}
+        f_{X,Y}(x,y)=\frac{\partial^2}{\partial x\partial y}F_{X,Y}(x,y)
+    \end{equation}
+    \item Valid PDF: $f_{X,Y}(x,y)\geq 0$ and $\iint_{\mathbb{R}^2}f_{X,Y}(x,y)~dA=1$
+    \item For a general set $A\subset\mathbb{R}^2$,
+    \begin{equation}
+        P((X,Y)\in A)=\iint_Af_{X,Y}(x,y)~dA
+    \end{equation}
+    \item Marginal PDF of $X$ for continuous r.v.s $X$ and $Y$
+    \begin{equation}
+        f_X(x)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)~dy
+    \end{equation}
+    \item Conditional PDF of continuous r.v.s $Y$ given $X=x$
+    \begin{equation}
+        f_{Y\mid X}(y\mid x)=\frac{f_{X,Y}(x,y)}{f_X(x)}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Generalization of Probability Rules}
+\begin{itemize}
+    \item Bayes' Rule
+    \begin{equation}
+        f_{Y\mid X}(y\mid x)=\frac{f_{X\mid Y}(x\mid y)f_Y(y)}{f_X(x)}
+    \end{equation}
+    \item LOTP
+    \begin{equation}
+        f_X(x)=\int_{-\infty}^{\infty}f_{X\mid Y}(x\mid y)f_Y(y)~dy
+    \end{equation}
+    \item 2D LOTUS
+    \begin{equation}
+        E(g(X,Y))=\int_{-\infty}^\infty\int_{-\infty}^\infty g(x,y)f_{X,Y}(x,y)~dxdy
+    \end{equation}
+    \begin{itemize}
+        \item Discrete version: $E(g(X,Y))=\sum_x\sum_yg(x,y)P(X=x,Y=y)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Independence of Random Variables}
+\begin{itemize}
+    \item Random variables $X$ and $Y$ are independent if
+    \begin{equation}\label{eq:prp:rv-indep}
+        \forall~x,y,~F_{X,Y}(x,y)=F_X(x)F_Y(y)
+    \end{equation}
+    \item $X$, $Y$: discrete
+    \begin{itemize}
+        \item \ref{eq:prp:rv-indep} $\iff$ $p_{X,Y}(x,y)=p_X(x)p_Y(y)$
+        \item \ref{eq:prp:rv-indep}, $P(X=x)>0$ $\iff$ $P(Y=y\mid X=x)=P(Y=y)$
+    \end{itemize}
+    \item $X$, $Y$: continuous
+    \begin{itemize}
+        \item \ref{eq:prp:rv-indep} $\iff$ $f_{X,Y}(x,y)=f_X(x)f_Y(y)$
+        \item \ref{eq:prp:rv-indep}, $f_X(x)>0$ $\iff$ $f_{Y\mid X}(y\mid x)=f_Y(y)$
+        \item Joint PDF $f_{X,Y}$ can be factorized into two nonnegative functions $\iff$ $X\indep Y$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Covariance}
+\begin{itemize}
+    \item Covariance between r.v.s $X$ and $Y$
+    \begin{equation}
+        \text{Cov}(X,Y):=E\Bigr[(X-E(X))(Y-E(Y))\Bigr]=E(XY)-E(X)E(Y)
+    \end{equation}
+    \item $X\indep Y\implies\text{Cov}(X,Y)=0$
+    \begin{itemize}
+        \item $\text{Cov}(X,Y)=0$ $\implies$ $X$ and $Y$ are \textit{uncorrelated}
+        \item Converse is false
+    \end{itemize}
+    \item Properties: For any r.v.s $X$, $Y$, $Z$, $W$ and constant $c\in\mathbb{R}$,
+    \begin{itemize}
+        \item $\text{Cov}(X,X)=\text{Var}(X)$
+        \item $\text{Cov}(X,Y)=\text{Cov}(Y,X)$
+        \item $\text{Cov}(X,c)=0$
+        \item $\text{Cov}(cX,Y)=c\text{Cov}(X,Y)$
+        \item $\text{Cov}(X+Y,Z)=\text{Cov}(X,Z)+\text{Cov}(Y,Z)$
+        \item $\text{Cov}(X+Y,Z+W)=\text{Cov}(X,Z)+\text{Cov}(X,W)+\text{Cov}(Y,Z)+\text{Cov}(Y,W)$
+        \item $\text{Var}(X\pm Y)=\text{Var}(X)+\text{Var}(Y)\pm 2\text{Cov}(X,Y)$
+        \item $\text{Var}\left(\sum_{i=1}^nX_i\right)=\sum_{i=1}^n\text{Var}(X_i)+2\sum_{i<j}\text{Cov}(X_i,X_j)$
+    \end{itemize}
+    \item Correlation between r.v.s $X$ and $Y$
+    \begin{equation}
+        \text{Corr}(X,Y):=\frac{\text{Cov}(X,Y)}{\sqrt{\text{Var}(X)\text{Var}(Y)}}
+    \end{equation}
+    \begin{itemize}
+        \item Undefined if $\text{Var}(X)=0$ or $\text{Var}(Y)=0$
+        \item \textit{Normalized} covariance: $\forall~X,Y$, $\abs{~\text{Corr}(X,Y)~}\leq 1$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Joint MGF}
+\begin{itemize}
+    \item Joint MGF of random vector $\mathbf{X}=\left(X_1,X_2,\cdots,X_k\right)$ of $\mathbf{t}=\left(t_1,t_2,\cdots,t_k\right)$ is
+    \begin{equation}
+        M_{\mathbf{X}}(\mathbf{t})=E\left(e^{\mathbf{t}^T\mathbf{X}}\right)=E\left(e^{\sum_{i=1}^kt_iX_i}\right)
+    \end{equation}
+    \begin{itemize}
+        \item MGF for joint distribution
+        \item $\mathbf{X}$: independent r.v.s $\iff$ Joint MGF: given as product of MGFs
+        \begin{equation}
+            M_{\mathbf{X}}(\mathbf{t})=E\left(\prod_{i=1}^ke^{t_iX_i}\right)=\prod_{i=1}^kM_{X_i}(t_i)
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Multivariate Normal (MVN, Jointly Gaussian)}
+\begin{itemize}
+    \item Random vector $\mathbf{X}=\left(X_1,X_2,\cdots,X_k\right)$: MVN distribution if
+    \begin{equation}
+        \forall~t_1,t_2,\cdots,t_k\in\mathbb{R},~\sum_{i=1}^kt_iX_i\sim\mathcal{N}
+    \end{equation}
+    \begin{itemize}
+        \item $k=2$: $\mathbf{X}$ has Bivariate Normal (BVN)
+        \item $\mathbf{X}$: MVN $\implies$ $\forall X_i$: Normal
+        \item $\forall X_i$: Normal $\centernot\implies$ $\mathbf{X}$: MVN
+        \item Within MVN $\mathbf{X}$, $\text{Cov}(X_i,X_j)=0$ $\implies$ $X_i\indep X_j$
+    \end{itemize}
+    \item MVN $\mathbf{X}$ is denoted by
+    \begin{equation}
+        \mathbf{X}\sim\mathcal{N}(\mu,\Sigma_\mathbf{X})
+    \end{equation}
+    \begin{itemize}
+        \item Mean vector $\mu=\left(\mu_1,\mu_2,\cdots,\mu_k\right)$
+        \item Covariance matrix: outer product of $\mathbf{X}-\mu$
+        \begin{equation}
+            \Sigma_\mathbf{X}=E\left((\mathbf{X}-\mu)(\mathbf{X}-\mu)^T\right)=\begin{mtx}{cccc}
+                \text{Var}(X_1) & \text{Cov}(X_1,X_2) & \cdots & \text{Cov}(X_1,X_n) \\
+                \text{Cov}(X_2,X_1) & \text{Var}(X_2) & \cdots & \text{Cov}(X_2,X_n) \\
+                \vdots & \vdots & \ddots & \vdots \\
+                \text{Cov}(X_n,X_1) & \text{Cov}(X_n,X_2) & \cdots & \text{Var}(X_n)
+            \end{mtx}
+        \end{equation}
+    \end{itemize}
+    \item PDF of MVN $\mathbf{X}$
+    \begin{equation}
+        f_{\mathbf{X}}(\mathbf{x})=\frac{1}{\sqrt{(2\pi)^n\abs{\text{det}\Sigma_\mathbf{X}}}}\exp\left(-\frac{1}{2}(\mathbf{x-\mu})^T\Sigma_\mathbf{X}^{-1}(\mathbf{x-\mu})\right)
+    \end{equation}
+\end{itemize}
+
+\subsection{Transformations}
+
+\subsubsection*{Change of Variables}
+\begin{itemize}
+    \item PDF transformation
+    \begin{equation}
+        f_{\mathbf{Y}}(\mathbf{y})=\abs{\text{det}\left(\frac{\partial\mathbf{x}}{\partial\mathbf{y}}\right)}f_{\mathbf{X}}\left(\mathbf{x}\right)
+    \end{equation}
+    \begin{itemize}
+        \item $\mathbf{X}=(X_1,X_2,\cdots,X_n)$: continuous r.v. with PDF $f_\mathbf{X}$
+        \item $g:\mathbb{R}^n\to\mathbb{R}^n$: differentiable, strictly increasing $\iff$ \textbf{invertible}
+        \item $\mathbf{Y}=g(\mathbf{X})$, $\mathbf{x}=g^{-1}\left(\mathbf{y}\right)$
+        \item Jacobian matrix
+        \begin{equation}
+            \frac{\partial \mathbf{x}}{\partial \mathbf{y}}=\begin{mtx}{cccc}
+                \frac{\partial x_1}{\partial y_1} & \frac{\partial x_1}{\partial y_2} & \cdots & \frac{\partial x_1}{\partial y_n}\\
+                \frac{\partial x_2}{\partial y_1} & \frac{\partial x_2}{\partial y_2} & \cdots & \frac{\partial x_2}{\partial y_n}\\
+                \vdots & \vdots & \ddots & \vdots \\
+                \frac{\partial x_n}{\partial y_1} & \frac{\partial x_n}{\partial y_2} & \cdots & \frac{\partial x_n}{\partial y_n}
+            \end{mtx}
+        \end{equation}
+    \end{itemize}
+    \item One-dimension $X$ and $Y$
+    \begin{equation}
+        f_Y(y)=f_X(x)\abs{\frac{dx}{dy}}
+    \end{equation}
+    \item Box-Muller Method: Method for generating Normal r.v.s
+    \begin{itemize}
+        \item $U\sim\text{Unif}(0,2\pi)$, $T\sim\text{Expo}(1)$
+        \item $X=\sqrt{2T}\cos{U}$, $Y=\sqrt{2T}\sin{U}$ $\implies$ $X,Y\iidsim\mathcal{N}(0,1)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gamma Distribution}
+\begin{itemize}
+    \item Gamma Function $\Gamma$
+    \begin{equation}
+        \Gamma(a)=\int_0^\infty x^{a-1}e^{-x}dx
+    \end{equation}
+    \begin{itemize}
+        \item $\forall n\in\mathbb{N}$, $\Gamma(n)=(n-1)!$
+        \item $\forall a>0$, $\Gamma(a+1)=a\Gamma(a)$: $\mathbb{R}$ version of factorial
+    \end{itemize}
+    \item Gamma Distribution
+    \begin{equation}
+        X\sim\text{Gamma}(a,\lambda)\implies f_X(x)=\frac{1}{\Gamma(a)}\lambda (\lambda x)^{a-1}e^{-\lambda x}~(x>0)
+    \end{equation}
+    \begin{itemize}
+        \item $\text{Gamma}(a,\lambda)=\frac{1}{\lambda}\text{Gamma}(a,1)$
+        \item $\text{Gamma}(1,\lambda)=\text{Expo}(\lambda)$
+        \item $X_1,X_2,\cdots,X_n\iidsim\text{Expo}(\lambda)$ $\implies$ $\sum_{i=1}^nX_i\sim\text{Gamma}(n,\lambda)$
+        \item $\forall a,b>0$, $\text{Gamma}(a,\lambda)+\text{Gamma}(b,\lambda)=\text{Gamma}(a+b,\lambda)$
+        \item Mean and variance
+        \begin{equation}
+            E(X)=\frac{a}{\lambda},~\text{Var}(X)=\frac{a}{\lambda^2},~E(X^n)=\frac{1}{\lambda^n}\frac{\Gamma(a+n)}{\Gamma(a)}
+        \end{equation}
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Gamma Function}{gamma-function.png}{.2035}
+    \subfig{Gamma Distribution}{gamma-distribution.png}{.2965}
+\end{figures}
+
+\subsubsection*{Beta Distribution}
+\begin{itemize}
+    \item Beta Integral
+    \begin{equation}
+        \beta(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}=\frac{(a-1)!(b-1)!}{(a+b-1)!}~~(a,b\in\mathbb{R^+})
+    \end{equation}
+    \item Beta Distribution
+    \begin{equation}
+        X\sim\text{Beta}(a,b)\implies f_X(x)=\frac{1}{\beta(a,b)}x^{a-1}(1-x)^{b-1}~~(a>0,b>0,x\in(0,1))
+    \end{equation}
+    \begin{itemize}
+        \item Often used to model \textit{probability of probability}
+        \item Mean and variance
+        \begin{equation}
+            E(X)=\frac{a}{a+b},~\text{Var}(X)=\frac{ab}{(a+b)^2(a+b+1)},~E\left(X^n\right)=\frac{\Gamma(a+n)\Gamma(a+b)}{\Gamma(a)\Gamma(a+b+n)}
+        \end{equation}
+    \end{itemize}
+    \item Beta-Gamma Connection
+    \begin{equation}
+        X\sim\text{Gamma}(a,\lambda),Y\sim\text{Gamma}(b,\lambda),X\indep Y\implies \frac{X}{X+Y}\sim\text{Beta}(a,b)
+    \end{equation}
+\end{itemize}
+\begin{figures}
+    \subfig{$a=.1,b=.1$}{beta-dist-.1-.1.png}{.25}
+    \subfig{$a=8,b=4$}{beta-dist-8-4.png}{.25}
+\end{figures}
+
+\subsubsection*{Chi-squared Distribution}
+\begin{itemize}
+    \item $X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(0,1)$, then
+    \begin{equation}
+        Z=\sum_{i=1}^nX_i^2\sim\chi^2(n)
+    \end{equation}
+    \begin{itemize}
+        \item $n$: degree of freedom
+        \item Often used to analyze MSE
+    \end{itemize}
+    \item PDF of chi-squared distribution
+    \begin{equation}
+        f_Z(z)=\frac{1}{2^{\frac{n}{2}}\Gamma(\frac{n}{2})}z^{\frac{n}{2}-1}e^{-\frac{z}{2}}
+    \end{equation}
+    \begin{itemize}
+        \item $\chi^2(n)\sim\text{Gamma}\left(\frac{n}{2},\frac{1}{2}\right)$
+        \item $\Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gaussian Sample Variance}
+\begin{itemize}
+    \item $X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(\mu,\sigma^2)$
+    \begin{equation}
+        \bar{X}:=\frac{1}{n}\sum_{i=1}^nX_i,~S:=\sum_{i=1}^n\left(X_i-\bar{X}\right)^2
+    \end{equation}
+    \begin{itemize}
+        \item Sample mean $\bar{X}$: estimate of $\mu$
+        \item Sample variance $\hat{\sigma}^2=\frac{1}{n-1}S$: estimate of $\sigma^2$
+    \end{itemize}
+    \item $S\sim\sigma^2\chi^2(n-1)$: has $n-1$ degree of freedom
+    \item $E\left(\hat{\sigma}^2\right)=\sigma^2$, $\bar{X}\indep\hat{\sigma}^2$
+\end{itemize}
+
+\subsubsection*{$t$ Distribution}
+\begin{itemize}
+    \item $X,X_1,X_2,\cdots,X_n\iidsim\mathcal{N}(0,1)$
+    \begin{equation}
+        T=\frac{X}{\sqrt{\frac{1}{n}\sum_{i=1}^nX_i^2}}\sim t(n)(=\text{Student}(n))
+    \end{equation}
+    \clearpage
+    \begin{itemize}
+        \item $Y=\sum_{i=1}^nX_i^2\sim\chi^2(n)$
+        \item Normalizes $X$ with stddev of $X_i$s
+        \item Often used to estimate sample mean
+    \end{itemize}
+    \item PDF of $t$ distribution
+    \begin{equation}
+        f_T(t)=\frac{1}{\sqrt{n}}\frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{\pi}\Gamma\left(\frac{n}{2}\right)}\left(1+\frac{t^2}{n}\right)^{-\frac{n+1}{2}}\varpropto\left(1+\frac{t^2}{n}\right)^{-\frac{n+1}{2}}
+    \end{equation}
+\end{itemize}
+
+\subsection{Conditional Expectation}
+
+\subsubsection*{Conditional Expectation Given an Event}
+\begin{itemize}
+    \item Conditional Expectation of $Y$ given an event $A$ with $P(A)>0$
+    \item $Y$: discrete r.v.
+    \begin{equation}
+        E(Y|A)=\sum_yyP(Y=y|A)
+    \end{equation}
+    \item $Y$: continuous r.v.
+    \begin{equation}
+        E(Y|A)=\int_{-\infty}^\infty yf(y|A)~dy
+    \end{equation}
+    \item Conditional PDF and marginal PDF of $f$
+    \begin{equation}
+        f(y|A)=\frac{d}{dy}P(Y\leq y|A)=\frac{P(A|Y=y)f(y)}{P(A)},~P(A)=\int_Af(y)~dy
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Law of Total Expectation}
+\begin{itemize}
+    \item $S=\dot{\bigcup}_{i=1}^nA_i$, $P(A_i)>0$, $Y$: r.v. on sample space $S$
+    \begin{equation}
+        E(Y)=\sum_{i=1}^nE(Y|A_i)P(A_i)
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Conditional Expectation Given an Random Variable}
+\begin{itemize}
+    \item $E(Y|X)$: Conditional expectation of a r.v. $Y$ given r.v. $X$
+    \begin{equation}
+        E(Y|X=x)=\int yf(y|X=x)~dy
+    \end{equation}
+    \begin{itemize}
+        \item $E(Y|X)$ is a random variable as a function of $X$
+        \item $E(E(Y|X))=\int E(Y|X=x)f(x)~dx$
+        \item $\text{Var}(E(Y|X))=\int \Bigr[E(Y|X=x)-E(E(Y|X=x))\Bigr]^2f(x)~dx$
+    \end{itemize}
+    \item $X\indep Y$ $\implies$ $E(Y|X)=E(Y)$
+    \item $\forall h$, $E(h(X)Y|X)=h(X)E(Y|X)$
+    \begin{itemize}
+        \item $E(X|X)=X$
+        \item $X\indep Y$ $\implies$ $E(XY|X)=E(X)E(Y)$
+    \end{itemize}
+    \item Linearity: $E(Y_1+Y_2|X)=E(Y_1|X)+E(Y_2|X)$
+    \begin{itemize}
+        \item Note: $E(Y|X_1+X_2)\neq E(Y|X_1)+E(Y|X_2)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Adam's Law}
+\begin{itemize}
+    \item $\forall$ r.v.s $X,Y$
+    \begin{equation}
+        E(E(Y|X))=E(Y)
+    \end{equation}
+    \item Adam's Law with extra conditioning: $\forall$ r.v.s $X,Y,Z$,
+    \begin{equation}
+        E(E(Y|X,Z),Z)=E(Y|Z)
+    \end{equation}
+    \item Projection Interpretation
+    \begin{equation}
+        \forall h:\mathbb{R}\to\mathbb{R},\implies\text{Cov}(Y-E(Y|X),h(X))=0~(\iff E((Y-E(Y|X))h(X))=0)
+    \end{equation}
+    \begin{itemize}
+        \item $E(Y|X)$ is the \textit{projection} of $Y$ onto the space of all functions of $X$
+        \item Residual $Y-E(Y|X)$ is orthogonal to the plane
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Conditional Variance}
+\begin{itemize}
+    \item Conditional variance of $Y$ given $X$
+    \begin{equation}
+        \text{Var}(Y|X)=E\Bigr[(Y-E(Y|X))^2\Bigr|X\Bigr]=E\left(Y^2|X\right)-E(Y|X)^2
+    \end{equation}
+    \begin{itemize}
+        \item $\text{Var}(Y|X)$ is a random variable as a function of $X$
+    \end{itemize}
+    \item Eve's Law: $\forall$ r.v.s $X,Y$,
+    \begin{equation}
+        \text{Var}(Y)=E(\text{Var}(Y|X))+\text{Var}(E(Y|X))
+    \end{equation}
+    \begin{itemize}
+        \item Also called ``law of total variance'', ``variance decomposition formula''
+    \end{itemize}
+\end{itemize}
+
+\subsection{Inequalities and Limit Theorems}
+
+\subsubsection*{Cauchy-Schwarz Inequality}
+\begin{itemize}
+    \item $\forall$ r.v.s $X,Y$ with finite variances
+    \begin{equation}
+        \abs{E(XY)}\leq\sqrt{E(X^2)E(Y^2)}
+    \end{equation}
+    \item $X$: Non-negative r.v. $\implies$ $P(X=0)\leq\frac{1}{\mu+1}$
+\end{itemize}
+
+\subsubsection*{Bound on Tails}
+\begin{itemize}
+    \item Markov Inequality: $\forall$ r.v. $X$ and $a>0$,
+    \begin{equation}
+        P(\abs{X}\geq a)\leq\frac{E(\abs{X})}{a}
+    \end{equation}
+    \item Chebyshev Inequality: $\forall$ r.v. $X$ with mean $\mu$ and variance $\sigma^2$, $\forall a>0$,
+    \begin{equation}
+        P(\abs{X-\mu}\geq a)\leq\frac{\sigma^2}{a^2}
+    \end{equation}
+    \item Chernoff Inequality: $\forall$ r.v. $X$, $a>0$, $t>0$,
+    \begin{equation}
+        P(X\geq a)=P\left(e^{tX}\geq e^{ta}\right)\leq\frac{E\left(e^{tX}\right)}{e^{ta}}=\frac{M_X(t)}{e^{ta}}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Central Limit Theorem}
+\begin{itemize}
+    \item $X_1,X_2,\cdots$: i.i.d. with mean $\mu$ and variance $\sigma^2$
+    \item Sample mean $\bar{X_n}=\frac{1}{n}\sum_{i=1}^nX_i$: a r.v. with $E\left(\bar{X_n}\right)=\mu$, $\text{Var}\left(\bar{X_n}\right)=\frac{\sigma^2}{n}$
+    \item Strong law of large numbers (SLLN)
+    \begin{equation}
+        P\left(\lim_{n\to\infty}\bar{X_n}=\mu\right)=1
+    \end{equation}
+    \item Weak law of large numbers (WLLN)
+    \begin{equation}
+        \forall\varepsilon>0,\lim_{n\to\infty}P\left(\abs{\bar{X_n}-\mu}>\varepsilon\right)=0
+    \end{equation}
+    \item Central Limit Theorem
+    \begin{equation}
+        n\to\infty\implies\sqrt{n}\left(\frac{\bar{X_n}-\mu}{\sigma}\right)\to\mathcal{N}(0,1)
+    \end{equation}
+    \item As $n\to\infty$,
+    \begin{itemize}
+        \item $\text{Pois}(n)=\sum\text{Pois}(1)\to\mathcal{N}(n,n)$
+        \item $\text{Gamma}(n,\lambda)=\sum\text{Expo}(\lambda)\to\mathcal{N}\left(\frac{n}{\lambda},\frac{n}{\lambda^2}\right)$
+        \item $\text{Bin}(n,p)=\sum\text{Bern}(p)\to\mathcal{N}(np,np(1-p))$
+    \end{itemize}
+\end{itemize}

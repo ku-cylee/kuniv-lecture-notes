@@ -1,6 +1,6 @@
 \section{Random Variables and Distributions}
 
-\subsection{Random Variables and Distributions}
+\subsection{Random Variables and their Distributions}
 
 \subsubsection*{Random Variables}
 \begin{itemize}
@@ -136,4 +136,326 @@
         \item $Y_1\sim\text{Bin}(n,p),~Y_2\sim\text{Bin}(m,p),~Y_1\indep Y_2\implies X=Y_1\mid Y_1+Y_2=r$
         \item $X$: $m$개의 Class 1 원소, $n$개의 Class 2 원소 중 $r$개를 $p$의 확률로 뽑을 때, 뽑은 Class 1 원소 개수
     \end{itemize}
+\end{itemize}
+
+\subsection{Expectation}
+
+\subsubsection*{Expectation}
+\begin{itemize}
+    \item \textbf{Def.} Expected value(= expectation = mean) of a discrete r.v. $X$ is
+    \begin{equation}
+        E(X)=\sum_{i=1}^\infty x_iP(X=x_i)=\sum_{x}xp_X(x)
+    \end{equation}
+    \item $E(X)$ depends only on the distribution of $X$
+    \item Linearity of expectation
+    \begin{itemize}
+        \item For all r.v.s $X$, $Y$, $E(X+Y)=E(X)+E(Y)$
+        \item For all r.v.s $X$ and $c\in\mathbb{R}$, $E(cX)=cE(X)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Indicator Random Variable}
+\begin{itemize}
+    \item Indicator random variable: R.v. is $1$ if event $A$ occurs(success) and $0$ otherwise (failure)
+    \begin{equation}
+        I_A(s)=\begin{cases}
+            1 & s\in A\\
+            0 & s\notin A
+        \end{cases}
+    \end{equation}
+    \item Properties of indicator r.v.
+    \begin{itemize}
+        \item $\forall~k\in\mathbb{N}$, $(I_A)^k=I_A$; $I_{A^c}=1-I_A$; $I_{A\cap B}=I_AI_B$; $I_{A\cup B}=I_A+I_B-I_AI_B$
+    \end{itemize}
+    \item Indicator r.v. is a fundamental bridge between probability and expectation
+    \begin{equation}
+        P(A)=E(I_A)
+    \end{equation}
+\end{itemize}
+\clearpage
+
+\subsubsection*{Law of the Unconscious Statistician (LOTUS)}
+\begin{itemize}
+    \item $X$ is a discrete r.v. and $g:\mathbb{R}\to\mathbb{R}$, then for $Y=g(X)$,
+    \begin{equation}
+        E(Y)=E(g(X))=\sum_xg(x)P(X=x)
+    \end{equation}
+    \item Be careful: $E(g(X))\neq g(E(X))$ (St. Petersburg Paradox)
+\end{itemize}
+
+\subsubsection*{Variance}
+\begin{itemize}
+    \item Variance of an r.v. $X$
+    \begin{equation}
+        \text{Var}(X):=E\Bigr[(X-E(X))^2\Bigr]
+    \end{equation}
+    \item Standard deviation of an r.v. $X$ is $\text{SD}(X):=\sqrt{\text{Var}(X)}$
+    \item For any r.v. $X$,
+    \begin{equation}
+        \text{Var}(X)=E\left(X^2\right)-\left(E(X)\right)^2
+    \end{equation}
+    \item Properties
+    \begin{itemize}
+        \item $\text{Var}(X+c)=\text{Var}(X)$
+        \item $\text{Var}(cX)=c^2\text{Var}(X)$
+        \item $X\indep Y\implies \text{Var}(X+Y)=\text{Var}(X)+\text{Var}(Y)$
+        \item $\text{Var}(X)\geq 0$
+        \item Variance is not linear
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Binomial Distribution}
+\begin{itemize}
+    \item For $X\sim\text{Bin}(n,p)$ and $q=1-p$,
+    \item $E(X)=np$
+    \item $\text{Var}(X)=np(1-p)=npq$
+\end{itemize}
+
+\subsubsection*{Geometric Distribution}
+\begin{equation}
+    X\sim\text{Geom}(p)\implies P(X=k)=(1-p)^kp~~(k=0,1,\cdots)
+\end{equation}
+\begin{itemize}
+    \item \# of \textit{failures} before the first success in a sequence of i.i.d. Bernoulli trials with success prob. $p$
+    \item First success distribution
+    \begin{itemize}
+        \item \# of \textit{trials} before the first success in a sequence of i.i.d. Bernoulli trials with success prob. $p$
+        \item $Y\sim\text{FS}(p)\implies P(Y=k)=(1-p)^{k-1}p~~(k=1,2,\cdots)$, $Y=X+1$
+    \end{itemize}
+    \item Expectation
+    \begin{equation}
+        E(X)=\frac{1-p}{p},~E(Y)=\frac{1}{p}
+    \end{equation}
+    \item Variance
+    \begin{equation}
+        \text{Var}(X)=\text{Var}(Y)=\frac{1-p}{p^2}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Poisson Distribution}
+\begin{equation}
+    X\sim\text{Pois}(\lambda)\implies P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}~~(k=0,1,2,\cdots)
+\end{equation}
+\begin{itemize}
+    \item $X$: \# of events occurs during the time interval $\lambda$
+    \item Expectation and Variance
+    \begin{equation}
+        E(X)=\text{Var}(X)=\lambda
+    \end{equation}
+    \item Poisson dist. is a \textit{continuous} version of Binomial dist.
+    \begin{itemize}
+        \item Suppose $X\sim\text{Bin}(n,p)$ and $\lambda=np$
+        \item Let $n\to\infty$ and $p\to 0$ with $\lambda$ fixed, then $p_X$ converges to $\text{Pois}(\lambda)$ PMF
+        \item Parameter $\lambda>0$: Interpreted as a \textit{rate} of occurrence of \textit{rare} events during unit time
+    \end{itemize}
+    \item $X\sim\text{Pois}(\lambda_1)$, $Y\sim\text{Pois}(\lambda_2)$, $X\indep Y$
+    \begin{itemize}
+        \item $X+Y\sim\text{Pois}(\lambda_1+\lambda_2)$
+        \item $X\mid X+Y=n\sim\text{Bin}\left(n,\frac{\lambda_1}{\lambda_1+\lambda_2}\right)$
+    \end{itemize}
+\end{itemize}
+
+\subsection{Continuous Random Variables}
+
+\subsubsection*{Continuous Random Variables}
+\begin{itemize}
+    \item A random variable with a continuous distribution($X_S$)
+    \item A r.v. has a continuous distribution if its CDF($F_X=P(X\leq x)$) is
+    \begin{itemize}
+        \item Differentiable except finitely many points
+        \item Continuous everywhere
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Probability Density Function}
+\begin{itemize}
+    \item Probability density function(PDF) of continuous r.v. $X$ is a derivative of its CDF
+    \begin{equation}
+        f_X(x)=\frac{d}{dx}F_X(x)
+    \end{equation}
+    \item Support of $X$: $\{x\mid f_X(x)>0\}$
+    \item PDF to CDF
+    \begin{equation}
+        F_X(x)=\int_{-\infty}^{x}f_X(t)~dt
+    \end{equation}
+    \item For a given $A\subset\mathbb{R}$,
+    \begin{equation}
+        P(X\in A)=\int_Af_X(x)~dx
+    \end{equation}
+    \begin{itemize}
+        \item Generalization of \ref{eq:prp:discrete-pmf-subset}
+    \end{itemize}
+    \item Valid PDFs: Any PDF $f$ satisfies
+    \begin{itemize}
+        \item Nonnegative: $\forall x\in\mathbb{R},~f(x)\geq 0$
+        \item Integrates to $1$: $\int_{-\infty}^{\infty}f(x)~dx=1$
+    \end{itemize}
+    \item Expectation of continuous r.v.
+    \begin{equation}
+        E(X)=\int_{-\infty}^{\infty}xf_X(x)~dx
+    \end{equation}
+    \begin{itemize}
+        \item Not every dist. has a mean (e.g. Cauchy dist. $f_X(x)=\frac{1}{\pi(1+x^2)}$, $E(X)=\infty$)
+    \end{itemize}
+    \item Continuous LOTUS: $f$ is a PDF of cont. r.v. $X$ and $g:\mathbb{R}\to\mathbb{R}$, then for $Y=g(X)$,
+    \begin{equation}
+        E(Y)=E(g(X))=\int_{-\infty}^{\infty}g(x)f(x)~dx
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Uniform Distribution}
+\begin{equation}
+    X\sim\text{Unif}(a,b)\implies f_X(x)=\begin{cases}
+        \frac{1}{b-a} & x\in(a,b)\\
+        0 & \text{else}
+    \end{cases}
+\end{equation}
+\begin{itemize}
+    \item Mean: $E(U)=\frac{a+b}{2}$
+    \item Variance: $\text{Var}(U)=\frac{1}{12}(b-a)^2$
+\end{itemize}
+
+\subsubsection*{Universality of Uniform}
+\begin{itemize}
+    \item Condition: $F:\mathbb{R}\to(0,1)$ is a valid CDF and $\exists~F^{-1}:(0,1)\to\mathbb{R}$
+    \begin{itemize}
+        \item $\impliedby$ $F$ is continuous, strictly increasing on its support
+    \end{itemize}
+    \item For such $F$,
+    \begin{enumerate}
+        \item $U\sim\text{Unif}(0,1)$, $X=F^{-1}(U)$ $\implies$ $X$ is a r.v. with CDF $F$
+        \item $X$: r.v. with CDF $F$ $\implies$ $F(X)\sim\text{Unif}(0,1)$
+    \end{enumerate}
+    \item We can generate a target distribution from a uniformly distributed data
+    \begin{itemize}
+        \item Limitation: CDF of target dist. must have its inverse
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Normal (Gaussian) Distribution}
+\begin{itemize}
+    \item Standard Normal Distribution
+    \begin{equation}
+        Z\sim\mathcal{N}(0,1)\implies \varphi(z)=\frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}}~~(z\in(-\infty,\infty))
+    \end{equation}
+    \begin{itemize}
+        \item $\varphi$ is a PDF of $Z$
+        \item $E(Z)=0$, $\text{Var}(Z)=1$
+        \item Standard normal CDF: $\Phi(z)=\int_{-\infty}^z\varphi(t)~dt$
+    \end{itemize}
+    \item Normal Distribution
+    \begin{itemize}
+        \item $Z\sim\mathcal{N}(0,1)$ $\implies$ $X=\mu+\sigma Z\sim\mathcal{N}(\mu,\sigma^2)$
+        \item $E(X)=\mu$, $\text{Var}(X)=\sigma^2$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Exponential Distribution}
+\begin{equation}
+    X\sim\text{Expo}(\lambda)\implies f_X(x)=\begin{cases}
+        \lambda e^{-\lambda x} & x>0 \\
+        0 & x\leq 0
+    \end{cases}~~(\lambda>0)
+\end{equation}
+\begin{itemize}
+    \item CDF: $F_X(x)=1-e^{-\lambda x}$ for $x>0$
+    \item $Y=\lambda_0X\sim\text{Expo}\left(\frac{\lambda}{\lambda_0}\right)$
+    \item Expectation and Variance
+    \begin{equation}
+        E(X)=\frac{1}{\lambda},~~\text{Var}(X)=\frac{1}{\lambda^2}
+    \end{equation}
+    \item Exponential dist. is a \textit{continuous} version of Geometric dist.
+    \begin{itemize}
+        \item Parameter $\lambda>0$: Interpreted as a \textit{averaged number} of events occuring during unit time
+        \item $X$: waiting time to see an event occurrence
+    \end{itemize}
+    \item Memoryless Property: Dist. of r.v. $X$ has \textit{memoryless property} if
+    \begin{equation}
+        \forall~s,t>0,~P(X\geq s+t\mid X\geq s)=P(X\geq t)
+    \end{equation}
+    \begin{itemize}
+        \item Exponential dist. and geometric dist. do have memoryless property
+    \end{itemize}
+\end{itemize}
+
+\subsection{Moments}
+
+\subsubsection*{Moments}
+\begin{itemize}
+    \item $X$: a r.v. with mean $\mu$ and variance $\sigma^2$
+    \item $n$-th moment of $X$
+    \begin{equation}
+        E\left(X^n\right)
+    \end{equation}
+    \item $n$-th central moment of $X$: $E\left((X-\mu)^n\right)$
+    \item $n$-th standardized moment of $X$: $E\left(\left(\frac{X-\mu}{\sigma}\right)^n\right)$
+    \item $n>0$; $0$-th moment is always $1$
+\end{itemize}
+
+\subsubsection*{Moment Generating Function (MGF)}
+\begin{equation}
+    M_X(t)=E\left(e^{tX}\right)
+\end{equation}
+\begin{itemize}
+    \item Moment generating function(MGF) of a r.v. $X$
+    \item Existence: $\exists~a>0$ s.t. $\forall~t\in(-a,a)$, $M_X(t)$ is finite
+    \begin{itemize}
+        \item For any valid MGF $M$, $M(0)=1$ $\implies$ Interval $(-a,a)$ must contain $0$
+    \end{itemize}
+    \item Moments via derivatives of MGF
+    \begin{equation}
+        E\left(X^n\right)=\frac{d^n}{dt^n}M(t)\Bigr|_{t=0}=M^{(n)}(0)
+    \end{equation}
+    \item For two r.v.s $X$ and $Y$, $\exists~a>0$ s.t. $\forall~t\in(-a,a)$, $M_X(t)=M_Y(t)$ $\implies$ $X=Y$
+    \begin{itemize}
+        \item Converse is also true, trivially
+    \end{itemize}
+    \item For two r.v.s $X$ and $Y$, $X\indep Y\implies M_{X+Y}(t)=M_X(t)M_Y(t)$
+    \item $M_X(t)$: MGF of $X$ $\implies$ $M_{a+bX}=e^{at}M_X(bt)$
+\end{itemize}
+
+\subsubsection*{Moments and MGFs of Distributions}
+\begin{itemize}
+    \item Bernoulli Distribution
+    \begin{equation}
+        X\sim\text{Bern}(p)\implies M(t)=pe^t+q~(p+q=1)
+    \end{equation}
+    \item Binomial Distribution
+    \begin{equation}
+        X\sim\text{Bin}(p)\implies M(t)=(pe^t+q)^n~(p+q=1)
+    \end{equation}
+    \item Uniform Distribution
+    \begin{equation}
+        U\sim\text{Unif}(a,b)\implies M(t)=\begin{cases}
+            \frac{e^{tb}-e^{ta}}{t(b-a)} & t\neq 0\\
+            1 & t=0
+        \end{cases}
+    \end{equation}
+    \item Geometric Distribution
+    \begin{equation}
+        M(t)=\frac{p}{1-(1-p)e^t}~~\left(t\in\left(-\infty,-\log(1-p)\right)\right)
+    \end{equation}
+    \item Normal Distribution
+    \begin{equation}
+        Z\sim\mathcal{N}(0,1)\implies M(t)=e^{\frac{t^2}{2}},~E(Z^n)=\begin{cases}
+            (2k-1)!!=\prod_{i=1}^k(2k-1) & (n=2k:~\text{even})\\
+            0 & (n:~\text{odd})
+        \end{cases}
+    \end{equation}
+    \begin{itemize}
+        \item $X=\mu+\sigma Z\sim\mathcal{N}(\mu,\sigma^2)\implies M_X(t)=\exp\left(\mu t+\frac{1}{2}\sigma^2t^2\right)$
+        \item For two r.v.s $X_1\indep X_2$, $X_1\sim\mathcal(\mu_1,\sigma_1^2),~X_2\sim\mathcal(\mu_2,\sigma_2^2)\iff X_1+X_2\sim\mathcal(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$
+    \end{itemize}
+    \item Poisson Distribution
+    \begin{equation}
+        X\sim\text{Pois}(\lambda)\implies M(t)=e^{\lambda(e^t-1)}
+    \end{equation}
+    \begin{itemize}
+        \item Sum of independent Poissons is also Poisson
+        \item $X_1\sim\text{Pois}(\lambda_1),~X_2\sim\text{Pois}(\lambda_2)\implies X_1+X_2\sim\text{Pois}(\lambda_1+\lambda_2)$
+    \end{itemize}
+    \item Exponential Distribution
+    \begin{equation}
+        X\sim\text{Expo}(\lambda)\implies M(t)=\frac{\lambda}{\lambda-t}~(t<\lambda),~E(X^n)=\frac{n!}{\lambda^n}
+    \end{equation}
 \end{itemize}
