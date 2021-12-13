@@ -1,0 +1,52 @@
+\section{Inequalities and Limit Theorems}
+
+\subsection{Inequalities and Limit Theorems}
+
+\subsubsection*{Cauchy-Schwarz Inequality}
+\begin{itemize}
+    \item $\forall$ r.v.s $X,Y$ with finite variances
+    \begin{equation}
+        \abs{E(XY)}\leq\sqrt{E(X^2)E(Y^2)}
+    \end{equation}
+    \item $X$: Non-negative r.v. $\implies$ $P(X=0)\leq\frac{1}{\mu+1}$
+\end{itemize}
+
+\subsubsection*{Bound on Tails}
+\begin{itemize}
+    \item Markov Inequality: $\forall$ r.v. $X$ and $a>0$,
+    \begin{equation}
+        P(\abs{X}\geq a)\leq\frac{E(\abs{X})}{a}
+    \end{equation}
+    \item Chebyshev Inequality: $\forall$ r.v. $X$ with mean $\mu$ and variance $\sigma^2$, $\forall a>0$,
+    \begin{equation}
+        P(\abs{X-\mu}\geq a)\leq\frac{\sigma^2}{a^2}
+    \end{equation}
+    \item Chernoff Inequality: $\forall$ r.v. $X$, $a>0$, $t>0$,
+    \begin{equation}
+        P(X\geq a)=P\left(e^{tX}\geq e^{ta}\right)\leq\frac{E\left(e^{tX}\right)}{e^{ta}}=\frac{M_X(t)}{e^{ta}}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Central Limit Theorem}
+\begin{itemize}
+    \item $X_1,X_2,\cdots$: i.i.d. with mean $\mu$ and variance $\sigma^2$
+    \item Sample mean $\bar{X_n}=\frac{1}{n}\sum_{i=1}^nX_i$: a r.v. with $E\left(\bar{X_n}\right)=\mu$, $\text{Var}\left(\bar{X_n}\right)=\frac{\sigma^2}{n}$
+    \item Strong law of large numbers (SLLN)
+    \begin{equation}
+        P\left(\lim_{n\to\infty}\bar{X_n}=\mu\right)=1
+    \end{equation}
+    \item Weak law of large numbers (WLLN)
+    \begin{equation}
+        \forall\varepsilon>0,\lim_{n\to\infty}P\left(\abs{\bar{X_n}-\mu}>\varepsilon\right)=0
+    \end{equation}
+    \item Central Limit Theorem
+    \begin{equation}
+        n\to\infty\implies\sqrt{n}\left(\frac{\bar{X_n}-\mu}{\sigma}\right)\to\mathcal{N}(0,1)
+    \end{equation}
+    \item As $n\to\infty$,
+    \begin{itemize}
+        \item $\text{Pois}(n)=\sum\text{Pois}(1)\to\mathcal{N}(n,n)$
+        \item $\text{Gamma}(n,\lambda)=\sum\text{Expo}(\lambda)\to\mathcal{N}\left(\frac{n}{\lambda},\frac{n}{\lambda^2}\right)$
+        \item $\text{Bin}(n,p)=\sum\text{Bern}(p)\to\mathcal{N}(np,np(1-p))$
+    \end{itemize}
+\end{itemize}
