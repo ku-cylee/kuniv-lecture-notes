@@ -1,0 +1,194 @@
+\section{Markov Chains}
+
+\subsection{Random Process and Markov Chains}
+
+\subsubsection*{Random Process}
+\begin{itemize}
+    \item Random process is an \textit{indexed set} of random variables
+    \begin{itemize}
+        \item Index set can be finite, infinite, continuous, $\mathbb{R}$, $\mathbb{R}^m$, etc
+        \item Real line $\mathbb{R}$ is interpreted as ``time'' $t$
+    \end{itemize}
+    \item Specifying Random Process
+    \begin{itemize}
+        \item Mean function: $m_X(t)=E(X_t)=\int xf_{X_t}(x)~dx$
+        \item Autocorrelation function: $R_X(t,s)=E(X_tX_s)=\iint x_1x_2f_{X_t,X_s}(x_1,x_2)~dx_1dx_2$
+        \begin{itemize}
+            \item Correlation of r.v.s within the chain
+        \end{itemize}
+        \item Autocovariance function: $C_X(t,s)=E\left((X_t-\mu_t)(X_s-\mu_s)\right)=R_X(t,s)-m_X(t)m_X(s)$
+        \item Variance function: $\text{Var}_X(t)=C_X(t,t)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Gaussian Random Process}
+\begin{itemize}
+    \item Definition
+    \begin{equation}
+        X_t\sim\mathcal{GP}(m(t),C(t,s))\iff\forall\{X_{t_1},\cdots,X_{t_n}\}\subset\{X_t\},(X_{t_1},\cdots,X_{t_n})\sim\mathcal{N}(\mathbf{m},\Sigma)
+    \end{equation}
+    \begin{itemize}
+        \item $\mathbf{m}=\left(m(t_1),m(t_2),\cdots,m(t_n)\right)$, $\Sigma_{ij}=C(t_i,t_j)$
+        \item Gaussian process is determined by mean function $m(t)$ and covariance(kernel) function $C(t,s)$
+    \end{itemize}
+    \item Radial basis function: a famous example of kernel function
+    \begin{equation}
+        k(t,s)=\sigma^2\exp\left(-\frac{\norm{t-s}^2}{2\ell^2}\right)
+    \end{equation}
+    \item Wiener Process: A $\mathcal{GP}$ defined over $t\in\mathbb{R}^+$ with
+    \begin{equation}
+        W_t\sim\mathcal{GP}(m(t)=0,C(t,s)=\min(t,s))
+    \end{equation}
+    \begin{itemize}
+        \item For a fixed $t$, $W_t\sim\mathcal{N}(0,t)=\sqrt{t}\mathcal{N}(0,1)$
+        \item For $t>s$, $W_t-W_s=W_{t-s}$
+        \item For $t>s>u$, $W_t-W_s\indep W_s-W_u$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Markov Chain}
+\begin{itemize}
+    \item Markov Property: Only the \textit{most recent} term of past history matters for predicting next state
+    \begin{equation}
+        \forall n\geq 0,~P(X_{n+1}=j\mid X_n=i,X_{n-1}=i_{n-1},\cdots,X_0=i_0)=P(X_{n+1}=j\mid X_n=i)
+    \end{equation}
+    \clearpage
+    \item Markov Chain (MC): A random process $\{X_n\}$ with
+    \begin{itemize}
+        \item Integer index set
+        \item Takes values in a fixed integer set $\{1,2,\cdots,M\}$
+        \item Has Markov property
+    \end{itemize}
+    \item State: a specific realization(value) of $X_n$ among $\{1,2,\cdots,M\}$
+    \item State space: the integer set of all possible states, i.e. $\{1,2,\cdots,M\}$
+    \item Transition probability from state $i$ to state $j$: $q_{ij}:=P(X_{n+1}=j\mid X_n=i)$
+    \item time-homogeneous: $q_{ij}$ is constant over $n$
+    \begin{itemize}
+        \item We assume time-homogeneous
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Transition Matrix}
+\begin{itemize}
+    \item Transition matrix of a Markov chain with state space $\{1,2,\cdots,M\}$ is an $M\times M$ matrix
+    \begin{equation}
+        Q=(P(X_{n+1}=j\mid X_n=i))=\begin{mtx}{cccc}
+            q_{11} & q_{12} & \cdots & q_{1M}\\
+            q_{21} & q_{22} & \cdots & q_{2M}\\
+            \vdots & \vdots & \ddots & \vdots\\
+            q_{M1} & q_{M2} & \cdots & q_{MM}
+        \end{mtx}
+    \end{equation}
+    \begin{itemize}
+        \item Sum of each row: $\sum_{j=1}^Mq_{ij}=1$
+        \item Sum of each column: $\sum_{i=1}^Mq_{ij}\neq 1$
+        \item $\sum_{j=1}^Mq_{ij}=\sum_{i=1}^Mq_{ij}=1$ $\implies$ $Q$: doubly stochastic matrix
+    \end{itemize}
+    \item Transition diagram: A diagram representing transition probabilities
+    \begin{figures}
+        \fig{transition-diagram.png}{.35}
+    \end{figures}
+    \item $n$-step transition probability from $i$ to $j$
+    \begin{equation}
+        \forall k,~q_{ij}^{(n)}=P(X_{n+k}=j\mid X_k=i)
+    \end{equation}
+    \begin{itemize}
+        \item $q_{ij}^{(n)}$ is the $(i,j)$ entry of $Q^n$
+    \end{itemize}
+    \item Marginal Distribution of $X_n$
+    \begin{itemize}
+        \item Let $t_i=P(X_0=i)$ and $\mathbf{t}=\begin{mtx}{cccc}t_1 & t_2 & \cdots & t_M\end{mtx}$
+        \item Marginal distribution of $X_n$ is $\mathbf{t}Q^n$
+        \item $j$-th component of $\mathbf{t}Q^n$ is $P(X_n=j)$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Classification of States}
+\begin{itemize}
+    \item States of MC
+    \begin{itemize}
+        \item Recurrent state $i$: Probability of starting $i$ returning to $i$ eventually $=1$
+        \item Transient state $i$: Probability of starting $i$ \textit{never} returning to $i$ $>0$
+    \end{itemize}
+    \item \# of returns to transient state $\sim\text{Geom}(p)$
+    \item Reducibility of MC with state space $S$
+    \begin{itemize}
+        \item A MC is irreducible $\iff$ $\forall i,j\in S$, $\exists~n\in\mathbb{N}$ s.t. $P(X_n=j\mid X_0=i)=(Q^n)_{ij}>0$
+        \item A MC is reducible $\iff$ Not irreducible $\iff$ $\exists~i,j\in S$ s.t. $\forall n\in\mathbb{N}$, $P(X_n=j\mid X_0=i)=0$
+    \end{itemize}
+    \item Reducibility and States of MC with state space $S$
+    \begin{equation}
+        \text{MC}:~\text{irreducible}\implies\forall i\in S,~i:~\text{recurrent}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Period}
+\begin{itemize}
+    \item Period of state $i$
+    \begin{equation}
+        d_i=\gcd\left\{n~\Big|~q_{ii}^{(n)}>0\right\}
+    \end{equation}
+    \item $d_i=1$ $\implies$ State $i$ is aperiodic, $d_i\neq 1$ $\implies$ State $i$ is periodic
+    \item $\forall i\in S$, $d_i=1$ $\implies$ Chain is aperiodic, $\exists i\in S$ s.t. $d_i\neq 1$ $\implies$ Chain is periodic
+    \item Theorems
+    \begin{itemize}
+        \item MC: irreducible $\implies$ $\forall i,j\in S$, $d_i=d_j$
+        \item Given irreducible MC, MC: aperiodic $\iff$ $\exists~n>0$ s.t. $Q^n>0$
+        \item MC: irreducible, $\exists$ self-loop $\implies$ MC: aperiodic
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Stationary Distribution}
+\begin{itemize}
+    \item $\mathbf{s}=\begin{mtx}{cccc}s_1 & s_2 & \cdots & s_M\end{mtx}$ is a stationary distribution of MC if
+    \begin{equation}
+        \mathbf{s}\geq 0,~\sum_{i=1}^Ms_i=1,~\mathbf{s}Q=\mathbf{s}
+    \end{equation}
+    \begin{itemize}
+        \item $Q$: Transition matrix of MC
+        \item Once marginal dist. of $n_0$ becomes $\mathbf{s}$, marginal dist. of $n>n_0$ are also $\mathbf{s}$
+    \end{itemize}
+    \item MC: irreducible $\implies$ Stationary dist. $\exists!~\textbf{s}>0$
+    \item Expected time to return from state $i$ to $i$ of irreducible MC: $r_i=\frac{1}{s_i}$
+    \item $Q$: doubly stochastic $\implies$ $\mathbf{s}=\begin{mtx}{cccc}\frac{1}{M} & \frac{1}{M} & \cdots & \frac{1}{M}\end{mtx}$
+\end{itemize}
+
+\subsubsection*{Convergence}
+\begin{itemize}
+    \item For any irreducible, aperiodic MC $X_0,X_1,\cdots$
+    \begin{equation}
+        \lim_{n\to\infty}\mathbf{t}_n=\lim_{n\to\infty}\mathbf{t}_0Q^n=\mathbf{s}
+    \end{equation}
+    \begin{itemize}
+        \item $Q$: transition matrix, $\mathbf{s}$: stationary dist., $\mathbf{t}_i$: marginal dist. of $X_i$
+        \item Converges to $\mathbf{s}$ \textit{regardless} of $\textbf{t}_0$
+    \end{itemize}
+    \item $Q^n$ converges to matrix of $\mathbf{s}$, i.e.
+    \begin{equation}
+        \lim_{n\to\infty}Q^n=\begin{mtx}{c}\mathbf{s} \\ \mathbf{s} \\ \vdots \\ \mathbf{s}\end{mtx}
+    \end{equation}
+\end{itemize}
+
+\subsubsection*{Reversibility}
+\begin{itemize}
+    \item Reversibility (detailed balance) condition of $\mathbf{s}=\begin{mtx}{cccc}s_1 & s_2 & \cdots & s_M\end{mtx}$ and transition matrix $Q$ is
+    \begin{equation}
+        \forall i,j\in S,~s_iq_{ij}=s_jq_{ji}
+    \end{equation}
+    \item Reversibility holds for $\mathbf{s}$ $\implies$ Chain is reversible w.r.t. $\mathbf{s}$
+    \item MC is reversible w.r.t. $\mathbf{s}$ s.t. $\mathbf{s}\geq 0$ and $\sum_{i=1}^Ms_i=1$ $\implies$ $\mathbf{s}$: stationary dist. of the MC
+    \begin{itemize}
+        \item Reversibility implies stationary
+    \end{itemize}
+    \item Random walk on an undirected network
+    \begin{itemize}
+        \item Random walk: Transition probabilites to connected states are equal
+        \item Undirected: Edges can be traversed in either direction if connected
+        \item Degree $d_j$: \# of edges attached to node $j$ (self-loop is counted as $1$)
+        \item Degree vector $\mathbf{d}=\begin{mtx}{cccc}d_1 & d_2 & \cdots & d_M\end{mtx}$
+        \item Random walk, undirected $\implies$ reversibility $\implies$
+        \begin{equation}
+            \mathbf{s}=\frac{1}{\sum_{i=1}^Md_i}\mathbf{d}:~\text{stationary dist.}
+        \end{equation}
+    \end{itemize}
+\end{itemize}
