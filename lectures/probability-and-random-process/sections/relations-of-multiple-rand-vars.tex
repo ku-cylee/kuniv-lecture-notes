@@ -168,7 +168,7 @@
 \begin{itemize}
     \item PDF transformation
     \begin{equation}
-        f_{\mathbf{Y}}(\mathbf{y})=\abs{\text{det}\left(\frac{\partial\mathbf{x}}{\partial\mathbf{y}}\right)}f_{\mathbf{X}}\left(\mathbf{x}\right)
+        f_{\mathbf{Y}}(\mathbf{y})=\frac{1}{\abs{\text{det}\frac{\partial\mathbf{y}}{\partial\mathbf{x}}}}f_{\mathbf{X}}(\mathbf{x})=\abs{\text{det}\frac{\partial\mathbf{x}}{\partial\mathbf{y}}}f_{\mathbf{X}}(\mathbf{x})
     \end{equation}
     \begin{itemize}
         \item $\mathbf{X}=(X_1,X_2,\cdots,X_n)$: continuous r.v. with PDF $f_\mathbf{X}$
