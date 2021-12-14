@@ -244,11 +244,11 @@
     \end{itemize}
     \item Beta-Gamma Connection
     \begin{equation}
-        X\sim\text{Gamma}(a,\lambda),Y\sim\text{Gamma}(b,\lambda),X\indep Y\implies \frac{X}{X+Y}\sim\text{Beta}(a,b)
+        X\sim\text{Gamma}(a,\lambda),~Y\sim\text{Gamma}(b,\lambda),~X\indep Y\implies\frac{X}{X+Y}\sim\text{Beta}(a,b)
     \end{equation}
 \end{itemize}
 \begin{figures}
-    \subfig{$a=.1,b=.1$}{beta-dist-.1-.1.png}{.25}
+    \subfig{$a=0.1,b=0.1$}{beta-dist-.1-.1.png}{.25}
     \subfig{$a=8,b=4$}{beta-dist-8-4.png}{.25}
 \end{figures}
 
@@ -415,7 +415,7 @@
     \end{equation}
     \item Chernoff Inequality: $\forall$ r.v. $X$, $a>0$, $t>0$,
     \begin{equation}
-        P(X\geq a)=P\left(e^{tX}\geq e^{ta}\right)\leq\frac{E\left(e^{tX}\right)}{e^{ta}}=\frac{M_X(t)}{e^{ta}}
+        P(X\geq a)\leq\frac{E\left(e^{tX}\right)}{e^{ta}}=\frac{M_X(t)}{e^{ta}}
     \end{equation}
 \end{itemize}
 
