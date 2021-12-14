@@ -165,7 +165,14 @@
     \end{itemize}
     \item $Q^n$ converges to matrix of $\mathbf{s}$, i.e.
     \begin{equation}
-        \lim_{n\to\infty}Q^n=\begin{mtx}{c}\mathbf{s} \\ \mathbf{s} \\ \vdots \\ \mathbf{s}\end{mtx}
+        \lim_{n\to\infty}Q^n=\begin{mtx}{c}
+            \mathbf{s} \\ \mathbf{s} \\ \vdots \\ \mathbf{s}
+        \end{mtx}=\begin{mtx}{cccc}
+            s_1 & s_2 & \cdots & s_M \\
+            s_1 & s_2 & \cdots & s_M \\
+            \vdots & \vdots & \ddots & \vdots \\
+            s_1 & s_2 & \cdots & s_M
+        \end{mtx}
     \end{equation}
 \end{itemize}
 
@@ -190,5 +197,67 @@
         \begin{equation}
             \mathbf{s}=\frac{1}{\sum_{i=1}^Md_i}\mathbf{d}:~\text{stationary dist.}
         \end{equation}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Markov Chain Monte Carlo (MCMC)}
+
+\subsubsection*{Metropolis-Hastings Algorithm}
+\begin{itemize}
+    \item $X_0,X_1,\cdots$: MC on state space $\{1,2,\cdots,M\}$, transition matrix $P$
+    \item Objective: Modify a MC(i.e. $P$) to obtain a transition matrix $Q$ with a \textit{desired} stationary dist. $\mathbf{s}$
+    \item Starting from $X_0$,
+    \begin{enumerate}
+        \item On $X_n=i$, propose transition to state $j$ with probability of $p_{ij}$
+        \item If proposed, compute \textit{acceptance probability}
+        \begin{equation}
+            a_{ij}=\min\left(\frac{s_jp_{ji}}{s_ip_{ij}},1\right)
+        \end{equation}
+        \item Accept the proposal with acceptance probability, i.e. $P(\text{accept})=a_{ij}$
+        \begin{itemize}
+            \item Accepted: accept the proposal $i\to j$, i.e. $X_{n+1}=j$
+            \item Rejected: reject the proposal $i\to j$, i.e. $X_{n+1}=i$
+        \end{itemize}
+    \end{enumerate}
+    \item Modified MC has transition probability $q_{ij}=a_{ij}p_{ij}$
+    \item As $n\to\infty$, stationary dist. $\to\mathbf{s}$
+    \item Normalizing constant vanishes on $\frac{s_j}{s_i}$ $\implies$ Computing it is unnecessary
+    \item Similar method can be applied on uncountable state space
+    \item Proposal dist. $P$ decides converging speed $\implies$ important
+\end{itemize}
+
+\subsubsection*{Monte Carlo Simulation}
+\begin{itemize}
+    \item Using a large number of simulated trials to approximate a solution to a problem
+    \item Generating good samples is important
+\end{itemize}
+
+\subsubsection*{Gibbs Sampling}
+\begin{itemize}
+    \item Sampling from conditional dist.(known) to approximate joint dist.(unknown)
+    \item Objective: construct a 2D MC $(X_n,Y_n)$ as $n\to\infty$
+    \item Systemic scan Gibbs sampler
+    \begin{enumerate}
+        \item Draw a value $x_{n+1}$ from $X\mid Y=y_n$, then $X_{n+1}=x_{n+1}$
+        \item Draw a value $y_{n+1}$ from $Y\mid X=x_{n+1}$, then $Y_{n+1}=y_{n+1}$
+    \end{enumerate}
+    \item Random scan Gibbs sampler
+    \begin{enumerate}
+        \item Choose which component to update with equal prob.s
+        \item Update the chosen component, copy the unchosen component
+        \item e.g. if $Y$ is chosen, draw a value $y_{n+1}$ from $Y\mid X=x_n$, then $X_{n+1}=x_n$, $Y_{n+1}=y_{n+1}$
+    \end{enumerate}
+    \item Random scan Gibbs sampler is widely used
+    \item Choosing proposal dist. $P$ is unnecessary
+    \item Can be extended to higher dimensions
+\end{itemize}
+
+\subsubsection*{Random scan Gibbs as Metropolis-Hastings}
+\begin{itemize}
+    \item Metropolis-Hastings emphasizes \textit{acceptance probabilities}
+    \item Gibbs emphasizes \textit{conditional distributions}
+    \item Random scan Gibbs sampler is a \textit{special case} of Metropolis-Hastings algorithm
+    \begin{itemize}
+        \item Random scan Gibbs sampler always accepts proposal on Metropolis-Hastings
     \end{itemize}
 \end{itemize}
