@@ -150,7 +150,7 @@
     \item Proof
     \begin{itemize}
         \item Let $z_k = \exp x_k$, then
-            $\frac {\partial f(\mathbf{x})} {\partial x_i} = \frac {z_k} {\sum_k z_k}$,
+            $\frac {\partial f(\mathbf{x})} {\partial x_i} = \frac {z_i} {\sum_k z_k}$,
             $\frac {\partial^2 f(\mathbf{x})} {\partial x_i^2} = \frac {z_i \sum_k z_k - (z_i)^2} {(\sum_k z_k)^2}$,
             $\frac {\partial^2 f(\mathbf{x})} {\partial x_i \partial x_j} = -\frac {z_i z_j} {(\sum_k z_k)^2}$
         \item $\nabla^2 f(\mathbf{x}) = \frac 1 {\mathbf{1}^T \mathbf{z}} \mathrm{diag}(\mathbf{z}) - \frac 1 {(\mathbf{1}^T \mathbf{z})^2} \mathbf{z}\mathbf{z}^T$
