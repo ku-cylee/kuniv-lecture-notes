@@ -171,3 +171,108 @@
     \end{itemize}
     \item Directly computing $\nabla L(W)$ by differentiation is complicated! $\Rightarrow$ Backpropagation
 \end{itemize}
+
+\subsection{Backpropagation}
+
+\subsubsection*{Jacobian}
+\begin{itemize}
+    \item Partial derivative of multidimensional mapping
+    \item $x\in\mathbb{R}^m$, $y\in\mathbb{R}^n$ $\implies$ $\frac{\partial y}{\partial x}:m\times n$ matrix
+    \begin{equation}
+        \frac{\partial y}{\partial x}=\begin{mtx}{cccc}
+            \nabla y_1(x)^T \\
+            \nabla y_2(x)^T \\
+            \vdots \\
+            \nabla y_m(x)^T
+        \end{mtx}=\begin{mtx}{cccc}
+            \frac{\partial y_1}{\partial x_1} & \frac{\partial y_1}{\partial x_2} & \cdots & \frac{\partial y_1}{\partial x_n}\\
+            \frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} & \cdots & \frac{\partial y_2}{\partial x_n}\\
+            \vdots & \vdots & \ddots & \vdots \\
+            \frac{\partial y_m}{\partial x_1} & \frac{\partial y_m}{\partial x_2} & \cdots & \frac{\partial y_m}{\partial x_n}
+        \end{mtx}
+    \end{equation}
+    \item $X\in\mathbb{R}^{m\times n}$, $y\in\mathbb{R}$ $\implies$ $\frac{\partial y}{\partial X}:m\times n$ matrix
+    \begin{equation}
+        \frac{\partial y}{\partial X}=\begin{mtx}{cccc}
+            \frac{\partial y}{\partial x_{11}} & \frac{\partial y}{\partial x_{12}} & \cdots & \frac{\partial y}{\partial x_{1n}}\\
+            \frac{\partial y}{\partial x_{21}} & \frac{\partial y}{\partial x_{22}} & \cdots & \frac{\partial y}{\partial x_{2n}}\\
+            \vdots & \vdots & \ddots & \vdots \\
+            \frac{\partial y}{\partial x_{m1}} & \frac{\partial y}{\partial x_{m2}} & \cdots & \frac{\partial y}{\partial x_{mn}}
+        \end{mtx}
+    \end{equation}
+    \item $X\in\mathbb{R}^{m\times n}$, $y\in\mathbb{R}^k$ $\implies$ $\frac{\partial y}{\partial X}:k\times m\times n$ matrix(=tensor)
+    \begin{equation}
+        \frac{\partial y}{\partial X}=\left(\begin{mtx}{ccc}
+            \frac{\partial y_1}{\partial x_{11}} & \cdots & \frac{\partial y_1}{\partial x_{1n}}\\
+            \vdots & \ddots & \vdots \\
+            \frac{\partial y_1}{\partial x_{m1}} & \cdots & \frac{\partial y_1}{\partial x_{mn}}
+        \end{mtx},\begin{mtx}{ccc}
+            \frac{\partial y_2}{\partial x_{11}} & \cdots & \frac{\partial y_2}{\partial x_{1n}}\\
+            \vdots & \ddots & \vdots \\
+            \frac{\partial y_2}{\partial x_{m1}} & \cdots & \frac{\partial y_2}{\partial x_{mn}}
+        \end{mtx},\cdots,\begin{mtx}{ccc}
+            \frac{\partial y_k}{\partial x_{11}} & \cdots & \frac{\partial y_k}{\partial x_{1n}}\\
+            \vdots & \ddots & \vdots \\
+            \frac{\partial y_k}{\partial x_{m1}} & \cdots & \frac{\partial y_k}{\partial x_{mn}}
+        \end{mtx}\right)
+    \end{equation}
+    \item Jacobian is a \textit{transpose} of gradient
+    \item Chain rule: For $y=h(g(f(x)))$,
+    \begin{equation}
+        \frac{\partial y}{\partial x}=\frac{\partial y}{\partial g}\frac{\partial g}{\partial f}\frac{\partial f}{\partial x}
+    \end{equation}
+    \begin{itemize}
+        \item Sequence of multiplication is important
+    \end{itemize}
+\end{itemize}
+\clearpage
+
+\subsubsection*{Backpropagation}
+\begin{itemize}
+    \item Computational Graph: Computation relations expressed in graph
+    \begin{figures}
+        \fig{computational-graph.png}{.7}
+    \end{figures}
+    \begin{itemize}
+        \item Computational graph of $f(w,x)=\sigma(w_0x_0+w_1x_1+w_2)$
+        \item Each node represents function (e.g. add., mult., exponential, sigmoid, etc.)
+    \end{itemize}
+    \item Forward computation: Compute loss along graph from given input values
+    \item Backpropagation: Use chain rule and gradient from next node to compute previous nodes' gradients
+    \begin{itemize}
+        \item Suppose a node: input $x$ and $y$, output $z$, function $f$, i.e. $z=f(x,y)$
+        \item Let $L$ be a loss of graph
+        \item Upstream gradient(s): $\frac{\partial L}{\partial z}$; given from next node
+        \begin{itemize}
+            \item Upstream gradient of last node is always $1$
+        \end{itemize}
+        \item Local gradient(s): $\frac{\partial z}{\partial x}$, $\frac{\partial z}{\partial y}$; can be computed from function $f$ and input/output values of the node
+        \item Use chain rule to compute $\frac{\partial L}{\partial x}$, $\frac{\partial L}{\partial y}$
+        \begin{equation}
+            \frac{\partial L}{\partial x}=\frac{\partial L}{\partial z}\frac{\partial z}{\partial x},~\frac{\partial L}{\partial y}=\frac{\partial L}{\partial z}\frac{\partial z}{\partial y}
+        \end{equation}
+        \item Computed gradients are \textit{propagated} to previous layers $\implies$ \textbf{Backpropagation}
+    \end{itemize}
+    \item Patterns in backward flow
+    \begin{itemize}
+        \item add gate is gradient ``distributor'': propagates to previous as it is
+        \item max gate is gradient ``router'': only propagates to max value node
+        \item mult gate is gradient ``switcher'': inputs switch, then propagates with upstream gradient
+    \end{itemize}
+    \item Nodes may have branches, i.e. multiple branches
+    \begin{equation}
+        y=f(x),~z=g(x)\implies\frac{\partial L}{\partial x}=\frac{\partial L}{\partial y}\frac{\partial y}{\partial x}+\frac{\partial L}{\partial z}\frac{\partial z}{\partial x}
+    \end{equation}
+    \item Optimizing computation
+    \begin{itemize}
+        \item Matrix multiplication is \textit{expensive} for huge matrices
+        \item Consider $y=f(x)=\max\{x,0\}$, then
+        \begin{equation}
+            \frac{\partial L}{\partial x_{ij}}=\begin{cases}
+                \frac{\partial L}{\partial y_{ij}} & (x_{ij}>0) \\
+                0 & (x_{ij}\leq 0)
+            \end{cases}
+        \end{equation}
+        \item Sometimes, element-wise computation is cheaper then matrix multiplication
+    \end{itemize}
+\end{itemize}
