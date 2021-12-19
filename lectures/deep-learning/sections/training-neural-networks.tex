@@ -1,0 +1,119 @@
+\section{Training Neural Networks}
+
+\subsection{Optimization Algorithms}
+
+\subsubsection*{Stochastic Gradient Descent (SGD)}
+\begin{itemize}
+    \item Problems of Gradient Descent(GD)
+    \begin{itemize}
+        \item GD update: $\nabla L(W)=\frac{1}{N}\nabla L_i(f(x_i,W),y_i)$
+        \item Large $N$ causes long time for each step
+    \end{itemize}
+    \item Randomized, simplified version of GD
+    \begin{itemize}
+        \item Randomly sampled inputs randomize descending direction
+        \item We can \textit{escape} local valley with local minimal
+    \end{itemize}
+    \item Algorithm
+    \begin{enumerate}
+        \item Select \textbf{one} random data sample: choose $k$ from $1,2,\cdots,N$
+        \item Update $W\leftarrow W-\alpha\nabla_WL_k(f(x_k,W),y_k)$
+    \end{enumerate}
+    \item MSE minimization: $W\leftarrow W-2\gamma\left(\hat{f}(x_k,W)-y_k\right)\nabla_Wf(x_k,W)$
+    \item $\nabla L_k$: a noisy, inaccurate estimate of true gradient $\nabla L$
+    \begin{itemize}
+        \item $\mathbb{E}_k[\nabla L_k(W)]=\nabla L(W)$
+        \item an unbiased estimator, i.e. correct direction in long-term
+        \item SGD may not converge, but oscillate nearby optimum
+    \end{itemize}
+    \item Traditional GD is called \textit{batch GD}
+    \item Problem of SGD: stepwise computation is fast, but \# of steps is large
+\end{itemize}
+
+\subsubsection*{Mini-batch SGD}
+\begin{itemize}
+    \item Choose a random subset of dataset: Select $M$ samples, and use their mean gradient
+    \item Algorithm
+    \begin{enumerate}
+        \item Select a random subset of data sample: choose $B\in\{1,2,\cdots,N\}$
+        \item Update $W\leftarrow W-\gamma\frac{1}{|B|}\sum_{k\in B}\nabla_WL_k(f(x_k,W),y_k)$
+    \end{enumerate}
+    \item Batch size $M$
+    \begin{itemize}
+        \item $M$ is typically $2^n$ (32, 64, $\cdots$): Memory access efficiency
+        \item $M$ $\uparrow$ $\implies$ Error variance $\downarrow$
+        \item $M=1$: SGD, $M=N$: Batch GD
+    \end{itemize}
+    \item Also unbiased estimator of $\nabla L$ $\implies$ correct direction in long-term
+    \item Mini-batch SGD is a sufficiently good solution, practically
+\end{itemize}
+
+\subsubsection*{SGD with Momentum and EWMA}
+\begin{itemize}
+    \item Problems of SGD: Oscillates on valley-like contours, Very noisy
+    \item Idea: EWMA(Exponentially Weighted Moving Average)
+    \begin{itemize}
+        \item Enhance a \textit{long-term} trend(history) of gradient
+        \item Suppress \textit{short-term} fluctuations in the gradient
+    \end{itemize}
+    \clearpage
+    \item Update Rule
+    \begin{itemize}
+        \item Gradient vector $g_t=\nabla L_J(x_t)$ from SGD, noisy version of true gradient
+        \item Introduce friction $\alpha\in(0,1)$ and velocity $v_t$, which is EWMA on $g_t$
+        \begin{equation}
+            v_{t+1}=\alpha v_t+(1-\alpha)g_t
+        \end{equation}
+        \item Update $x_t$: considered as position
+        \begin{equation}
+            x_{t+1}=x_t-\gamma v_t
+        \end{equation}
+    \end{itemize}
+    \item Solving for $v_t$
+    \begin{equation}\label{eq:dl:ewma-solution}
+        v_t=(1-\alpha)\sum_{i=1}^t\alpha^{t-i}g_i
+    \end{equation}
+    \begin{itemize}
+        \item Past values of $g_t$: exponential decay $\implies$ forgotten
+        \item $\alpha\to0$: aggresively forget; $\alpha\to1$: more weight on past
+        \item Velocity with common(right) direction accumulates, noise direction vanishes
+    \end{itemize}
+    \item Removing bias
+    \begin{itemize}
+        \item Weights of $g_t$ should sum up to $1$
+        \item From \ref{eq:dl:ewma-solution}, $(1-\alpha)\sum_{i=1}^t\alpha^{t-i}=1-\alpha^t$
+        \item Bias-corrected estimate is given
+        \begin{equation}
+            \hat{v_t}=\frac{v_t}{1-\alpha^t},~x_{t+1}\leftarrow x_t-\hat{v_t}
+        \end{equation}
+        \item As $t\to\infty$, $\hat{v_t}\to v_t$ $\implies$ optional
+    \end{itemize}
+    \item Typical friction is $\alpha=0.9$
+    \item Momentum method works mostly better than vanilla SGD
+\end{itemize}
+
+\subsubsection*{RMSProp}
+\begin{itemize}
+    \item Algorithm
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, learning rate $\gamma$, parameter $\alpha$, $\varepsilon$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Sample data and compute $g\leftarrow\nabla L_i(x)$
+            \item \textit{Accumulate} $r\leftarrow\alpha r+(1-\alpha)g\odot g$
+            \item \textit{Update} $x\leftarrow x-\frac{\gamma}{\sqrt{r}+\varepsilon}\odot g$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+    \item $\odot$: Elementwise product of vectors
+    \item $\varepsilon>0$: prevents numerical instability, i.e. denominator $\to 0$
+    \item Adaptive annealing of learning rates
+    \begin{itemize}
+        \item Large gradient $\to$ decrease l.r.; Small gradient $\to$ increase l.r.
+        \item Gradients among variables may vary $\implies$ Different gradients among direction
+        \begin{equation}
+            r_i\leftarrow\alpha r_i+(1-\alpha)g_i^2,~x_i\leftarrow x_i-\frac{\gamma}{\sqrt{r_i}+\varepsilon}g_i
+        \end{equation}
+        \item Scaling l.r. of each component w/ weighted RMS(root-mean-square) of past gradients
+    \end{itemize}
+\end{itemize}
