@@ -293,24 +293,24 @@
 \begin{itemize}
     \item Suppose input data(image) $x$ is
     \begin{equation}
-        x:~W_i\times H_i\times D
+        x:~D\times W_i\times H_i
     \end{equation}
     \item Suppose \# of channels $C\in\mathbb{N}$, stride $S\in\mathbb{N}$
     \item Suppose $c$-th filter and $c$-th bias $W_c$ and $b_c\in\mathbb{R}$
     \begin{equation}
-        W_c:~W_f\times H_f\times D~(W_f\leq W_i,~H_f\leq H_i)
+        W_c:~D\times W_f\times H_f~(W_f\leq W_i,~H_f\leq H_i)
     \end{equation}
     \item Shape of output data
     \begin{equation}
-        y:~\left(W_o=\frac{W_i-W_f}{S}+1\right)\times\left(H_o=\frac{H_i-H_f}{S}+1\right)\times C
+        y:~C\times\left(W_o=\frac{W_i-W_f}{S}+1\right)\times\left(H_o=\frac{H_i-H_f}{S}+1\right)
     \end{equation}
     \item Computing output data
     \begin{equation}
-        y_{w_o,h_o,c}=\sum_{d=1}^D\sum_{h_f=1}^{H_f}\sum_{w_f=1}^{W_f}W_{c,w_f,h_f,d}\cdot x_{(w_0-1)S+w_f,(h_0-1)S+h_f,d}+b_c
+        y_{w_o,h_o,c}=\sum_{h_f=1}^{H_f}\sum_{w_f=1}^{W_f}\sum_{d=1}^DW_{c,d,w_f,h_f}\cdot x_{d,(w_0-1)S+w_f,(h_0-1)S+h_f}+b_c
     \end{equation}
     \begin{enumerate}
         \item Reshape $W_c$ to a vector $\tilde{w}$
-        \item Extract a $W_f\times H_f\times D$ matrix from $W_c$ to a vector $\tilde{x}$
+        \item Extract a $D\times W_f\times H_f\times$ matrix from $W_c$ to a vector $\tilde{x}$
         \item Compute inner product: $y_{w_o,h_o,c}=\tilde{w}^T\tilde{x}+b_c$
         \item Slide the filter by stride $S$, and repeat the process
         \item Repeat the process by every channel
@@ -320,13 +320,104 @@
         \item Among input values, border values are less considered then other values
         \item Add extra paddings of 0 on every side of matrix, with width $W_p$ and height $H_p$
         \item Border values are fully considered, weights of extra pads are vanished($\times 0$)
-        \item Input shape: $(W_i,H_i,D)\to(W_i+2W_p,H_i+2H_p,D)$
         \item Output shape
         \begin{equation}
-            y:~\left(W_o=\frac{W_i+2W_p-W_f}{S}+1\right)\times\left(H_o=\frac{H_i+2H_p-H_f}{S}+1\right)\times C
+            y:~C\times\left(W_o=\frac{W_i+2W_p-W_f}{S}+1\right)\times\left(H_o=\frac{H_i+2H_p-H_f}{S}+1\right)
         \end{equation}
     \end{itemize}
     \item \# of learnable parameters: $C(W_fH_fD+1)$
+\end{itemize}
+
+\subsubsection*{Simple CNN Example for Single Filter}
+\begin{itemize}
+    \item Suppose an input data $x\in\mathbb{R}^{2\times5\times5}$
+    \begin{equation}
+        x=\left(\begin{mtx}{ccccc}
+            3 & 3 & 6 & -2 & -5\\
+            0 & 4 & 6 & 6 & -5\\
+            5 & -4 & 6 & 0 & 1\\
+            -3 & -2 & -5 & 5 & -2\\
+            1 & -4 & 4 & -1 & -3
+        \end{mtx},\begin{mtx}{ccccc}
+            5 & 2 & 3 & 5 & -5\\
+            5 & -4 & -3 & 5 & 5\\
+            3 & 0 & -1 & 6 & -3\\
+            3 & 5 & 0 & 3 & 3\\
+            5 & 4 & 3 & 5 & 6
+        \end{mtx}\right)
+    \end{equation}
+    \item Suppose a weight matrix of one filter $W\in\mathbb{R}^{2\times3\times3}$ and bias $b=1$
+    \begin{equation}
+        W=\left(\begin{mtx}{cccc}
+            0 & -3 & 3\\
+            3 & 2 & 0\\
+            3 & 2 & 6
+        \end{mtx},\begin{mtx}{cccc}
+            4 & 6 & -1\\
+            -2 & -1 & 2\\
+            -4 & 2 & 0
+        \end{mtx}\right)
+    \end{equation}
+    \item On $S=1$ and no padding, shape of output $y$ is: $(1,3,3)=(3,3)$
+    \item Reshaped $W$, $\tilde{w}$ is
+    \begin{equation}
+        \tilde{w}=(0,-3, 3, 3, 2, 0, 3, 2, 6, 4,6,-1,-2,-1,2,-4,2,0)
+    \end{equation}
+    \item Compute $y_{11}$
+    \begin{equation}
+        x=\left(\begin{mtx}{ccccc}
+            \textcolor{red}{3} & \textcolor{red}{3} & \textcolor{red}{6} & -2 & -5\\
+            \textcolor{red}{0} & \textcolor{red}{4} & \textcolor{red}{6} & 6 & -5\\
+            \textcolor{red}{5} & \textcolor{red}{-4} & \textcolor{red}{6} & 0 & 1\\
+            -3 & -2 & -5 & 5 & -2\\
+            1 & -4 & 4 & -1 & -3
+        \end{mtx},\begin{mtx}{ccccc}
+            \textcolor{red}{5} & \textcolor{red}{2} & \textcolor{red}{3} & 5 & -5\\
+            \textcolor{red}{5} & \textcolor{red}{-4} & \textcolor{red}{-3} & 5 & 5\\
+            \textcolor{red}{3} & \textcolor{red}{0} & \textcolor{red}{-1} & 6 & -3\\
+            3 & 5 & 0 & 3 & 3\\
+            5 & 4 & 3 & 5 & 6
+        \end{mtx}\right)
+    \end{equation}
+    \begin{itemize}
+        \item Extract submatrix from overlapping area with $W$, then reshape to $\tilde{x}$
+        \begin{equation}
+            \tilde{x}=(3,3,6,0,4,6,5,-4,6,5,2,3,5,-4,-3,3,0,-1)
+        \end{equation}
+        \item Then, $y_{11}=\tilde{w}^T\tilde{x}+b=66$
+    \end{itemize}
+    \item Compute $y_{12}$
+    \begin{equation}
+        x=\left(\begin{mtx}{ccccc}
+            3 & \textcolor{blue}{3} & \textcolor{blue}{6} & \textcolor{blue}{-2} & -5\\
+            0 & \textcolor{blue}{4} & \textcolor{blue}{6} & \textcolor{blue}{6} & -5\\
+            5 & \textcolor{blue}{-4} & \textcolor{blue}{6} & \textcolor{blue}{0} & 1\\
+            -3 & -2 & -5 & 5 & -2\\
+            1 & -4 & 4 & -1 & -3
+        \end{mtx},\begin{mtx}{ccccc}
+            5 & \textcolor{blue}{2} & \textcolor{blue}{3} & \textcolor{blue}{5} & -5\\
+            5 & \textcolor{blue}{-4} & \textcolor{blue}{-3} & \textcolor{blue}{5} & 5\\
+            3 & \textcolor{blue}{0} & \textcolor{blue}{-1} & \textcolor{blue}{6} & -3\\
+            3 & 5 & 0 & 3 & 3\\
+            5 & 4 & 3 & 5 & 6
+        \end{mtx}\right)
+    \end{equation}
+    \begin{itemize}
+        \item \textit{Slide} $W$ by $S=1$
+        \item Extract submatrix from overlapping area with $W$, then reshape to $\tilde{x}$
+        \begin{equation}
+            \tilde{x}=(3,6,-2,4,6,6,-4,6,0,2,3,5,-4,-3,5,0,-1,6)
+        \end{equation}
+        \item Then, $y_{12}=\tilde{w}^T\tilde{x}+b=41$
+    \end{itemize}
+    \item Repeating the process gives output
+    \begin{equation}
+        y=\begin{mtx}{ccc}
+            66 & 41 & 120\\
+            -40 & -31 & -22\\
+            27 & -69 & 27
+        \end{mtx}
+    \end{equation}
 \end{itemize}
 
 \subsubsection*{Hyperparameters of Convolutional Layer}
@@ -355,4 +446,42 @@
     \item Provides attention on \textit{local patterns}
     \item Enables hierarchial and deep structure
     \item Conv. layer is translation-invariance, i.e. Absolute position of visual features doesn't affect output
+\end{itemize}
+
+\subsubsection*{Pooling Layer}
+\begin{itemize}
+    \item Aggresive downsampling $\to$ Representations smaller, more manageable
+    \item Pooling methods may vary; e.g. max pool, average pool, etc
+    \item Typically, conv. layer with $C=D$, $W_f=H_f=2$ or $3$, $S=2$, $W_p=H_p=0$
+    \item Consider an input $x\in\mathbb{R}^{2\times4\times4}$
+    \begin{equation}
+        x=\left(\begin{mtx}{cccc}
+            6 & -2 & -4 & 6\\
+            -1 & 5 & 1 & 1\\
+            4 & -2 & -5 & 0\\
+            0 & -2 & -2 & -5
+        \end{mtx},\begin{mtx}{cccc}
+            3 & 2 & 2 & -4\\
+            2 & -1 & 3 & 4\\
+            5 & -5 & -5 & 4\\
+            2 & 3 & -1 & -3
+        \end{mtx}\right)
+    \end{equation}
+    \item With $2\times2$ filter and stride $2$, max pool result $y_{\text{max}}$ and average pool result $y_{\text{avg}}$ are
+    \begin{equation}
+        y_{\text{max}}=\left(\begin{mtx}{cc}
+            6 & 6\\
+            4 & 0
+        \end{mtx},\begin{mtx}{cc}
+            3 & 4\\
+            5 & 4
+        \end{mtx}\right),~y_{\text{avg}}=\left(\begin{mtx}{cc}
+            2 & 1\\
+            0 & -3
+        \end{mtx},\begin{mtx}{cc}
+            1.5 & 1.25\\
+            1.25 & -1.25
+        \end{mtx}\right)
+    \end{equation}
+    \item Pooling layers are often inserted between some Conv.-ReLU layers
 \end{itemize}
