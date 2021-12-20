@@ -84,9 +84,9 @@
         \item From \ref{eq:dl:ewma-solution}, $(1-\alpha)\sum_{i=1}^t\alpha^{t-i}=1-\alpha^t$
         \item Bias-corrected estimate is given
         \begin{equation}
-            \hat{v_t}=\frac{v_t}{1-\alpha^t},~x_{t+1}\leftarrow x_t-\hat{v_t}
+            \hat{v}_t=\frac{v_t}{1-\alpha^t},~x_{t+1}\leftarrow x_t-\hat{v}_t
         \end{equation}
-        \item As $t\to\infty$, $\hat{v_t}\to v_t$ $\implies$ optional
+        \item As $t\to\infty$, $\hat{v}_t\to v_t$ $\implies$ optional
     \end{itemize}
     \item Typical friction is $\alpha=0.9$
     \item Momentum SGD works mostly better than vanilla SGD
@@ -300,4 +300,68 @@
     \subfig{$\sigma^2=1$}{weight-init-big-var.png}{.12}
     \subfig{$\sigma^2=0.01$}{weight-init-small-var.png}{.12}
     \subfig{$\sigma^2=\frac{1}{n}$}{weight-init-proper-var.png}{.12}
+\end{figures}
+
+\subsection{Batch Normalization}
+
+\subsubsection*{Data Preprocessing}
+\begin{itemize}
+    \item Data is too much off from zero $\implies$ saturation, especially sigmoid, tanh, etc
+    \item Normalizing input data to zero-mean ($\mu=0$) and unit-variance ($\sigma^2=1$)
+    \item Allows to use large l.r.s $\implies$ Fast training
+    \item But, as data goes thru layers, mean and variance changes $\implies$ Normalize between layers
+\end{itemize}
+
+\subsubsection*{Batch Normalization of FC Layer}
+\begin{itemize}
+    \item Consider a \textit{batch} of input data $x$: $(N,D)$
+    \begin{itemize}
+        \item $N$: batch size, $D$: \# of channels
+    \end{itemize}
+    \item Batch Normalization
+    \begin{itemize}
+        \item Mean and variance of $d$-th channel is
+        \begin{equation}
+            \mu_d=\frac{1}{N}\sum_{n=1}^Nx_{n,d},~\sigma_d^2=\frac{1}{N}\sum_{n=1}^N\left(x_{n,d}-\mu_d\right)^2
+        \end{equation}
+        \item Mean vector $\mu$, Stddev vector $\sigma$ is a vector of size $D$
+        \item Normalized input is
+        \begin{equation}
+            \hat{x}_{n,d}=\frac{x_{n,d}-\mu_d}{\sqrt{\sigma_d^2+\varepsilon}}
+        \end{equation}
+        \item $\varepsilon>0$ prevents numerical instability
+    \end{itemize}
+    \item Batch Normalization with Learnable Parameters
+    \begin{itemize}
+        \item Strict zero-mean, unit-variance: not flexible, activations may look too linear $\implies$ give some shifts
+        \item Introduce learnable param.s $\gamma,\beta$ with size of $D$
+        \item Output is
+        \begin{equation}
+            y_{n,d}=\gamma_d\hat{x}_{n,d}+\beta_d=\gamma_d\frac{x_{n,d}-\mu_d}{\sqrt{\sigma_d^2+\varepsilon}}+\beta_d
+        \end{equation}
+        \item $\gamma,\beta$ gets trained at training time, constant on testing time
+    \end{itemize}
+    \item BatchNorm for Conv. layers: $x:(N,D,H,W)\implies\mu,\sigma,\gamma,\beta:(1,D,1,1)$
+    \item BN layers are usually inserted after FC/Conv. Layers, before activation
+\end{itemize}
+
+\subsubsection*{Other Normalizations}
+\begin{itemize}
+    \item BatchNorm is heavily affected by inputs within the batch
+    \item Layer Normalization: Average/variance over channel dimension
+    \begin{itemize}
+        \item $x:(N,D)\implies\mu,\sigma:(N,1),~\gamma,\beta:(1,D)$
+        \item Note BatchNorm: $x:(N,D)\implies\mu,\sigma,\gamma,\beta:(1,D)$
+        \item Shows same behavior for training and test
+        \item Used for RNN/Transformers
+    \end{itemize}
+    \item Instance Normalization: Average/variance over feature dimension for Conv. Layers
+    \begin{itemize}
+        \item $x:(N,D,W,H)\implies\mu,\sigma:(N,D,1,1),~\gamma,\beta:(1,D,1,1)$
+        \item Note BatchNorm for Conv. Layer: $x:(N,D,H,W)\implies\mu,\sigma,\gamma,\beta:(1,D,1,1)$
+        \item Shows same behavior for training and test
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \fig{data-normalization.png}{.8}
 \end{figures}
