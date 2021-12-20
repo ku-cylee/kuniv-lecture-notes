@@ -79,12 +79,12 @@
         f(x)=\max\{0,x\}
     \end{equation}
     \begin{itemize}
-        \item Filters out $x<0$ $\Rightarrow$ rectifies information
-        \item Simple calculation, similar to linear $\Rightarrow$ 표현력과 최적화 모두 좋음 $\Rightarrow$ Good choice for many problems
+        \item Filters out $x<0$ $\implies$ rectifies information
+        \item Simple calculation, similar to linear $\implies$ Nice optimization and expression
+        \item Good choice for many problems
     \end{itemize}
     \item Sigmoid ($\sigma(x)=\frac{1}{1+e^{-x}}$), Hyper-tangent ($f(x)=\tanh(x)$)
-    \item Maxout ($f(x)=\max\{w_1^Tx+b_1,w_2^Tx+b_2\}$)
-    \item Leaky ReLU ($f(x)=\max\{\alpha x,x\}~(\alpha>0)$), ELU ($f(x)=x~(x\geq 0),~\alpha(e^x-1)~(x<0)$)
+    \item Leaky ReLU ($f(x)=\max\{0.01x,x\}$), ELU ($f(x)=x~(x\geq 0),~\alpha(e^x-1)~(x<0)$)
 \end{itemize}
 \begin{figures}
     \subfig{ReLU}{actfunc-relu.jpg}{.18}

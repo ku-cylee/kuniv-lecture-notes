@@ -179,3 +179,79 @@
         \item[until] stopping criterion is satisfied
     \end{description}
 \end{itemize}
+
+\subsection{Activation Functions}
+
+\subsubsection*{Sigmoid and Hypertangent}
+\begin{equation}
+    \sigma(x)=\frac{1}{1+e^{-x}},~\tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}
+\end{equation}
+\begin{itemize}
+    \item Pros of sigmoid: Saturates ``firing rate'' of a neuron $\implies$ nice interpretation
+    \item Cons of sigmoid
+    \begin{itemize}
+        \item Saturated neurons \textit{kill} the gradients
+        \begin{itemize}
+            \item $\abs{x}\gg1\implies\frac{d\sigma}{dx}\to0$: Vanishing gradient problem
+        \end{itemize}
+        \item Output is always positive, Not zero-centered(zero-mean) $\implies$ Limits search direction greatly
+        \begin{itemize}
+            \item Consider sigmoid layer $\to$ linear layer ($f(x)=Wx+b$) $\implies$ $x>0$
+            \item Consider backprop. on linear layer $\frac{\partial L}{\partial W}=\frac{\partial L}{\partial f}\frac{\partial f}{\partial W}=\frac{\partial L}{\partial f}x$
+            \item Possible direction of $\frac{\partial L}{\partial W}$ are: All components positive or all negative
+            \item Possible signs of search direction: $2^n\to 2$ $\implies$ Greatly limited
+        \end{itemize}
+        \item Exponential functions are expensive to compute
+    \end{itemize}
+    \item Hypertangent
+    \begin{itemize}
+        \item $\tanh(x)=2\sigma(2x)-1$: A zero-centered version of sigmoid
+        \item Still, gradient vanishing problem and computation-expensive problem
+    \end{itemize}
+    \item Sigmoid, tanh are typically used at final layers
+\end{itemize}
+\begin{figures}
+    \subfig{Sigmoid}{actfunc-sigmoid.jpg}{.18}
+    \subfig{tanh}{actfunc-tanh.jpg}{.18}
+\end{figures}
+
+\subsubsection*{Linear Units}
+\begin{equation}\begin{aligned}
+    \text{ReLU}(x)=\max\{0,x\},&~\text{LeakyReLU}(x)=\max\{0.01 x,x\}\\
+    \text{PReLU}(x)=\max\{\alpha x,x\}~(\alpha>0),&~\text{ELU}(x)=\begin{cases}
+        x & (x>0) \\
+        \alpha(e^x-1) & (x\leq 0)
+    \end{cases}~(\alpha>0)
+\end{aligned}\end{equation}
+\begin{itemize}
+    \item Pros of ReLU
+    \begin{itemize}
+        \item Gradient does not vanish for positive input; negative input is less important
+        \item Easy to compute
+        \item Model converges faster
+    \end{itemize}
+    \item Cons of ReLU
+    \begin{itemize}
+        \item Not zero-centered; Output always nonnegative
+        \item Some neurons may become \textit{dead} (but, not often)
+        \begin{itemize}
+            \item Consider linear layer($W,b$) $\to$ ReLU ($f$)
+            \item Consider backprop. on $i$-th neuron of linear layer, i.e. $\frac{\partial L}{\partial w_i}=\frac{\partial L}{\partial f}\frac{\partial f}{\partial w_i}$
+            \item Remind: $\frac{\partial f}{\partial w_i}$ is $1$ if $x_j>0$, else $0$
+            \item If $\forall x_j$, $w_i^Tx_j+b_i<0$, $\frac{\partial L}{\partial w_i}=0$, i.e. $w_i$ NEVER changes $\implies$ ``dead'' neuron
+        \end{itemize}
+    \end{itemize}
+    \item Leaky ReLU: Most benefits of ReLU, Closer to zero-center, No saturation (dead neuron)
+    \item Parametric ReLU(PReLU): introduce learnable param. $\alpha$
+    \item Exponential Linear Units (ELU)
+    \begin{itemize}
+        \item Pros: Benefints of ReLU, Closer to zero-center, Robust to noise (saturation for $x\to-\infty$)
+        \item Cons: Saturation issue for negative inputs
+    \end{itemize}
+    \item ReLU is mostly good choice, Leaky ReLU or ELU may be next good choice
+\end{itemize}
+\begin{figures}
+    \subfig{ReLU}{actfunc-relu.jpg}{.18}
+    \subfig{Leaky ReLU}{actfunc-leaky-relu.jpg}{.18}
+    \subfig{ELU}{actfunc-elu.jpg}{.18}
+\end{figures}
