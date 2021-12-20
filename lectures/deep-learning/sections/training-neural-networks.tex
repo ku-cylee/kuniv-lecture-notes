@@ -152,7 +152,7 @@
     \begin{itemize}
         \item Weight decay rate $\alpha\gamma$ and learning rate $\alpha$: Tightly coupled(dependent)
         \item \textit{Decoupling} two parameters shows far better performance
-        \item Replace weight decay rate $\alpha\gamma$ to independent parameter $\lambda$
+        \item Replace weight decay rate $\alpha\gamma$ to an independent parameter $\lambda$
     \end{itemize}
     \item SGDW: Momentum SGD + Decoupled weight decay
     \begin{description}
@@ -297,9 +297,9 @@
 \clearpage
 \begin{figures}
     \subfig{Initial}{weight-init-initial.png}{.12}
-    \subfig{$\sigma^2=1$}{weight-init-big-var.png}{.12}
-    \subfig{$\sigma^2=0.01$}{weight-init-small-var.png}{.12}
-    \subfig{$\sigma^2=\frac{1}{n}$}{weight-init-proper-var.png}{.12}
+    \subfig{Blowed Up}{weight-init-big-var.png}{.12}
+    \subfig{Vanished}{weight-init-small-var.png}{.12}
+    \subfig{Consistent}{weight-init-proper-var.png}{.12}
 \end{figures}
 
 \subsection{Batch Normalization}
@@ -318,7 +318,7 @@
     \begin{itemize}
         \item $N$: batch size, $D$: \# of channels
     \end{itemize}
-    \item Batch Normalization
+    \item Batch Normalization (BatchNorm, BN)
     \begin{itemize}
         \item Mean and variance of $d$-th channel is
         \begin{equation}

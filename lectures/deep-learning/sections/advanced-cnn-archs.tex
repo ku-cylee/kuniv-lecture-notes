@@ -21,12 +21,12 @@
 \begin{itemize}
     \item \# of FLOPs(floating point operations)
     \begin{itemize}
-        \item Inner product of vectors of size $n$
+        \item Suppose inner product of vectors of size $n$
         \item $n$ MULs and $n-1$ ADDs $\implies$ $2n-1$ FLOPs
         \item But, we assume $n$-dimension inner product has $n$ FLOPs
     \end{itemize}
     \item Assume all elements are 32b(=4B) floating points
-    \item Example: Conv. Layer with $3\times227\times227$ input, $64$ filters of size $11\times11$, stride 4, pad 2
+    \item Example: Conv. layer with $3\times227\times227$ input, $64$ filters of size $11\times11$, stride 4, pad 2
     \begin{itemize}
         \item Output width and height are both $\frac{227+2\cdot2-11}{4}+1=56$
         \item \# of output elements: $64\cdot56\cdot56\approx2.01\text{e}5$
@@ -35,10 +35,10 @@
         \item FLOPs per output elements: $3\cdot11\cdot11=363$
         \item Total FLOPs: (FLOP/output element)(\# of output elements)$=(363)(2.01\text{e}5)\approx72.9~\text{MFLOPs}$
     \end{itemize}
-    \item Example: Maxpool Layer with $64\times56\times56$ input, filter size $3\times3$, stride $2$
+    \item Example: Maxpool layer with $64\times56\times56$ input, filter size $3\times3$, stride $2$
     \begin{itemize}
-        \item Output shape is $64\times27\times27$ $\implies$ \# of output elmts: $64\cdot27\cdot27\approx4.67\text{e}4$
-        \item Size of output elmts: $4\cdot(4.67\text{e}4)\approx182~\text{KB}$
+        \item Output shape is $64\times27\times27$ $\implies$ \# of output elements: $64\cdot27\cdot27\approx4.67\text{e}4$
+        \item Size of output elements: $4\cdot(4.67\text{e}4)\approx182~\text{KB}$
         \item FLOPs per output elements: $3\cdot3=9$
         \item Total FLOPs: $(9)(4.67\text{e}4)\approx0.420~\text{MFLOPs}$
     \end{itemize}
@@ -62,7 +62,7 @@
     \fig{alexnet.png}{.35}
 \end{figures}
 
-\subsubsection*{VGG}
+\subsubsection*{VGG (Visual Geometric Group)}
 \begin{itemize}
     \item First network to introduce regular design pattern
     \item Design Rules
@@ -70,7 +70,7 @@
         \item All conv. layers are $3\times3$ filter with stride $1$
         \item All pool layers are $2\times2$ filter with stride $2$
         \item Double \# of channels after pool layer
-        \item Stage: Multiple conv. layers $\rightarrow$ pool layer; Network has 5 stages
+        \item Stage: Multiple conv. layers $\rightarrow$ one pool layer; Network has 5 stages
     \end{itemize}
     \item VGG16 and VGG19 (image below)
     \begin{itemize}
@@ -124,15 +124,16 @@
     \end{itemize}
     \item Introduce \textit{skip connection}
     \begin{itemize}
-        \item Original objective of conv. layer is to optimize $H(x)$
-        \item Create a skip connection, Let $F(x)$: Output of conv. layer
+        \item Original objective of layers(conv. layers in image) is to optimize $H(x)$
+        \item Create a skip connection, Let $F(x)$: Output of layers
         \begin{itemize}
             \item $H(x)=x+F(x)$
-            \item Objective of conv. layer is to optimize $F(x)$, i.e. identity
+            \item Now, objective of layers is to optimize $F(x)$, i.e. identity
         \end{itemize}
     \end{itemize}
     \begin{figures}
-        \fig{residual-block.png}{.5}
+        \subfig{Standard Layers}{resnet-standard-layers.png}{.18}
+        \subfig{Residual Block}{resnet-residual-block.png}{.18}
     \end{figures}
     \item Learning residual, i.e. $F(x)=H(x)-x$ is much easier
     \begin{itemize}
@@ -142,14 +143,14 @@
     \end{itemize}
     \item Uses regular design patterns, similar to VGG
     \begin{itemize}
-        \item Each res. blocks have two $3\times3$ conv. layer,
-        \item Divided into stages: Halves resolution, doubles \# of channels
+        \item Each residual blocks have two $3\times3$ conv. layer,
+        \item Divided into stages s.t. Resolution $\div~4$, \# of channels $\times~2$
     \end{itemize}
     \item Pre-activation ResNet
     \begin{itemize}
         \item Activation after ResNet does not learn ``true'' identity $\implies$ Place it before conv. layer
         \item Pre-activation is actually activation of output of previous layer (Fig (a))
-        \item Poolings are inserted on skip connections for consistent shape (Fig (b))
+        \item Poolings can be inserted on skip connections for consistent shape (Fig (b))
     \end{itemize}
     \begin{figures}
         \subfig{Pre-activation ResNet}{pre-activation-resnet.png}{.542}
@@ -162,7 +163,7 @@
     \item Lightweight architecture for mobile apps
     \item Example: Consider $F\times F$ conv. layer with \# of filters unchanged, input $C\times H\times W$
     \item Standard convolution: $(F^2C)(CHW)=F^2C^2HW$ FLOPs required
-    \item Separate conv. layer into depthwise conv. layer and pointwise conv. layer
+    \item Separate conv. layer into depthwise conv. layer $\rightarrow$ pointwise conv. layer
     \item Depthwise Convolution: Conv. over spatial dimensions only
     \begin{itemize}
         \item Filter is $F\times F\times 1$, one conv. filter per channel
@@ -173,7 +174,7 @@
         \item $(1^2C)(CHW)=C^2HW$ FLOPs required
     \end{itemize}
     \item Total flop is $F^2CHW+C^2HW=(F^2+C)CHW$ FLOPs
-    \item DSC is way more cheaper then standard conv., but a bit lower performance
+    \item DSC is way more cheaper than standard conv., but a bit lower performance
     \begin{equation}
         \frac{\text{DSC~FLOPs}}{\text{Std.~Conv.~FLOPs}}=\frac{(F^2+C)CHW}{F^2C^2HW}=\frac{\frac{F^2}{C}+1}{F^2}\to\frac{1}{F^2}~~(C\gg F^2)
     \end{equation}

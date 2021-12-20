@@ -313,7 +313,7 @@
         \item Extract a $D\times W_f\times H_f\times$ matrix from $W_c$ to a vector $\tilde{x}$
         \item Compute inner product: $y_{w_o,h_o,c}=\tilde{w}^T\tilde{x}+b_c$
         \item Slide the filter by stride $S$, and repeat the process
-        \item Repeat the process by every channel
+        \item Repeat the process for every channel
     \end{enumerate}
     \item Zero padding
     \begin{itemize}
@@ -433,7 +433,7 @@
     \end{itemize}
     \item Stride($S$)
     \begin{itemize}
-        \item Typically 1, $\frac{W_i-W_f}{S},\frac{H_i-H_f}{S}\in\mathbb{N}$
+        \item Typically 1, $S\mid W_i+2W_p-W_f,S\mid H_i+2H_p-H_f$
         \item $S$ shrinks input; Too fast shrink is not good
     \end{itemize}
     \item Padding size($W_p$, $H_p$): Typically 0 or $W_p=\frac{1}{2}(W_f-1)$, $H_p=\frac{1}{2}(H_f-1)$
@@ -450,7 +450,7 @@
 
 \subsubsection*{Pooling Layer}
 \begin{itemize}
-    \item Aggresive downsampling $\to$ Representations smaller, more manageable
+    \item Aggresive downsampling $\to$ Smaller, more manageable representations
     \item Pooling methods may vary; e.g. max pool, average pool, etc
     \item Typically, conv. layer with $C=D$, $W_f=H_f=2$ or $3$, $S=2$, $W_p=H_p=0$
     \item Consider an input $x\in\mathbb{R}^{2\times4\times4}$
