@@ -1,0 +1,183 @@
+\section{Advanced CNN Architectures}
+
+\subsection{Advanced CNN Architectures}
+
+\subsubsection*{ImageNet Classification Challenge}
+\begin{itemize}
+    \item Error rate of human is 5.1\%
+    \item Major Breakthroughs
+    \begin{itemize}
+        \item AlexNet (2012): 25.8\% $\to$ 16.4\%; Shallow $\to$ 8 layers
+        \item VGG, GoogLeNet (2014): 11.7\% $\to$ 7.3\%, 6.7\%; 8 layers $\to$ 19, 22 layers
+        \item ResNet (2015): 6.7\% $\to$ 3.6\%; 22 layers $\to$ 152 layers
+    \end{itemize}
+    \item ImageNet Challenge discontinued after 2017, as error rate became lower than human's
+\end{itemize}
+\begin{figures}
+    \fig{imagenet-challenge.png}{.7}
+\end{figures}
+
+\subsubsection*{Analyzing Resource Usages}
+\begin{itemize}
+    \item \# of FLOPs(floating point operations)
+    \begin{itemize}
+        \item Inner product of vectors of size $n$
+        \item $n$ MULs and $n-1$ ADDs $\implies$ $2n-1$ FLOPs
+        \item But, we assume $n$-dimension inner product has $n$ FLOPs
+    \end{itemize}
+    \item Assume all elements are 32b(=4B) floating points
+    \item Example: Conv. Layer with $3\times227\times227$ input, $64$ filters of size $11\times11$, stride 4, pad 2
+    \begin{itemize}
+        \item Output width and height are both $\frac{227+2\cdot2-11}{4}+1=56$
+        \item \# of output elements: $64\cdot56\cdot56\approx2.01\text{e}5$
+        \item Size of output elements: $4\cdot(2.01\text{e}5)\approx784~\text{KB}$
+        \item \# of learnable weights: $(3\cdot11\cdot11+1)\cdot64\approx2.33\text{e}4$
+        \item FLOPs per output elements: $3\cdot11\cdot11=363$
+        \item Total FLOPs: (FLOP/output element)(\# of output elements)$=(363)(2.01\text{e}5)\approx72.9~\text{MFLOPs}$
+    \end{itemize}
+    \item Example: Maxpool Layer with $64\times56\times56$ input, filter size $3\times3$, stride $2$
+    \begin{itemize}
+        \item Output shape is $64\times27\times27$ $\implies$ \# of output elmts: $64\cdot27\cdot27\approx4.67\text{e}4$
+        \item Size of output elmts: $4\cdot(4.67\text{e}4)\approx182~\text{KB}$
+        \item FLOPs per output elements: $3\cdot3=9$
+        \item Total FLOPs: $(9)(4.67\text{e}4)\approx0.420~\text{MFLOPs}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{AlexNet}
+\begin{itemize}
+    \item First network to introduce Convolutional Layer
+    \item Resource usage
+    \begin{itemize}
+        \item Most memory, FLOPs are from early conv. layers
+        \item Most parameters are from FC layers
+    \end{itemize}
+    \item Problem
+    \begin{itemize}
+        \item Filter size, \# of filters, etc. are chosen from trial and error
+        \item Not a good design approach
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \fig{alexnet.png}{.35}
+\end{figures}
+
+\subsubsection*{VGG}
+\begin{itemize}
+    \item First network to introduce regular design pattern
+    \item Design Rules
+    \begin{itemize}
+        \item All conv. layers are $3\times3$ filter with stride $1$
+        \item All pool layers are $2\times2$ filter with stride $2$
+        \item Double \# of channels after pool layer
+        \item Stage: Multiple conv. layers $\rightarrow$ pool layer; Network has 5 stages
+    \end{itemize}
+    \item VGG16 and VGG19 (image below)
+    \begin{itemize}
+        \item VGG16: 16 conv/FC layers; Stage 3, 4, 5 has 3 conv. layers each
+        \item VGG19: 19 conv/FC layers; Stage 3, 4, 5 has 4 conv. layers each
+    \end{itemize}
+    \item Prefers small filters
+    \begin{itemize}
+        \item Receptive field coverage: Two $3\times3$ filters = One $5\times5$ filter
+        \item Resource usage: Two $3\times3$ filters $<$ One $5\times5$ filter
+    \end{itemize}
+    \item VGG is an expensive, larger network; But regular design is meaningful
+\end{itemize}
+\begin{figures}
+    \fig{vgg19.png}{.55}
+\end{figures}
+
+\subsubsection*{GoogLeNet}
+\begin{itemize}
+    \item Focused on Efficiency: Reduced computation, param.s, memory
+    \item Architecture
+    \begin{enumerate}
+        \item Stem Network: Aggressively downsample
+        \item Inception Module
+        \begin{itemize}
+            \item Try and choose best filter size \textit{during} training
+            \item $1\times1$ conv. layers reduces channels before expensive conv. operations
+            \item Outputs of trials are concatenated later
+        \end{itemize}
+        \item Auxiliary Classifier
+        \begin{itemize}
+            \item Prevents vanishing gradient problem
+            \item Became unncessary after BatchNorm has came out
+        \end{itemize}
+        \item Global Average Pooling: No large FC; Collapses spatial dimensions
+        \item 1 Linear layer to produce class scores
+    \end{enumerate}
+    \item Much cheaper then VGG
+\end{itemize}
+\begin{figures}
+    \subfig{GoogLeNet Architecture}{googlenet.png}{.4343}
+    \subfig{Inception Module}{googlenet-inception-module.png}{.3657}
+\end{figures}
+
+\subsubsection*{Residual Networks (ResNet)}
+\begin{itemize}
+    \item Motivation
+    \begin{itemize}
+        \item Deeper models(20+ layers) show worse accuracy then shallow models
+        \item Optimization is difficult $\implies$ Underfitting
+    \end{itemize}
+    \item Introduce \textit{skip connection}
+    \begin{itemize}
+        \item Original objective of conv. layer is to optimize $H(x)$
+        \item Create a skip connection, Let $F(x)$: Output of conv. layer
+        \begin{itemize}
+            \item $H(x)=x+F(x)$
+            \item Objective of conv. layer is to optimize $F(x)$, i.e. identity
+        \end{itemize}
+    \end{itemize}
+    \begin{figures}
+        \fig{residual-block.png}{.5}
+    \end{figures}
+    \item Learning residual, i.e. $F(x)=H(x)-x$ is much easier
+    \begin{itemize}
+        \item Forward: Just a single, very cheap addition(+) step inserted
+        \item Backward: Optimal point makes $H(x)=x$, i.e. $F(x)=0$ $\implies$ zero-centered $\implies$ easier learning
+        \item Very simple idea, but very powerful; Enables very deep networks
+    \end{itemize}
+    \item Uses regular design patterns, similar to VGG
+    \begin{itemize}
+        \item Each res. blocks have two $3\times3$ conv. layer,
+        \item Divided into stages: Halves resolution, doubles \# of channels
+    \end{itemize}
+    \item Pre-activation ResNet
+    \begin{itemize}
+        \item Activation after ResNet does not learn ``true'' identity $\implies$ Place it before conv. layer
+        \item Pre-activation is actually activation of output of previous layer (Fig (a))
+        \item Poolings are inserted on skip connections for consistent shape (Fig (b))
+    \end{itemize}
+    \begin{figures}
+        \subfig{Pre-activation ResNet}{pre-activation-resnet.png}{.542}
+        \subfig{ResNet Architecture}{resnet.png}{.358}
+    \end{figures}
+\end{itemize}
+
+\subsubsection*{Depthwise Separable Convolution (DSC)}
+\begin{itemize}
+    \item Lightweight architecture for mobile apps
+    \item Example: Consider $F\times F$ conv. layer with \# of filters unchanged, input $C\times H\times W$
+    \item Standard convolution: $(F^2C)(CHW)=F^2C^2HW$ FLOPs required
+    \item Separate conv. layer into depthwise conv. layer and pointwise conv. layer
+    \item Depthwise Convolution: Conv. over spatial dimensions only
+    \begin{itemize}
+        \item Filter is $F\times F\times 1$, one conv. filter per channel
+        \item $(F^2\cdot1)(CHW)=F^2CHW$ FLOPs required
+    \end{itemize}
+    \item Pointwise Convolution: Conv. over channel dimension only
+    \begin{itemize}
+        \item $(1^2C)(CHW)=C^2HW$ FLOPs required
+    \end{itemize}
+    \item Total flop is $F^2CHW+C^2HW=(F^2+C)CHW$ FLOPs
+    \item DSC is way more cheaper then standard conv., but a bit lower performance
+    \begin{equation}
+        \frac{\text{DSC~FLOPs}}{\text{Std.~Conv.~FLOPs}}=\frac{(F^2+C)CHW}{F^2C^2HW}=\frac{\frac{F^2}{C}+1}{F^2}\to\frac{1}{F^2}~~(C\gg F^2)
+    \end{equation}
+\end{itemize}
+\begin{figures}
+    \fig{mobilenets-dsc.png}{.3}
+\end{figures}
