@@ -245,7 +245,7 @@
     \item Parametric ReLU(PReLU): introduce learnable param. $\alpha$
     \item Exponential Linear Units (ELU)
     \begin{itemize}
-        \item Pros: Benefints of ReLU, Closer to zero-center, Robust to noise (saturation for $x\to-\infty$)
+        \item Pros: Benefits of ReLU, Closer to zero-center, Robust to noise (saturation for $x\to-\infty$)
         \item Cons: Saturation issue for negative inputs
     \end{itemize}
     \item ReLU is mostly good choice, Leaky ReLU or ELU may be next good choice
@@ -254,4 +254,50 @@
     \subfig{ReLU}{actfunc-relu.jpg}{.18}
     \subfig{Leaky ReLU}{actfunc-leaky-relu.jpg}{.18}
     \subfig{ELU}{actfunc-elu.jpg}{.18}
+\end{figures}
+
+\subsection{Weights Initialization Methods}
+
+\subsubsection*{Weights Must be Initialized Randomly}
+\begin{itemize}
+    \item Weights of linear layers must be initialized at first step of training
+    \item If weights are initialized symmetrically?
+    \begin{itemize}
+        \item Consider linear layer $q=Wx$ $\to$ L2 loss layer $f$
+        \begin{equation}
+            L=f(q)=\norm{Wx}_2^2,~\nabla_Wf=2qx^T,~\nabla_xf=2W^Tq
+        \end{equation}
+        \item $[W]_{ij}=0$ $\implies$ $\nabla_Wf=0$ $\implies$ $W$ never changes
+        \item $[W]_{ij}=1$ $\implies$ $\nabla_xf=2q$ $\implies$ Consistent gradients $\implies$ Limits directions on previous layer
+    \end{itemize}
+    \item We should provide \textit{various} linear scores over different regions
+    \item $\therefore$ Weights must be initialized \textit{randomly}
+\end{itemize}
+
+\subsubsection*{Xavier-He Initialization}
+\begin{itemize}
+    \item Weights are initialized with large variance, e.g. $\mathcal{N}(0,1)$ $\implies$ Weight blows up, saturation
+    \item Weights are initialized with small variance, e.g. $\mathcal{N}(0,0.1^2)$ $\implies$ Weight vanishes, no learning
+    \item Xavier Initialization: Initialize weights with
+    \begin{equation}
+        \mathcal{N}\left(0,\frac{1}{n}\right)
+    \end{equation}
+    \begin{itemize}
+        \item Output has same distribution as input
+        \item $n$: Length of inner product(i.e. input size), convolution in the layer
+        \item Initializing with $\mathcal{N}(0,1)$, then divide by $\sqrt{n}$ is identical way
+    \end{itemize}
+    \item He Initialization
+    \begin{itemize}
+        \item Pronounced [he]
+        \item Half of outputs may be 0 for ReLU $\implies$ only half of weights are used
+        \item Initialize with $\mathcal{N}(0,1)$, then divide by $\sqrt{n/2}$
+    \end{itemize}
+\end{itemize}
+\clearpage
+\begin{figures}
+    \subfig{Initial}{weight-init-initial.png}{.12}
+    \subfig{$\sigma^2=1$}{weight-init-big-var.png}{.12}
+    \subfig{$\sigma^2=0.01$}{weight-init-small-var.png}{.12}
+    \subfig{$\sigma^2=\frac{1}{n}$}{weight-init-proper-var.png}{.12}
 \end{figures}
