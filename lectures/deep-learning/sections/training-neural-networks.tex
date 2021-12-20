@@ -333,7 +333,10 @@
     \end{itemize}
     \item Batch Normalization with Learnable Parameters
     \begin{itemize}
-        \item Strict zero-mean, unit-variance: not flexible, activations may look too linear $\implies$ give some shifts
+        \item Strict zero-mean, unit-variance are not good $\implies$ give some shifts
+        \begin{itemize}
+            \item Not flexible (overfitting), activations may look too linear
+        \end{itemize}
         \item Introduce learnable param.s $\gamma,\beta$ with size of $D$
         \item Output is
         \begin{equation}
@@ -365,3 +368,33 @@
 \begin{figures}
     \fig{data-normalization.png}{.8}
 \end{figures}
+
+\subsection{Minor Tips for Training NN}
+
+\subsubsection*{Data Augmentation}
+\begin{itemize}
+    \item Let the model to see \textit{diverse} version of data $\implies$ generalization
+    \item Manipulate images in various methods and use them as inputs during training
+    \item Popular methods
+    \begin{itemize}
+        \item Basic methods: flips, rotations, scales, crops, color jitter, etc
+        \item Synthetic data: Entirely new, but fake data
+        \item Random mix/combinations of basic methods
+    \end{itemize}
+    \item During test: average the prediction results among augmented inputs
+\end{itemize}
+
+\subsubsection*{Checking Model Correctness}
+\begin{itemize}
+    \item Check if the loss is reasonable, i.e. programmatic errors
+    \item Regularization
+    \begin{itemize}
+        \item Suppose L2 regularization with data loss $L(W)+\lambda\norm{W}_2^2$
+        \item Settings $\lambda=0$ should give smaller loss $\implies$ if not, loss has bug
+    \end{itemize}
+    \item Training loss must go down eventually
+    \begin{itemize}
+        \item Loss does not go down $\implies$ Maybe too low l.r.
+        \item Loss blows up $\implies$ Maybe too high l.r.
+    \end{itemize}
+\end{itemize}
