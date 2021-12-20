@@ -89,19 +89,19 @@
         \item As $t\to\infty$, $\hat{v_t}\to v_t$ $\implies$ optional
     \end{itemize}
     \item Typical friction is $\alpha=0.9$
-    \item Momentum method works mostly better than vanilla SGD
+    \item Momentum SGD works mostly better than vanilla SGD
 \end{itemize}
 
 \subsubsection*{RMSProp}
 \begin{itemize}
     \item Algorithm
     \begin{description}
-        \item[given] a starting point $x\in\mathcal{D}(f)$, learning rate $\gamma$, parameter $\alpha$, $\varepsilon$
+        \item[given] a starting point $x\in\mathcal{D}(f)$, friction $\alpha$, learning rate $\gamma$, param. $\varepsilon$
         \item[repeat] \phantom{}
         \begin{enumerate}
             \item Sample data and compute $g\leftarrow\nabla L_i(x)$
-            \item \textit{Accumulate} $r\leftarrow\alpha r+(1-\alpha)g\odot g$
-            \item \textit{Update} $x\leftarrow x-\frac{\gamma}{\sqrt{r}+\varepsilon}\odot g$
+            \item \textit{Accumulate:} $r\leftarrow\alpha r+(1-\alpha)g\odot g$
+            \item \textit{Update:} $x\leftarrow x-\frac{\gamma}{\sqrt{r}+\varepsilon}\odot g$
         \end{enumerate}
         \item[until] stopping criterion is satisfied
     \end{description}
@@ -116,4 +116,66 @@
         \end{equation}
         \item Scaling l.r. of each component w/ weighted RMS(root-mean-square) of past gradients
     \end{itemize}
+\end{itemize}
+
+\subsubsection*{Adam}
+\begin{itemize}
+    \item Combination of momentum and RMSprop
+    \item Algorithm
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, learning rate $\gamma$, friction $\alpha,\beta$, param. $\varepsilon$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Sample data and compute $g\leftarrow\nabla L_i(x)$
+            \item \textit{1st moment estimate:} $v\leftarrow\alpha v+(1-\alpha)g$
+            \item \textit{2nd moment estimate:} $r\leftarrow\beta r+(1-\beta)g\odot g$
+            \item \textit{Bias correction:} $\hat{v}\leftarrow\frac{v}{1-\alpha^t}$, $\hat{r}\leftarrow\frac{r}{1-\beta^t}$
+            \item \textit{Update:} $x\leftarrow x-\frac{\gamma}{\sqrt{\hat{r}+\varepsilon}}\odot\hat{v}$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+    \item Hyperparameters
+    \begin{itemize}
+        \item $\alpha$: 1st moment decay rate; typically 0.9
+        \item $\beta$: 2nd moment decay rate; typically 0.99
+        \item $\gamma$: global learning rate; typically $10^{-3}$
+        \item $\varepsilon>0$: numerical stability; typically $10^{-8}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Decoupled Regularization}
+\begin{itemize}
+    \item Idea: L2 Regularization
+    \begin{equation}
+        x\leftarrow x-\alpha\nabla\left[f(x)+\gamma\frac{\norm{x}_2^2}{2}\right]=(1-\alpha\gamma)x-\alpha\nabla f(x)
+    \end{equation}
+    \begin{itemize}
+        \item Weight decay rate $\alpha\gamma$ and learning rate $\alpha$: Tightly coupled(dependent)
+        \item \textit{Decoupling} two parameters shows far better performance
+        \item Replace weight decay rate $\alpha\gamma$ to independent parameter $\lambda$
+    \end{itemize}
+    \item SGDW: Momentum SGD + Decoupled weight decay
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, learning rate $\gamma$, friction $\alpha$, weight decay $\lambda$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Sample data and compute $g\leftarrow\nabla L_i(x)$
+            \item \textit{Accumulate:} $v\leftarrow\alpha v+(1-\alpha)g$
+            \item \textit{Update:} $x\leftarrow (1-\lambda)x-\gamma v$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
+    \item AdamW: Adam + Decoupled Weight Decay; coupling on gradient $g$ affects $v,r,x$
+    \begin{description}
+        \item[given] a starting point $x\in\mathcal{D}(f)$, learning rate $\gamma$, friction $\alpha,\beta$, weight decay $\lambda$, param. $\varepsilon$
+        \item[repeat] \phantom{}
+        \begin{enumerate}
+            \item Sample data and compute $g\leftarrow\nabla L_i(x)$
+            \item \textit{1st moment estimate:} $v\leftarrow\alpha v+(1-\alpha)g$
+            \item \textit{2nd moment estimate:} $r\leftarrow\beta r+(1-\beta)g\odot g$
+            \item \textit{Bias correction:} $\hat{v}\leftarrow\frac{v}{1-\alpha^t}$, $\hat{r}\leftarrow\frac{r}{1-\beta^t}$
+            \item \textit{Update:} $x\leftarrow (1-\lambda)x-\frac{\gamma}{\sqrt{\hat{r}+\varepsilon}}\odot\hat{v}$
+        \end{enumerate}
+        \item[until] stopping criterion is satisfied
+    \end{description}
 \end{itemize}
