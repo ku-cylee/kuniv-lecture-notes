@@ -108,7 +108,7 @@
         \item Global Average Pooling: No large FC; Collapses spatial dimensions
         \item 1 Linear layer to produce class scores
     \end{enumerate}
-    \item Much cheaper then VGG
+    \item Much cheaper than VGG
 \end{itemize}
 \begin{figures}
     \subfig{GoogLeNet Architecture}{googlenet.png}{.4343}
@@ -161,22 +161,22 @@
 \subsubsection*{Depthwise Separable Convolution (DSC)}
 \begin{itemize}
     \item Lightweight architecture for mobile apps
-    \item Example: Consider $F\times F$ conv. layer with \# of filters unchanged, input $C\times H\times W$
-    \item Standard convolution: $(F^2C)(CHW)=F^2C^2HW$ FLOPs required
+    \item Example: Consider $F\times F$ conv. layer with \# of filters unchanged, input $C\times W\times H$
+    \item Standard convolution: $(F^2C)(CWH)=F^2C^2WH$ FLOPs required
     \item Separate conv. layer into depthwise conv. layer $\rightarrow$ pointwise conv. layer
     \item Depthwise Convolution: Conv. over spatial dimensions only
     \begin{itemize}
         \item Filter is $F\times F\times 1$, one conv. filter per channel
-        \item $(F^2\cdot1)(CHW)=F^2CHW$ FLOPs required
+        \item $(F^2\cdot1)(CWH)=F^2CWH$ FLOPs required
     \end{itemize}
     \item Pointwise Convolution: Conv. over channel dimension only
     \begin{itemize}
-        \item $(1^2C)(CHW)=C^2HW$ FLOPs required
+        \item $(1^2C)(CWH)=C^2WH$ FLOPs required
     \end{itemize}
-    \item Total flop is $F^2CHW+C^2HW=(F^2+C)CHW$ FLOPs
+    \item Total flop is $F^2CWH+C^2WH=(F^2+C)CWH$ FLOPs
     \item DSC is way more cheaper than standard conv., but a bit lower performance
     \begin{equation}
-        \frac{\text{DSC~FLOPs}}{\text{Std.~Conv.~FLOPs}}=\frac{(F^2+C)CHW}{F^2C^2HW}=\frac{\frac{F^2}{C}+1}{F^2}\to\frac{1}{F^2}~~(C\gg F^2)
+        \frac{\text{DSC~FLOPs}}{\text{Std.~Conv.~FLOPs}}=\frac{(F^2+C)CWH}{F^2C^2WH}=\frac{\frac{F^2}{C}+1}{F^2}\to\frac{1}{F^2}~~(C\gg F^2)
     \end{equation}
 \end{itemize}
 \begin{figures}
