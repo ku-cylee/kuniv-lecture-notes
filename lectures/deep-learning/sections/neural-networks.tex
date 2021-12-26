@@ -273,7 +273,7 @@
                 0 & (x_{ij}\leq 0)
             \end{cases}
         \end{equation}
-        \item Sometimes, element-wise computation is cheaper then matrix multiplication
+        \item Sometimes, element-wise computation is cheaper than matrix multiplication
     \end{itemize}
 \end{itemize}
 
@@ -404,11 +404,10 @@
     \end{equation}
     \begin{itemize}
         \item \textit{Slide} $W$ by $S=1$
-        \item Extract submatrix from overlapping area with $W$, then reshape to $\tilde{x}$
+        \item Extract submatrix from overlapping area with $W$, then reshape to $\tilde{x}$, then compute $y_{12}$
         \begin{equation}
-            \tilde{x}=(3,6,-2,4,6,6,-4,6,0,2,3,5,-4,-3,5,0,-1,6)
+            \tilde{x}=(3,6,-2,4,6,6,-4,6,0,2,3,5,-4,-3,5,0,-1,6),~y_{12}=\tilde{w}^T\tilde{x}+b=41
         \end{equation}
-        \item Then, $y_{12}=\tilde{w}^T\tilde{x}+b=41$
     \end{itemize}
     \item Repeating the process gives output
     \begin{equation}
@@ -428,12 +427,12 @@
     \end{itemize}
     \item Spatial extent($W_f$, $H_f$): Receptive field, spatial information of input
     \begin{itemize}
-        \item Typically odd value, $W_f=H_f$
+        \item Typically $W_f=H_f\equiv 1\pmod{2}$
         \item $W_f$, $H_f$ shrinks input; Too fast shrink is not good
     \end{itemize}
     \item Stride($S$)
     \begin{itemize}
-        \item Typically 1, $S\mid W_i+2W_p-W_f,S\mid H_i+2H_p-H_f$
+        \item Typically 1, $W_i+2W_p-W_f\equiv 0,H_i+2H_p-H_f\equiv 0\pmod{S}$
         \item $S$ shrinks input; Too fast shrink is not good
     \end{itemize}
     \item Padding size($W_p$, $H_p$): Typically 0 or $W_p=\frac{1}{2}(W_f-1)$, $H_p=\frac{1}{2}(H_f-1)$
