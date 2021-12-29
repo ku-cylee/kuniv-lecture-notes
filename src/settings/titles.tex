@@ -1,5 +1,13 @@
 \usepackage{titlesec}
 
+\makeatletter
+\@ifclassloaded{book}{
+    \newcommand\chap[1]{\chapter{#1}}
+}{
+    \newcommand\chap[1]{}
+}
+\makeatother
+
 \titlespacing
     {\subsection} % command
     {0pt} % left
