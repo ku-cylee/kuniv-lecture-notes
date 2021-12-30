@@ -1,6 +1,8 @@
-ENGINE=latexmk
-FLAGS=-synctex=1 --interaction=nonstopmode -file-line-error -xelatex -cd -outdir=../bin
 SRC_DIR=src
+DST_DIR=bin
+
+ENGINE=latexmk
+FLAGS=-synctex=1 --interaction=nonstopmode -file-line-error -xelatex -cd -outdir=../$(DST_DIR)
 
 all:
 	$(ENGINE) $(FLAGS) $(SRC_DIR)/lecture-notes.tex
@@ -9,7 +11,7 @@ single:
 	$(ENGINE) -usepretex="\def\lectitle{$(LECTURE_TITLE)}\def\lecsem{$(LECTURE_SEMESTER)}\def\lecdirname{$(LECTURE_NAME)}" -jobname="$(LECTURE_NAME)" $(FLAGS) $(SRC_DIR)/single-lecture-note.tex
 
 clean:
-	rm bin/*
+	rm -r $(DST_DIR)
 
 ca: LECTURE_TITLE=COSE222: Computer Architecture
 ca: LECTURE_SEMESTER=2021 Autumn
