@@ -15,7 +15,7 @@ clean:
 
 ca: LECTURE_TITLE=COSE222: Computer Architecture
 ca: LECTURE_SEMESTER=2021 Autumn
-ca: LECTURE_NAME=deep-learning
+ca: LECTURE_NAME=computer-architecture
 ca: single
 
 cg: LECTURE_TITLE=COSE331: Computer Graphics
