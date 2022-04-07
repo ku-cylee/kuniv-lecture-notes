@@ -117,7 +117,7 @@
 \begin{itemize}
     \item Joint MGF of random vector $\mathbf{X}=\left(X_1,X_2,\cdots,X_k\right)$ of $\mathbf{t}=\left(t_1,t_2,\cdots,t_k\right)$ is
     \begin{equation}
-        M_{\mathbf{X}}(\mathbf{t})=E\left(e^{\mathbf{t}^T\mathbf{X}}\right)=E\left(e^{\sum_{i=1}^kt_iX_i}\right)
+        M_{\mathbf{X}}(\mathbf{t})=E\left(e^{\mathbf{t}^{\top}\mathbf{X}}\right)=E\left(e^{\sum_{i=1}^kt_iX_i}\right)
     \end{equation}
     \begin{itemize}
         \item MGF for joint distribution
@@ -148,7 +148,7 @@
         \item Mean vector $\mu=\left(\mu_1,\mu_2,\cdots,\mu_k\right)$
         \item Covariance matrix: outer product of $\mathbf{X}-\mu$
         \begin{equation}
-            \Sigma_\mathbf{X}=E\left((\mathbf{X}-\mu)(\mathbf{X}-\mu)^T\right)=\begin{mtx}{cccc}
+            \Sigma_\mathbf{X}=E\left((\mathbf{X}-\mu)(\mathbf{X}-\mu)^{\top}\right)=\begin{mtx}{cccc}
                 \text{Var}(X_1) & \text{Cov}(X_1,X_2) & \cdots & \text{Cov}(X_1,X_n) \\
                 \text{Cov}(X_2,X_1) & \text{Var}(X_2) & \cdots & \text{Cov}(X_2,X_n) \\
                 \vdots & \vdots & \ddots & \vdots \\
@@ -158,7 +158,7 @@
     \end{itemize}
     \item PDF of MVN $\mathbf{X}$
     \begin{equation}
-        f_{\mathbf{X}}(\mathbf{x})=\frac{1}{\sqrt{(2\pi)^n\abs{\text{det}\Sigma_\mathbf{X}}}}\exp\left(-\frac{1}{2}(\mathbf{x-\mu})^T\Sigma_\mathbf{X}^{-1}(\mathbf{x-\mu})\right)
+        f_{\mathbf{X}}(\mathbf{x})=\frac{1}{\sqrt{(2\pi)^n\abs{\text{det}\Sigma_\mathbf{X}}}}\exp\left(-\frac{1}{2}(\mathbf{x-\mu})^{\top}\Sigma_\mathbf{X}^{-1}(\mathbf{x-\mu})\right)
     \end{equation}
 \end{itemize}
 

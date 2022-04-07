@@ -53,7 +53,7 @@
     \item Definition
     \begin{itemize}
         \item $A \in \mathbb{R}^{m \times n}$, $\mathrm{rank}(A) \equiv \mathrm{dim}(\mathcal{R}(A))$
-        \item Number of independent columns(rows) of $A$ $\Rightarrow$ $\mathrm{rank}(A^T) = \mathrm{rank}(A)$
+        \item Number of independent columns(rows) of $A$ $\Rightarrow$ $\mathrm{rank}(A^{\top}) = \mathrm{rank}(A)$
         \item Represents degree of freedom
     \end{itemize}
     \newpage
@@ -77,16 +77,16 @@
     \begin{itemize}
         \item Columns of $A$ spans $\mathbb{R}^m$
         \item Rows of $A$ are independent
-        \item $A^T\mathbf{c}$ $\Rightarrow$ $\mathbf{c} = \mathbf{0}$
-        \item $\det(AA^T) \neq 0$
-        \item $A$ has right inverse: $\exists B$ s.t. $AB = I$ with $B = A^T(AA^T)^{-1}$
+        \item $A^{\top}\mathbf{c}$ $\Rightarrow$ $\mathbf{c} = \mathbf{0}$
+        \item $\det(AA^{\top}) \neq 0$
+        \item $A$ has right inverse: $\exists B$ s.t. $AB = I$ with $B = A^{\top}(AA^{\top})^{-1}$
     \end{itemize}
     \item $A$ is full rank and $\mathcal{N}(A) = \{\mathbf{0}\}$
     \begin{itemize}
         \item $\mathrm{rank}(A) = n$
         \item Columns of $A$ are independent
         \item $A\mathbf{c} = \mathbf{0}$ $\Rightarrow$ $\mathbf{c} = \mathbf{0}$
-        \item $\det(AA^T) \neq 0$
+        \item $\det(AA^{\top}) \neq 0$
         \item $A$ has left inverse: $\exists B$ s.t. $BA = I$
     \end{itemize}
 \end{itemize}
@@ -144,16 +144,16 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
     \end{itemize}
     \item Spectral Decomposition
     \begin{itemize}
-        \item $A \in \mathbb{S}^n$ can be decomposed to $A = U\Lambda U^T$, i.e. $AU = U\Lambda$
+        \item $A \in \mathbb{S}^n$ can be decomposed to $A = U\Lambda U^{\top}$, i.e. $AU = U\Lambda$
         \item $\Lambda$: Diagonal matrix with $\lambda_i$ at $i$-th diagonal,
-            $U$: Orthogonal matrix $\Rightarrow$ $U^T = U^{-1}$
+            $U$: Orthogonal matrix $\Rightarrow$ $U^{\top} = U^{-1}$
     \end{itemize}
     \item Positive Definiteness of Symmetric Matrices
     \begin{itemize}
-        \item $A = U\Lambda U^T = \sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^T$: Sum of rank-1 matrices
+        \item $A = U\Lambda U^{\top} = \sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^{\top}$: Sum of rank-1 matrices
         \item $\mathbf{u}_i$: bases $\Rightarrow$ $\mathbf{x} = \sum_{i} \hat{\mathbf{x}_i}\mathbf{u}_i$
             $\Rightarrow$ $A\mathbf{x} = \sum_{i} \lambda_i \hat{\mathbf{x}_i}\mathbf{u}_i$
-            $\Rightarrow$ $\mathbf{x}^TA\mathbf{x} = \sum_{i} \lambda_i \hat{\mathbf{x}_i}^2$
+            $\Rightarrow$ $\mathbf{x}^{\top}A\mathbf{x} = \sum_{i} \lambda_i \hat{\mathbf{x}_i}^2$
         \item $A$: Positive definite $\Leftrightarrow$ $\forall i$, $\lambda_i \geq 0$
         \item $A$: Invertible $\Leftrightarrow$ $\forall i$, $\lambda_i \neq 0$
         \item $\lambda_i$: Eigenvalues of $A$ $\Rightarrow$ $\lambda_i^k$: Eigenvalues of $A^k$
@@ -164,8 +164,8 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 
 \subsubsection*{Definition}
 \begin{itemize}
-    \item A function that maps length $n$ vector to scalar s.t. $f(x) = \mathbf{x}^TQ\mathbf{x}$ ($Q \in \mathbb{S}^n$)
-    \item $Q \notin \mathbb{S}^n$ can be replaced by $\tilde{Q} = \frac 1 2 \left(Q + Q^T \right) \in \mathbb{S}^n$,
+    \item A function that maps length $n$ vector to scalar s.t. $f(x) = \mathbf{x}^{\top}Q\mathbf{x}$ ($Q \in \mathbb{S}^n$)
+    \item $Q \notin \mathbb{S}^n$ can be replaced by $\tilde{Q} = \frac 1 2 \left(Q + Q^{\top} \right) \in \mathbb{S}^n$,
         so assuption $Q \in \mathbb{S}^n$ does not lose generality
 \end{itemize}
 
@@ -174,14 +174,14 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
     \item Definition
     \begin{itemize}
         \item Positive Definite (PD) Matrix:
-            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^TQ\mathbf{x} > 0 \Rightarrow Q \succ 0$
+            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^{\top}Q\mathbf{x} > 0 \Rightarrow Q \succ 0$
         \item Positive Semi-definite (PSD) Matrix:
-            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^TQ\mathbf{x} \geq 0 \Rightarrow Q \succeq 0$
+            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^{\top}Q\mathbf{x} \geq 0 \Rightarrow Q \succeq 0$
         \item Negative Definite Matrix:
-            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^TQ\mathbf{x} < 0 \Rightarrow Q \prec 0$
+            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^{\top}Q\mathbf{x} < 0 \Rightarrow Q \prec 0$
         \item Negative Semi-definite Matrix:
-            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^TQ\mathbf{x} \leq 0 \Rightarrow Q \preceq 0$
-        \item Indefinite Matrix: Sign of $\mathbf{x}^TQ\mathbf{x}$ differs by $\mathbf{x}$
+            $ \forall \mathbf{x} \in \mathbb{R}^n \setminus \{\mathbf{0}\},~ \mathbf{x}^{\top}Q\mathbf{x} \leq 0 \Rightarrow Q \preceq 0$
+        \item Indefinite Matrix: Sign of $\mathbf{x}^{\top}Q\mathbf{x}$ differs by $\mathbf{x}$
     \end{itemize}
     \item Notations
     \begin{itemize}
@@ -194,8 +194,8 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 
 \subsubsection*{Positive Definiteness and Eigenvalues ($Q \in \mathbb{S}^n$)}
 \begin{itemize}
-    \item $\mathbf{x}^T Q\mathbf{x} = \mathbf{x}^T (U\Lambda U^T) \mathbf{x}
-        = \mathbf{x}^T \left(\sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^T\right) \mathbf{x}
+    \item $\mathbf{x}^{\top} Q\mathbf{x} = \mathbf{x}^{\top} (U\Lambda U^{\top}) \mathbf{x}
+        = \mathbf{x}^{\top} \left(\sum_i \lambda_i \mathbf{u}_i \mathbf{u}_i^{\top}\right) \mathbf{x}
         = \sum_i c_i^2 \lambda_i$ $\left(\mathbf{x} = \sum_i \mathbf{c}_i \mathbf{u}_i\right)$
     \item $Q$ is real matrix $\Rightarrow$ Eigenvalues are all real
     \item $Q \succ 0$ $\Leftrightarrow$ $\lambda_i > 0$, $Q \succeq 0$ $\Leftrightarrow$ $\lambda_i \geq 0$
@@ -208,16 +208,16 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 \begin{itemize}
     \item $A, B \in \mathbb{S}_{++}^n$
     \begin{itemize}
-        \item $\exists A^{-1}$, $A^{-1} \succ 0$ ($A^{-1} = QD^{-1}Q^T$, Eigenvalues are $\lambda_i^{-1}$)
+        \item $\exists A^{-1}$, $A^{-1} \succ 0$ ($A^{-1} = QD^{-1}Q^{\top}$, Eigenvalues are $\lambda_i^{-1}$)
         \item $A + B \succ 0$
     \end{itemize}
     \item $A \in \mathbb{R}^{m \times n}$
     \begin{itemize}
-        \item $\mathbf{x}^T\left(A^TA\right)\mathbf{x} = (A\mathbf{x})^T(A\mathbf{x}) = \Vert A\mathbf{x} \Vert^2 \geq 0$
-        \item $A^TA \succeq 0$ ($\mathrm{rank}(A) = n~\Rightarrow~A^TA \succ 0$)
-        \item $AA^T \succeq 0$ ($\mathrm{rank}(A) = m~\Rightarrow~AA^T \succ 0$)
+        \item $\mathbf{x}^{\top}\left(A^{\top}A\right)\mathbf{x} = (A\mathbf{x})^{\top}(A\mathbf{x}) = \Vert A\mathbf{x} \Vert^2 \geq 0$
+        \item $A^{\top}A \succeq 0$ ($\mathrm{rank}(A) = n~\Rightarrow~A^{\top}A \succ 0$)
+        \item $AA^{\top} \succeq 0$ ($\mathrm{rank}(A) = m~\Rightarrow~AA^{\top} \succ 0$)
     \end{itemize}
-    \item $\mathbf{v}\mathbf{v}^T \in \mathbb{S}_+^n$: Rank-1 matrix
+    \item $\mathbf{v}\mathbf{v}^{\top} \in \mathbb{S}_+^n$: Rank-1 matrix
     \item $A \in \mathbb{S}_+^n$ $\Rightarrow$ $A^k \in \mathbb{S}_+^n$
 \end{itemize}
 
@@ -232,9 +232,9 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 
 \subsubsection*{Ellipse}
 \begin{itemize}
-    \item $\left\{\mathbf{x}~|~\mathbf{x}^TQ\mathbf{x}=c,~Q \succ 0\right\}$ is an ellipse
+    \item $\left\{\mathbf{x}~|~\mathbf{x}^{\top}Q\mathbf{x}=c,~Q \succ 0\right\}$ is an ellipse
     \item If $Q = I$, the given set is a sphere
-    \item $1 = \mathbf{x}^T Q\mathbf{x} = \sum_i \lambda_i y_i^2$ $\Rightarrow$
+    \item $1 = \mathbf{x}^{\top} Q\mathbf{x} = \sum_i \lambda_i y_i^2$ $\Rightarrow$
         $\sum_i \frac {y_i^2} {\left( \sqrt{\frac 1 {\lambda_i}} \right)^2} = 1$
     \item Axis Lengths: $\frac 2 {\sqrt {\lambda_i}}$ $\Rightarrow$ Eigenvectors with larger eigenvalue: shorter axis length
     \item Axis Directions: Eigenvectors of $Q$
@@ -242,10 +242,10 @@ $\mathbf{v} \in \mathbb{R}\setminus\{\mathbf{0}\}$ is called eigenvector if $ A\
 
 \subsubsection*{Rayleigh Quotient}
 \begin{itemize}
-    \item Definition: $R(Q, \mathbf{x}) = \frac {\mathbf{x}^T Q\mathbf{x}} {\mathbf{x}^T\mathbf{x}}$ for $Q \in \mathbb{S}^n$
-    \item $\mathbf{x}$: unit vector $\Rightarrow$ $R(Q, \mathbf{x}) = \mathbf{x}^TQ\mathbf{x}$
+    \item Definition: $R(Q, \mathbf{x}) = \frac {\mathbf{x}^{\top} Q\mathbf{x}} {\mathbf{x}^{\top}\mathbf{x}}$ for $Q \in \mathbb{S}^n$
+    \item $\mathbf{x}$: unit vector $\Rightarrow$ $R(Q, \mathbf{x}) = \mathbf{x}^{\top}Q\mathbf{x}$
     \item $Q \succ 0$ $\Rightarrow$ Eigenvector with maximum(minimum) eigenvalue maximizes(minimizes) $R(Q, \mathbf{x})$
-    \item Proof: $\max_{\mathbf{x} \neq \mathbf{0}} \frac {\mathbf{x}^T Q\mathbf{x}} {\mathbf{x}^T\mathbf{x}}
+    \item Proof: $\max_{\mathbf{x} \neq \mathbf{0}} \frac {\mathbf{x}^{\top} Q\mathbf{x}} {\mathbf{x}^{\top}\mathbf{x}}
         = \max_{\mathbf{x} \neq \mathbf{0}} \frac {\sum_i \lambda_i \mathbf{x}_i^2} {\sum_i \mathbf{x}_i^2}
         \leq \max_{\mathbf{x} \neq \mathbf{0}} \frac {\lambda_{\mathrm{max}}\sum_i \mathbf{x}_i^2} {\sum_i \mathbf{x}_i^2}
         = \lambda_{\mathrm{max}}$

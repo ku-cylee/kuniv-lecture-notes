@@ -49,9 +49,9 @@
     \item Let $f$ be the activation function on output layer
     \item Then, value of $j$-th output is
     \begin{equation}
-        y_j=f(w_{1j}x_1+w_{2j}x_2+\cdots+w_{ij}x_i+b_j)=f(w_j^Tx+b_j)
+        y_j=f(w_{1j}x_1+w_{2j}x_2+\cdots+w_{ij}x_i+b_j)=f(w_j^{\top}x+b_j)
     \end{equation}
-    \item Let $W=\left(w_1^T,w_2^T,\cdots,w_n^T\right)$ and $b=(b_1,b_2,\cdots,b_n)$, then
+    \item Let $W=\left(w_1^{\top},w_2^{\top},\cdots,w_n^{\top}\right)$ and $b=(b_1,b_2,\cdots,b_n)$, then
     \begin{equation}
         y=f(Wx+b),\text{ i.e. }\begin{mtx}{c}
             y_1 \\ y_2 \\ \vdots \\ y_n
@@ -117,15 +117,15 @@
     \begin{equation}
         \nabla f(x)=\left(\frac{\partial f(x)}{\partial x_1},\frac{\partial f(x)}{\partial x_2},\cdots,\frac{\partial f(x)}{\partial x_n}\right)
     \end{equation}
-    \item Taylor expansion: $f(x + \Delta x) \approx f(x) + \nabla f(x)^T \Delta x$
+    \item Taylor expansion: $f(x + \Delta x) \approx f(x) + \nabla f(x)^{\top} \Delta x$
     \item Example
     \begin{itemize}
-        \item $f(x)=c^Tx$ $\Rightarrow$ $\nabla f(x)=c$
-        \item $f(x)=x^TQx$ $\Rightarrow$ $\nabla f(x)=2Qx$
+        \item $f(x)=c^{\top}x$ $\Rightarrow$ $\nabla f(x)=c$
+        \item $f(x)=x^{\top}Qx$ $\Rightarrow$ $\nabla f(x)=2Qx$
     \end{itemize}
     \item Gradient vector $\nabla f$ points in the direction of greatest increase/decrease of $f$
     \begin{itemize}
-        \item Directional derivative $\nabla f(x)^T\Delta x$: Rate of change to direction $\Delta x$
+        \item Directional derivative $\nabla f(x)^{\top}\Delta x$: Rate of change to direction $\Delta x$
         \item For any $\Vert\Delta x\Vert=1$, $f(x)$ increases the most if $\Delta x=\frac{\nabla f(x)}{\Vert\nabla f(x)\Vert}$
         \item For any $\Vert\Delta x\Vert=1$, $f(x)$ decreases the most if $\Delta x=-\frac{\nabla f(x)}{\Vert\nabla f(x)\Vert}$
     \end{itemize}
@@ -180,10 +180,10 @@
     \item $x\in\mathbb{R}^m$, $y\in\mathbb{R}^n$ $\implies$ $\frac{\partial y}{\partial x}:m\times n$ matrix
     \begin{equation}
         \frac{\partial y}{\partial x}=\begin{mtx}{cccc}
-            \nabla y_1(x)^T \\
-            \nabla y_2(x)^T \\
+            \nabla y_1(x)^{\top} \\
+            \nabla y_2(x)^{\top} \\
             \vdots \\
-            \nabla y_m(x)^T
+            \nabla y_m(x)^{\top}
         \end{mtx}=\begin{mtx}{cccc}
             \frac{\partial y_1}{\partial x_1} & \frac{\partial y_1}{\partial x_2} & \cdots & \frac{\partial y_1}{\partial x_n}\\
             \frac{\partial y_2}{\partial x_1} & \frac{\partial y_2}{\partial x_2} & \cdots & \frac{\partial y_2}{\partial x_n}\\
@@ -311,7 +311,7 @@
     \begin{enumerate}
         \item Reshape $W_c$ to a vector $\tilde{w}$
         \item Extract a $D\times W_f\times H_f\times$ matrix from $W_c$ to a vector $\tilde{x}$
-        \item Compute inner product: $y_{w_o,h_o,c}=\tilde{w}^T\tilde{x}+b_c$
+        \item Compute inner product: $y_{w_o,h_o,c}=\tilde{w}^{\top}\tilde{x}+b_c$
         \item Slide the filter by stride $S$, and repeat the process
         \item Repeat the process for every channel
     \end{enumerate}
@@ -384,7 +384,7 @@
         \begin{equation}
             \tilde{x}=(3,3,6,0,4,6,5,-4,6,5,2,3,5,-4,-3,3,0,-1)
         \end{equation}
-        \item Then, $y_{11}=\tilde{w}^T\tilde{x}+b=66$
+        \item Then, $y_{11}=\tilde{w}^{\top}\tilde{x}+b=66$
     \end{itemize}
     \item Compute $y_{12}$
     \begin{equation}
@@ -406,7 +406,7 @@
         \item \textit{Slide} $W$ by $S=1$
         \item Extract submatrix from overlapping area with $W$, then reshape to $\tilde{x}$, then compute $y_{12}$
         \begin{equation}
-            \tilde{x}=(3,6,-2,4,6,6,-4,6,0,2,3,5,-4,-3,5,0,-1,6),~y_{12}=\tilde{w}^T\tilde{x}+b=41
+            \tilde{x}=(3,6,-2,4,6,6,-4,6,0,2,3,5,-4,-3,5,0,-1,6),~y_{12}=\tilde{w}^{\top}\tilde{x}+b=41
         \end{equation}
     \end{itemize}
     \item Repeating the process gives output

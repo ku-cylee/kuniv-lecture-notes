@@ -25,10 +25,10 @@
     \item $\forall~x\in S$, $\exists~m>0$ s.t. $\nabla^2 f(x)\succeq mI$ $\Rightarrow$ $f$: strongly convex on $S$
     \item Stopping criterion: $f(x)-p^\ast\leq\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
     \begin{itemize}
-        \item Taylor's Theorem: $f(y)=f(x)+\nabla f(x)^T(y-x)+\frac{1}{2}(y-x)^T\nabla^2f(c)(y-x)$
-        \item Strict convexity: $f(y)\geq f(x)+\nabla f(x)^T(y-x)+\frac{m}{2}\Vert y-x\Vert_2^2$
+        \item Taylor's Theorem: $f(y)=f(x)+\nabla f(x)^{\top}(y-x)+\frac{1}{2}(y-x)^{\top}\nabla^2f(c)(y-x)$
+        \item Strict convexity: $f(y)\geq f(x)+\nabla f(x)^{\top}(y-x)+\frac{m}{2}\Vert y-x\Vert_2^2$
         \item Minimization of $f(y)$ over $y$: $0=\nabla f(y)=\nabla f(x)+m(y-x)$ $\Rightarrow$ $y=x-\frac{1}{m}\nabla f(x)$
-        \item Substituting back: $f(y)\geq f(x)-\nabla f(x)^T\left(\frac{1}{m}\nabla f(x)\right)+\frac{m}{2}\left(\frac{1}{m^2}\Vert\nabla f(x)\Vert_2^2\right)=f(x)-\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
+        \item Substituting back: $f(y)\geq f(x)-\nabla f(x)^{\top}\left(\frac{1}{m}\nabla f(x)\right)+\frac{m}{2}\left(\frac{1}{m^2}\Vert\nabla f(x)\Vert_2^2\right)=f(x)-\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
         \item Stopping criterion: $f(x)-p^\ast\leq\frac{1}{2m}\Vert\nabla f(x)\Vert_2^2$
         \item Limitations: Deciding $m$ is not known in general
     \end{itemize}
@@ -41,7 +41,7 @@
 \begin{itemize}
     \item $\Delta x$: step, search direction
     \item $t>0$: step size, step length
-    \item Convexity $\Rightarrow$ $f(x^{(k+1)})<f(x^{(k)})$ $\Leftrightarrow$ $\nabla f(x^{(k)})^T\Delta x^{(k)}<0$
+    \item Convexity $\Rightarrow$ $f(x^{(k+1)})<f(x^{(k)})$ $\Leftrightarrow$ $\nabla f(x^{(k)})^{\top}\Delta x^{(k)}<0$
     \item General Algorithm
     \begin{description}
         \item[given] a starting point $x\in\mathcal{D}(f)$
@@ -70,9 +70,9 @@
         \item Parameters $\alpha\in\left(0,\frac{1}{2}\right)$, $\beta\in(0,1)$
         \item Starting at $t=1$, repeat $t=\beta t$ until
         \begin{equation}
-            f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^T\Delta x
+            f(x+t\Delta x) < f(x)+\alpha t\nabla f(x)^{\top}\Delta x
         \end{equation}
-        \item Guarantees $f(x^{(k)})<f(x^{(k+1)})$ since $\nabla f(x)^T\Delta x<0$
+        \item Guarantees $f(x^{(k)})<f(x^{(k+1)})$ since $\nabla f(x)^{\top}\Delta x<0$
     \end{itemize}
     \item Algorithm: General descent method with $\Delta x = -\nabla f(x)$
     \begin{description}
@@ -98,10 +98,10 @@
 \begin{itemize}
     \item Normalized steepest Descent Direction
     \begin{equation}
-        \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^T v\right\}
+        \Delta x_\mathrm{nsd}=\arg\min_{v:\Vert v\Vert\leq 1} \left\{\nabla f(x)^{\top} v\right\}
     \end{equation}
     \begin{itemize}
-        \item Interpretation: for a very small $v$, $f(x+v)\approx f(x)+\nabla f(x)^T v$
+        \item Interpretation: for a very small $v$, $f(x+v)\approx f(x)+\nabla f(x)^{\top} v$
         \item $\Delta x_{\mathrm{nsd}}$: most negative directional derivative
     \end{itemize}
     \item (Unnormalized) Steepest Descent Direction
@@ -109,13 +109,13 @@
         \Delta x_\mathrm{sd}=\Vert\nabla f(x)\Vert_\ast\Delta x_\mathrm{nsd}
     \end{equation}
     \begin{itemize}
-        \item Interpretation: $\nabla f(x)^Tv\leq\Vert\nabla f(x)\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
+        \item Interpretation: $\nabla f(x)^{\top}v\leq\Vert\nabla f(x)\Vert_\ast\Vert v\Vert\leq\Vert\nabla f(x)\Vert_\ast$
         \item General form of GD. GD if $\Vert v\Vert_2\leq 1$
     \end{itemize}
     \item Examples
     \begin{itemize}
         \item 2-norm: $\Delta x_\mathrm{sd} = -\nabla f(x)$
-        \item Quadratic norm $\Vert x\Vert_P=(x^TPx)^{1/2}$ ($P\in S_{++}^n$): $\Delta x_\mathrm{sd}=-P^{-1}\nabla f(x)$
+        \item Quadratic norm $\Vert x\Vert_P=(x^{\top}Px)^{1/2}$ ($P\in S_{++}^n$): $\Delta x_\mathrm{sd}=-P^{-1}\nabla f(x)$
     \end{itemize}
 \end{itemize}
 
@@ -126,24 +126,24 @@
         \Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x)
     \end{equation}
     \begin{itemize}
-        \item $\Delta x_\mathrm{nt}$ minimizes second-order approx. over $v$: $f(x+v)=f(x)+\nabla f(x)^Tv+\frac{1}{2}v^T\nabla^2f(x)v$
-        \item Steepest descent direction at $x$ in local Hessian norm $\Vert u\Vert_{\nabla^2 f(x)}=\left(u^T\nabla^2 f(x)u\right)^{1/2}$
+        \item $\Delta x_\mathrm{nt}$ minimizes second-order approx. over $v$: $f(x+v)=f(x)+\nabla f(x)^{\top}v+\frac{1}{2}v^{\top}\nabla^2f(x)v$
+        \item Steepest descent direction at $x$ in local Hessian norm $\Vert u\Vert_{\nabla^2 f(x)}=\left(u^{\top}\nabla^2 f(x)u\right)^{1/2}$
     \end{itemize}
     \item Newton decrement: Newton step 방향 벡터에 대한 qudratic norm
     \begin{equation}
-        \lambda(x) = \left(\nabla f(x)^T\nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2}
+        \lambda(x) = \left(\nabla f(x)^{\top}\nabla^2f(x)^{-1}\nabla f(x)\right)^{1/2}
     \end{equation}
     \begin{itemize}
-        \item $\lambda(x)=\Vert\Delta x_\mathrm{nt}\Vert_{\nabla^2f}=(\Delta x_\mathrm{nt}^T~\nabla^2f~\Delta x_\mathrm{nt})^{1/2}=\left(((\nabla^2 f)^{-1}\nabla f)^T\nabla^2 f((\nabla^2 f)^{-1}\nabla f)\right)^{1/2}$
+        \item $\lambda(x)=\Vert\Delta x_\mathrm{nt}\Vert_{\nabla^2f}=(\Delta x_\mathrm{nt}^{\top}~\nabla^2f~\Delta x_\mathrm{nt})^{1/2}=\left(((\nabla^2 f)^{-1}\nabla f)^{\top}\nabla^2 f((\nabla^2 f)^{-1}\nabla f)\right)^{1/2}$
         \item $\hat{f}$: quadratic approx $\Rightarrow$ $f(x)-p^\ast\approx f(x)-\inf_y\hat{f}(y)=\frac{1}{2}\lambda^2$
-        \item Newton direction으로의 방향도 미분: $\nabla f(x)^T\Delta x_\mathrm{nt}=-\lambda^2$
+        \item Newton direction으로의 방향도 미분: $\nabla f(x)^{\top}\Delta x_\mathrm{nt}=-\lambda^2$
     \end{itemize}
     \item Algorithm
     \begin{description}
         \item[given] a starting point $x\in\mathcal{D}(f)$, tolerance $\epsilon>0$
         \item[repeat] \phantom{}
         \begin{enumerate}
-            \item Compute Newton step and decrement: $\Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x)$, $\lambda^2=\Delta x_\mathrm{nt}^T~\nabla^2f(x)~\Delta x_\mathrm{nt}$
+            \item Compute Newton step and decrement: $\Delta x_\mathrm{nt}=-\nabla^2f(x)^{-1}\nabla f(x)$, $\lambda^2=\Delta x_\mathrm{nt}^{\top}~\nabla^2f(x)~\Delta x_\mathrm{nt}$
             \item \textit{Stopping criterion}: quit if $\frac{1}{2}\lambda^2<\epsilon$
             \item \textit{Line search} Choose a step size $t>0$ via backtracking line search
             \item \textit{Update} $x:=x+t\Delta x_\mathrm{nt}$
@@ -185,12 +185,12 @@
     \item Optimality conditions: $x^\ast$: optimal $\Leftrightarrow$ $\exists~\nu^\ast$ s.t.
     \begin{itemize}
         \item KKT 1: $Ax^\ast=b$
-        \item KKT 4: $\nabla f(x^\ast)+A^T\nu^\ast=0$
+        \item KKT 4: $\nabla f(x^\ast)+A^{\top}\nu^\ast=0$
     \end{itemize}
     \item Objective: residual(error) functions $\rightarrow~0$
     \begin{itemize}
         \item Primal residual: $r_p(x,\nu)=Ax-b$
-        \item Dual residual: $r_d(x,\nu)=\nabla f(x)+A^T\nu$
+        \item Dual residual: $r_d(x,\nu)=\nabla f(x)+A^{\top}\nu$
     \end{itemize}
 \end{itemize}
 
@@ -208,11 +208,11 @@
     \item Optimality condition
     \begin{itemize}
         \item $x^\ast=Fz^\ast+\hat{x}$
-        \item KKT 4: $0=\nabla f(x^\ast)+A^T\nu^\ast$ $\Rightarrow$ $AA^T\nu^\ast=-A\nabla f(x^\ast)$ $\Rightarrow$ $\nu^\ast=-(AA^T)^{-1}A\nabla f(x^\ast)$
+        \item KKT 4: $0=\nabla f(x^\ast)+A^{\top}\nu^\ast$ $\Rightarrow$ $AA^{\top}\nu^\ast=-A\nabla f(x^\ast)$ $\Rightarrow$ $\nu^\ast=-(AA^{\top})^{-1}A\nabla f(x^\ast)$
     \end{itemize}
     \item Gradient Descent
     \begin{itemize}
-        \item GD step $\Delta z=-F^T\nabla f(Fz+\hat{x})=-F^Tg$
+        \item GD step $\Delta z=-F^{\top}\nabla f(Fz+\hat{x})=-F^{\top}g$
         \item Orthogonal projection to the subspace $\mathcal{V}=\mathrm{span}(f_1,f_2,\cdots,f_n)$
         \item $\Delta x$: closest to true gradient $-g$ $\Rightarrow$ projected gradient method
     \end{itemize}
@@ -227,25 +227,25 @@
 \begin{itemize}
     \item Newton step
     \begin{equation}
-        \begin{mtx}{cc}\nabla^2f(x)&A^T\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}-\nabla f(x)\\0\end{mtx}
+        \begin{mtx}{cc}\nabla^2f(x)&A^{\top}\\A&0\end{mtx}\begin{mtx}{c}\Delta x_\mathrm{nt}\\w\end{mtx}=\begin{mtx}{c}-\nabla f(x)\\0\end{mtx}
     \end{equation}
     \begin{itemize}
         \item Coefficient matrix is called KKT matrix
         \item Interpretation
         \begin{itemize}
-            \item $v=\Delta x_\mathrm{nt}$ solves 2nd-order approx. $\hat{f}(x+v)=f(x)+\nabla f(x)^Tv+\frac{1}{2}v^T\nabla^2 f(x)v$ s.t. $A(x+v)=b$
-            \item $\Delta x_\mathrm{nt}$ satisfies KKT cond 4: $\nabla f(x+v)+A^Tw\approx\nabla f(x)+\nabla^2 f(x)v+A^Tw=\nabla f(x)+(-\nabla f(x))=0$
+            \item $v=\Delta x_\mathrm{nt}$ solves 2nd-order approx. $\hat{f}(x+v)=f(x)+\nabla f(x)^{\top}v+\frac{1}{2}v^{\top}\nabla^2 f(x)v$ s.t. $A(x+v)=b$
+            \item $\Delta x_\mathrm{nt}$ satisfies KKT cond 4: $\nabla f(x+v)+A^{\top}w\approx\nabla f(x)+\nabla^2 f(x)v+A^{\top}w=\nabla f(x)+(-\nabla f(x))=0$
         \end{itemize}
         \item $x+\Delta x_\mathrm{nt}$, $w$: a good estimate of $x^\ast$ and $\nu^\ast$ when $f$ is nearly quadratic
     \end{itemize}
     \item Newton decrement
     \begin{equation}
-        \lambda(x)=\left(-\nabla f(x)^T\Delta x_\mathrm{nt}\right)^{1/2}
+        \lambda(x)=\left(-\nabla f(x)^{\top}\Delta x_\mathrm{nt}\right)^{1/2}
     \end{equation}
     \begin{itemize}
-        \item KKT cond 4: $\nabla f+\nabla^2fv+A^Tw=0$
-        \item $0=v^T\nabla f+v^T\nabla^2fv+v^TA^Tw=v^T\nabla f+v^T\nabla^2fv+(Av)^Tw=v^T\nabla f+v^T\nabla^2fv$ $\Rightarrow$ $v^T\nabla^2fv=-\nabla f^Tv$
-        \item $\lambda=\left(\nabla f^T\nabla^2f^{-1}\nabla f\right)^{1/2}=\left(-\nabla f^Tv\right)^{1/2}$
+        \item KKT cond 4: $\nabla f+\nabla^2fv+A^{\top}w=0$
+        \item $0=v^{\top}\nabla f+v^{\top}\nabla^2fv+v^{\top}A^{\top}w=v^{\top}\nabla f+v^{\top}\nabla^2fv+(Av)^{\top}w=v^{\top}\nabla f+v^{\top}\nabla^2fv$ $\Rightarrow$ $v^{\top}\nabla^2fv=-\nabla f^{\top}v$
+        \item $\lambda=\left(\nabla f^{\top}\nabla^2f^{-1}\nabla f\right)^{1/2}=\left(-\nabla f^{\top}v\right)^{1/2}$
     \end{itemize}
     \newpage
     \item Algorithm
@@ -264,28 +264,28 @@
 
 \subsubsection*{Solving KKT Matrix}
 \begin{equation}
-    K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g\\h\end{mtx}
+    K\begin{mtx}{c}v\\w\end{mtx}=\begin{mtx}{cc}H&A^{\top}\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g\\h\end{mtx}
 \end{equation}
 \begin{itemize}
     \item KKT matrix ($K$): nonsingular $\Leftrightarrow$ $\nexists~x\neq 0$ s.t. $Hx=0$, $Ax=0$ $\Leftrightarrow$ $H\succ 0$
     \begin{itemize}
-        \item $x\neq 0$, $Ax=0$ $\Rightarrow$ $x\in\mathcal{N}(A)$ $\Rightarrow$ $Hx\neq 0$ $\Rightarrow$ $x^THx\neq 0$ $\Rightarrow$ $x^THx>0$ $\Rightarrow$ $H\succ 0$
-        \item $H+A^TA>0$ also holds
+        \item $x\neq 0$, $Ax=0$ $\Rightarrow$ $x\in\mathcal{N}(A)$ $\Rightarrow$ $Hx\neq 0$ $\Rightarrow$ $x^{\top}Hx\neq 0$ $\Rightarrow$ $x^{\top}Hx>0$ $\Rightarrow$ $H\succ 0$
+        \item $H+A^{\top}A>0$ also holds
         \item $\therefore$ $H\succ 0$ $\Rightarrow$ KKT: nonsingular
     \end{itemize}
     \item Problem is convex optimization problem $\Rightarrow$ $H=\nabla^2 f(x)\succeq 0$
     \item If $H$: nonsingular, i.e. $H=\nabla^2 f(x)\succ 0$
     \begin{itemize}
-        \item $Hv+A^Tw=-g$ $\Rightarrow$ $v=-H^{-1}(g+A^Tw)$
-        \item $-h=Av=A\left(-H^{-1}(g+A^Tw)\right)=-AH^{-1}(g+A^Tw)$ $\Rightarrow$ $AH^{-1}A^Tw=h-AH^{-1}g$
-        \item $w=\left(AH^{-1}A^T\right)^{-1}\left(h-AH^{-1}g\right)$, $v=-H^{-1}\left(g+A^Tw\right)$
+        \item $Hv+A^{\top}w=-g$ $\Rightarrow$ $v=-H^{-1}(g+A^{\top}w)$
+        \item $-h=Av=A\left(-H^{-1}(g+A^{\top}w)\right)=-AH^{-1}(g+A^{\top}w)$ $\Rightarrow$ $AH^{-1}A^{\top}w=h-AH^{-1}g$
+        \item $w=\left(AH^{-1}A^{\top}\right)^{-1}\left(h-AH^{-1}g\right)$, $v=-H^{-1}\left(g+A^{\top}w\right)$
     \end{itemize}
     \item If $H$: singular, i.e. $H=\nabla^2 f(x)=0$
     \begin{itemize}
-        \item $Hv+A^Tw=-g$ $\Rightarrow$ $Hv+A^TAw+A^Tw=-g-A^Th$ ($\because~Aw=-h$)
-        \item $H+A^TA\succ 0$ $\Rightarrow$ Rewrite KKT equation, and apply elimination
+        \item $Hv+A^{\top}w=-g$ $\Rightarrow$ $Hv+A^{\top}Aw+A^{\top}w=-g-A^{\top}h$ ($\because~Aw=-h$)
+        \item $H+A^{\top}A\succ 0$ $\Rightarrow$ Rewrite KKT equation, and apply elimination
         \begin{equation}
-            \begin{mtx}{cc}H+A^TA&A^T\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g+A^Th\\h
+            \begin{mtx}{cc}H+A^{\top}A&A^{\top}\\A&0\end{mtx}\begin{mtx}{c}v\\w\end{mtx}=-\begin{mtx}{c}g+A^{\top}h\\h
         \end{mtx}\end{equation}
     \end{itemize}
 \end{itemize}
@@ -326,7 +326,7 @@
     \begin{itemize}
         \item $f_i$: convex $\Rightarrow$ $\phi(x)$ is convex
         \item $\nabla\phi(x)=-\sum_{i=1}^{m}\frac{1}{f_i(x)}\nabla f_i(x)$
-        \item $\nabla^2\phi(x)=\sum_{i=1}^{m}\left(\frac{1}{f_i(x)^2}\nabla f_i(x)\nabla f_i(x)^T-\frac{1}{f_i(x)}\nabla^2f_i(x)\right)$
+        \item $\nabla^2\phi(x)=\sum_{i=1}^{m}\left(\frac{1}{f_i(x)^2}\nabla f_i(x)\nabla f_i(x)^{\top}-\frac{1}{f_i(x)}\nabla^2f_i(x)\right)$
     \end{itemize}
     \item Approximation via Logarithmic Barrier
     \begin{equation}\begin{aligned}
@@ -350,8 +350,8 @@
     \begin{itemize}
         \item $x^\ast(t)$: Solution of the problem $f(x)=tf_0(x)+\phi(x)$ s.t. $Ax=b$ (Assume $\forall~t>0$, $\exists!~x^\ast(t)$)
     \end{itemize}
-    \item $\exists~w$ s.t. $Ax=b$, $t\nabla f_0(x)+\sum_{i=1}^m\frac{1}{-f_i(x)}\nabla f_i(x)+A^Tw = 0$ $\Rightarrow$ $x=x^\ast(t)$
-    \item Lagrangian: $L(x,\lambda^\ast(t),\nu^\ast)=f_0(x)+\sum_{i=1}^{m}\lambda_i^\ast(t)f_i(x)+\nu^\ast(t)^T(Ax-b)$
+    \item $\exists~w$ s.t. $Ax=b$, $t\nabla f_0(x)+\sum_{i=1}^m\frac{1}{-f_i(x)}\nabla f_i(x)+A^{\top}w = 0$ $\Rightarrow$ $x=x^\ast(t)$
+    \item Lagrangian: $L(x,\lambda^\ast(t),\nu^\ast)=f_0(x)+\sum_{i=1}^{m}\lambda_i^\ast(t)f_i(x)+\nu^\ast(t)^{\top}(Ax-b)$
     \item $x^\ast(t)$ minimizes $L$ where $\lambda_i^\ast(t)=-\frac{1}{tf_i(x^\ast(t))}$, $\nu^\ast(t)=\frac{w}{t}$
     \item $p^\ast\geq g(\lambda^\ast,\nu^\ast)=L(x^\ast,\lambda^\ast,\nu^\ast)=f_0(x^\ast)-\sum_{i=1}^m\frac{f_i(x^\ast)}{tf_i(x^\ast)}+\nu^{\ast T}(Ax-b)=f_0(x^\ast)-\frac{m}{t}$
     \item $f_0(x^\ast)-p^\ast\leq\frac{m}{t}\rightarrow 0$ when $t\rightarrow\infty$

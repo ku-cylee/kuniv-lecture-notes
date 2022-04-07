@@ -51,12 +51,12 @@
 \begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
     \mathrm{subject~to}~~&~~f_i(\mathbf{x}) \leq 0,~i=1,2,\cdots,m \\
-        &~~\mathbf{a}_i^T \mathbf{x} = b_i,~i=1,2,\cdots,p
+        &~~\mathbf{a}_i^{\top} \mathbf{x} = b_i,~i=1,2,\cdots,p
 \end{aligned}\end{equation}
 \begin{itemize}
     \item $f_i$: convex
     \item Equality constraints: affine
-    \item $\mathbf{a}_i^T \mathbf{x} = b_i$ can be simply written in $A\mathbf{x} = \mathbf{b}$
+    \item $\mathbf{a}_i^{\top} \mathbf{x} = b_i$ can be simply written in $A\mathbf{x} = \mathbf{b}$
         where $A \in \mathbb{R}^{p \times n}$, $\mathbf{b} \in \mathbb{R}^p$ when $\mathbf{x} \in \mathbb{R}^{n}$
 \end{itemize}
 
@@ -71,7 +71,7 @@
 \begin{itemize}
     \item In CO, $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal $\Leftrightarrow$
     \begin{equation}
-        \forall~\mathbf{x} \in \mathcal{F},~\nabla f_0 \left(\mathbf{x}^{\ast}\right)^T \left( \mathbf{x} - \mathbf{x}^{\ast} \right) \geq 0
+        \forall~\mathbf{x} \in \mathcal{F},~\nabla f_0 \left(\mathbf{x}^{\ast}\right)^{\top} \left( \mathbf{x} - \mathbf{x}^{\ast} \right) \geq 0
     \end{equation}
     \item Unconstrained CO: $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal
         $\Leftrightarrow$ $\nabla f_0 \left(\mathbf{x}^{\ast}\right) = \mathbf{0}$
@@ -86,7 +86,7 @@
     \end{aligned}\end{equation}
     \begin{itemize}
         \item $\mathbf{x}^{\ast} \in \mathcal{F}$: optimal $\Leftrightarrow$
-            $\nabla f_0 \left(\mathbf{x}^{\ast}\right) + A^T \nu = 0$
+            $\nabla f_0 \left(\mathbf{x}^{\ast}\right) + A^{\top} \nu = 0$
         \item $\mathbf{x}$: primal variable, $\nu$: dual variable
     \end{itemize}
     \item Minimization Over Positive Orthant
@@ -134,10 +134,10 @@
 \vspace*{-\baselineskip}
 \begin{equation}\begin{aligned}
     \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
-    \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x} \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\ {}
+    \mathrm{subject~to}~~&~~\mathbf{a}_i^{\top} \mathbf{x} \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\ {}
 \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
     \mathrm{minimize}~~&~~f_0(\mathbf{x}) \\
-    \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x} + s_i \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\
+    \mathrm{subject~to}~~&~~\mathbf{a}_i^{\top} \mathbf{x} + s_i \leq b_i~~(i \in \mathbb{Z} \cap [1,m]) \\
         &~~ s_i \geq 0~~(i \in \mathbb{Z} \cap [1,m])
 \end{aligned}\end{equation}
 \begin{itemize}
@@ -174,7 +174,7 @@
 
 \subsubsection*{Linear Program (LP)}
 \begin{equation}\begin{aligned}
-    \mathrm{minimize}~~&~~\mathbf{c}^T \mathbf{x} + d \\
+    \mathrm{minimize}~~&~~\mathbf{c}^{\top} \mathbf{x} + d \\
     \mathrm{subject~to}~~&~~G\mathbf{x} \geq \mathbf{h} \\
         &~~A\mathbf{x} = \mathbf{b}
 \end{aligned}\end{equation}
@@ -187,7 +187,7 @@
 \begin{itemize}
     \item Diet problem: Choose quantities $x_1$, $x_2$, $\cdots$, $x_n$ of $n$ foods
     \begin{equation}\begin{aligned}
-        \mathrm{minimize}~~&~~\mathbf{c}^T \mathbf{x} \\
+        \mathrm{minimize}~~&~~\mathbf{c}^{\top} \mathbf{x} \\
         \mathrm{subject~to}~~&~~A\mathbf{x} \geq \mathbf{b},~\mathbf{x} \geq 0
     \end{aligned}\end{equation}
     \begin{itemize}
@@ -196,7 +196,7 @@
     \end{itemize}
     \item Piecewise linear minimization
     \begin{equation}\begin{aligned}
-        \mathrm{minimize}~~&~~\max_{i \in \mathbb{Z} \cap [1,m]} \left\{ \mathbf{a}_i^T\mathbf{x} + \mathbf{b}_i \right\} \\ {}
+        \mathrm{minimize}~~&~~\max_{i \in \mathbb{Z} \cap [1,m]} \left\{ \mathbf{a}_i^{\top}\mathbf{x} + \mathbf{b}_i \right\} \\ {}
     \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
         \mathrm{minimize}~~&~~t \\
         \mathrm{subject~to}~~&~~Ax + B \leq t\mathbf{1}~~(i \in \mathbb{Z} \cap [1,m])
@@ -205,30 +205,30 @@
         of a polyhedron $\mathcal{P} = \left\{\mathbf{x}~|~A\mathbf{x}\leq\mathbf{b} \right\}$
     \begin{equation}\begin{aligned}
         \mathrm{maximize}~~&~~r \\
-        \mathrm{subject~to}~~&~~\mathbf{a}_i^T \mathbf{x}_C + r\Vert\mathbf{a}_i\Vert_2\leq\mathbf{b}_i~~(i \in \mathbb{Z} \cap [1,m])
+        \mathrm{subject~to}~~&~~\mathbf{a}_i^{\top} \mathbf{x}_C + r\Vert\mathbf{a}_i\Vert_2\leq\mathbf{b}_i~~(i \in \mathbb{Z} \cap [1,m])
     \end{aligned}\end{equation}
 \end{itemize}
 
 \subsubsection*{Linear Fractional Programming}
 \begin{equation}\begin{aligned}
-    \mathrm{minimize}~~&~~\phi(\mathbf{x}) = \frac {\mathbf{c}^T\mathbf{x} + d} {\mathbf{e}^T \mathbf{x} + f} \\
+    \mathrm{minimize}~~&~~\phi(\mathbf{x}) = \frac {\mathbf{c}^{\top}\mathbf{x} + d} {\mathbf{e}^{\top} \mathbf{x} + f} \\
     \mathrm{subject~to}~~&~~A\mathbf{x} \leq \mathbf{b} \\ {} \\ {}
 \end{aligned}~~~\Leftrightarrow~~~\begin{aligned}
-    \mathrm{minimize}~~&~~\mathbf{c}^T\mathbf{y} + d\mathbf{z} \\
+    \mathrm{minimize}~~&~~\mathbf{c}^{\top}\mathbf{y} + d\mathbf{z} \\
     \mathrm{subject~to}~~&~~A\mathbf{y} - b\mathbf{z} \leq 0 \\
-        &~~\mathbf{e}^T\mathbf{y} + f\mathbf{z} = 1\\
+        &~~\mathbf{e}^{\top}\mathbf{y} + f\mathbf{z} = 1\\
         &~~\mathbf{z} > 0
 \end{aligned}\end{equation}
 \begin{itemize}
-    \item $\mathcal{\phi} = \left\{\mathbf{x}~|~\mathbf{e}^T\mathbf{x} + f > 0 \right\}$
-    \item Take $\mathbf{y} = \frac 1 {\mathbf{e}^T\mathbf{x} + f}\mathbf{x}$, $z = \frac 1 {\mathbf{e}^T\mathbf{x} + f}$
+    \item $\mathcal{\phi} = \left\{\mathbf{x}~|~\mathbf{e}^{\top}\mathbf{x} + f > 0 \right\}$
+    \item Take $\mathbf{y} = \frac 1 {\mathbf{e}^{\top}\mathbf{x} + f}\mathbf{x}$, $z = \frac 1 {\mathbf{e}^{\top}\mathbf{x} + f}$
 \end{itemize}
 
 \subsection{Quadratic Program}
 
 \subsubsection*{Quadratic Program (QP)}
 \begin{equation}\begin{aligned}
-    \mathrm{minimize}~~&~~\frac 1 2 \mathbf{x}^TP\mathbf{x} + \mathbf{q}^T\mathbf{x} + r \\
+    \mathrm{minimize}~~&~~\frac 1 2 \mathbf{x}^{\top}P\mathbf{x} + \mathbf{q}^{\top}\mathbf{x} + r \\
     \mathrm{subject~to}~~&~~G\mathbf{x} \geq \mathbf{h} \\
         &~~A\mathbf{x} = \mathbf{b}
 \end{aligned}\end{equation}
@@ -239,7 +239,7 @@
 
 \subsubsection*{Examples}
 \begin{itemize}
-    \item Unconstrained QP: $\mathrm{minimize}~~~~\frac 1 2 \mathbf{x}^TP\mathbf{x} + \mathbf{q}^T\mathbf{x} + r$
+    \item Unconstrained QP: $\mathrm{minimize}~~~~\frac 1 2 \mathbf{x}^{\top}P\mathbf{x} + \mathbf{q}^{\top}\mathbf{x} + r$
     \begin{itemize}
         \item Assume $Q \succ 0$ i.e. given problem is convex QP
         \item First-order condition: $0 = \nabla f_0(\mathbf{x}^{\ast}) = P\mathbf{x}^{\ast} + \mathbf{q}$
@@ -247,18 +247,18 @@
     \end{itemize}
     \item Least-squares: $\mathrm{minimize}~~~~\Vert A\mathbf{x} - \mathbf{b} \Vert_2^2$
     \begin{itemize}
-        \item $\mathbf{x}^{\ast} = \left(A^TA\right)^{-1}A^T\mathbf{b} = A^{\ast}\mathbf{b}$ ($A^{\ast}$: Left inverse of $A$ i.e. $A^{\ast}A = I$)
+        \item $\mathbf{x}^{\ast} = \left(A^{\top}A\right)^{-1}A^{\top}\mathbf{b} = A^{\ast}\mathbf{b}$ ($A^{\ast}$: Left inverse of $A$ i.e. $A^{\ast}A = I$)
     \end{itemize}
     \item LP with Random Cost
     \begin{equation}\begin{aligned}
         \mathrm{minimize}~~&~~
-            \mathbb{E}\left[ \mathbf{c}^T\mathbf{x} \right] + \gamma \mathrm{Var}\left[ \mathbf{c}^T \mathbf{x} \right]
-            = \overline{\mathbf{c}}^T\mathbf{x} + \gamma \mathbf{x}^T \Sigma \mathbf{x} \\
+            \mathbb{E}\left[ \mathbf{c}^{\top}\mathbf{x} \right] + \gamma \mathrm{Var}\left[ \mathbf{c}^{\top} \mathbf{x} \right]
+            = \overline{\mathbf{c}}^{\top}\mathbf{x} + \gamma \mathbf{x}^{\top} \Sigma \mathbf{x} \\
         \mathrm{subject~to}~~&~~G\mathbf{x} \geq \mathbf{h},~A\mathbf{x} = \mathbf{b}
     \end{aligned}\end{equation}
     \begin{itemize}
         \item $\mathbf{c}$: random vector with mean $\overline{\mathbf{c}}$ and covariance matrix $\Sigma$
-        \item $\mathbf{c}^T\mathbf{x}$: random variable with mean $\overline{\mathbf{c}}^T\mathbf{x}$ and variance $\mathbf{x}^T\Sigma\mathbf{x}$
+        \item $\mathbf{c}^{\top}\mathbf{x}$: random variable with mean $\overline{\mathbf{c}}^{\top}\mathbf{x}$ and variance $\mathbf{x}^{\top}\Sigma\mathbf{x}$
         \item $\Sigma = \mathbb{E}\left[\left(\mathbf{c}_i - \overline{\mathbf{c}}_i\right)\left(\mathbf{c}_j - \overline{\mathbf{c}}_j\right)\right] \succeq 0$
             i.e. Given problem is convex QP
         \item $\gamma > 0$: risk aversion parameter; Minimizes covariance when $\gamma \rightarrow 0$ and minimizes mean when $\gamma \rightarrow \infty$
@@ -267,8 +267,8 @@
 
 \subsubsection*{Quadratically Constrained Quadratic Program (QCQP)}
 \begin{equation}\begin{aligned}
-    \mathrm{minimize}~~&~~\frac 1 2 \mathbf{x}^TP_0\mathbf{x} + \mathbf{q}_0^T\mathbf{x} + r_0 \\
-    \mathrm{subject~to}~~&~~\frac 1 2 \mathbf{x}^TP_i\mathbf{x} + \mathbf{q}_i^T\mathbf{x} + r_i \leq 0~~(i \in \mathbb{Z} \cap [1,m]) \\
+    \mathrm{minimize}~~&~~\frac 1 2 \mathbf{x}^{\top}P_0\mathbf{x} + \mathbf{q}_0^{\top}\mathbf{x} + r_0 \\
+    \mathrm{subject~to}~~&~~\frac 1 2 \mathbf{x}^{\top}P_i\mathbf{x} + \mathbf{q}_i^{\top}\mathbf{x} + r_i \leq 0~~(i \in \mathbb{Z} \cap [1,m]) \\
         &~~A\mathbf{x} = \mathbf{b}
 \end{aligned}\end{equation}
 \begin{itemize}

@@ -38,23 +38,23 @@
 
 \subsubsection*{Convex Functions on $\mathbb{R}^n$}
 \begin{itemize}
-    \item Affine: $f(\mathbf{x}) = \mathbf{a}^T\mathbf{x} + b$ ($\mathbf{a} \in \mathbb{R}^n$, $b\in\mathbb{R}$)
+    \item Affine: $f(\mathbf{x}) = \mathbf{a}^{\top}\mathbf{x} + b$ ($\mathbf{a} \in \mathbb{R}^n$, $b\in\mathbb{R}$)
     \item $p$-norms: $f(\mathbf{x}) = \left(\sum_i |x_i|^p\right)^{\frac 1 p}$ ($p \geq 1$)
 \end{itemize}
 
 \subsubsection*{Convex Functions on $\mathbb{R}^{m\times n}$}
 \begin{itemize}
-    \item Affine: $f(X) = \mathrm{tr}(A^T X) + b$ ($A \in \mathbb{R}^{m \times n}$, $b \in \mathbb{R}$)
+    \item Affine: $f(X) = \mathrm{tr}(A^{\top} X) + b$ ($A \in \mathbb{R}^{m \times n}$, $b \in \mathbb{R}$)
     \begin{itemize}
-        \item $\mathrm{tr}(A^T B) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} B_{ij}$: Inner product of $A$ and $B$
+        \item $\mathrm{tr}(A^{\top} B) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} B_{ij}$: Inner product of $A$ and $B$
     \end{itemize}
     \item Matrix Norm (Spectral Norm): $f(X) = \Vert X \Vert_2 = \max_{\mathbf{v}} \frac {\Vert X\mathbf{v} \Vert_2} {\Vert \mathbf{v} \Vert_2} = \sigma_{\max}(X)$
     \begin{itemize}
         \item Triangluar inequality ($\Vert A+B \Vert = \Vert A \Vert + \Vert B \Vert$) does hold for matrix norm
-        \item $\forall A \in \mathbb{R}^{m\times n}$, $A^T A \succeq 0$ $\Rightarrow$ $\lambda_i \geq 0$
+        \item $\forall A \in \mathbb{R}^{m\times n}$, $A^{\top} A \succeq 0$ $\Rightarrow$ $\lambda_i \geq 0$
             $\Rightarrow$ Singluar values $\sigma_i = \sqrt{\lambda_i}$ can be defined
-        \item Then, singular value decomposition (SVD): $A = U\Sigma V^T$ ($U^TU = V^TV = I$, $\Sigma$: diag mtx with $\sigma_i$)
-        \item Then, $A^T A = \left( U\Sigma V^T \right) \left(V \Sigma^T U^T \right) = U\Sigma \Sigma^T U^T = U \Lambda U^T$
+        \item Then, singular value decomposition (SVD): $A = U\Sigma V^{\top}$ ($U^{\top}U = V^{\top}V = I$, $\Sigma$: diag mtx with $\sigma_i$)
+        \item Then, $A^{\top} A = \left( U\Sigma V^{\top} \right) \left(V \Sigma^{\top} U^{\top} \right) = U\Sigma \Sigma^{\top} U^{\top} = U \Lambda U^{\top}$
     \end{itemize}
 \end{itemize}
 
@@ -73,9 +73,9 @@
     \begin{equation}
         \nabla f(\mathbf{x}) = \left(\frac {\partial f(\mathbf{x})} {\partial x_1}, \frac {\partial f(\mathbf{x})} {\partial x_2}, \cdots, \frac {\partial f(\mathbf{x})} {\partial x_n} \right)
     \end{equation}
-    \item Taylor expansion: $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^T \Delta \mathbf{x}$
-    \item $f(\mathbf{x}) = \mathbf{c}^T\mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = \mathbf{c}$
-    \item $f(\mathbf{x}) = \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = 2Q\mathbf{x}$
+    \item Taylor expansion: $f(\mathbf{x} + \Delta \mathbf{x}) \approx f(\mathbf{x}) + \nabla f(\mathbf{x})^{\top} \Delta \mathbf{x}$
+    \item $f(\mathbf{x}) = \mathbf{c}^{\top}\mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = \mathbf{c}$
+    \item $f(\mathbf{x}) = \mathbf{x}^{\top} Q \mathbf{x}$ $\Rightarrow$ $\nabla f(\mathbf{x}) = 2Q\mathbf{x}$
 \end{itemize}
 
 \subsubsection*{Jacobian}
@@ -84,7 +84,7 @@
         ($f(\mathbf{x}) = (f_1(\mathbf{x}), f_2(\mathbf{x}), \cdots, f_m(\mathbf{x}))$)
     \begin{equation}
         J_f = \begin{mtx}{c}
-            \nabla f_1(\mathbf{x})^T \\ \nabla f_2(\mathbf{x})^T \\ \vdots \\ \nabla f_m(\mathbf{x})^T
+            \nabla f_1(\mathbf{x})^{\top} \\ \nabla f_2(\mathbf{x})^{\top} \\ \vdots \\ \nabla f_m(\mathbf{x})^{\top}
         \end{mtx} = \begin{mtx}{cccc}
             \frac {\partial f_1} {\partial x_1} & \frac {\partial f_1} {\partial x_2} & \cdots & \frac {\partial f_1} {\partial x_n} \\
             \frac {\partial f_2} {\partial x_1} & \frac {\partial f_2} {\partial x_2} & \cdots & \frac {\partial f_2} {\partial x_n} \\
@@ -111,7 +111,7 @@
         \approx f(\mathbf{x}) + f^{\prime}(\mathbf{x})\Delta\mathbf{x} + \frac 1 2 f^{\prime\prime}(\mathbf{x})\Delta\mathbf{x}^2$
     \item $\nabla f(\mathbf{x} + \Delta \mathbf{x}) \approx \nabla f(\mathbf{x}) + J_{\nabla f}(\mathbf{x}) \Delta \mathbf{x}$
     \item Hessian is a square, symmetric matrix
-    \item $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^T Q \mathbf{x}$ $\Rightarrow$ $\nabla^2 f(\mathbf{x}) = Q$
+    \item $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^{\top} Q \mathbf{x}$ $\Rightarrow$ $\nabla^2 f(\mathbf{x}) = Q$
 \end{itemize}
 
 \subsubsection*{First-order Condition of Convexity}
@@ -119,7 +119,7 @@
     \item $f$ is differentiable: $\mathcal{D}(f)$: open, $\forall x \in \mathcal{D}(f),~\exists\nabla f(x)$
     \item $f$: differentiable, $\mathcal{D}(f)$: convex. $f$: convex $\Leftrightarrow$
     \begin{equation}
-        \forall x, y \in \mathcal{D}(f),~f(y) \geq f(x) + \nabla f(x)^T (y-x)
+        \forall x, y \in \mathcal{D}(f),~f(y) \geq f(x) + \nabla f(x)^{\top} (y-x)
     \end{equation}
 \end{itemize}
 
@@ -136,8 +136,8 @@
 \subsubsection*{Examples}
 \begin{itemize}
     \item Quadratic: $P \in \mathbb{S}^n_{+}$ $\Rightarrow$
-        $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^T P\mathbf{x} + \mathbf{q}^T\mathbf{x} + r$: convex ($\nabla^2 f = P$)
-    \item Least-squares Objective: $f(\mathbf{x}) = \Vert A\mathbf{x} - \mathbf{b} \Vert_2^2$: convex ($\nabla^2 f = 2A^T A$)
+        $f(\mathbf{x}) = \frac 1 2 \mathbf{x}^{\top} P\mathbf{x} + \mathbf{q}^{\top}\mathbf{x} + r$: convex ($\nabla^2 f = P$)
+    \item Least-squares Objective: $f(\mathbf{x}) = \Vert A\mathbf{x} - \mathbf{b} \Vert_2^2$: convex ($\nabla^2 f = 2A^{\top} A$)
     \item Quadratic-over-linear: $y > 0$ $\Rightarrow$ $f(x, y) = \frac {x^2} y$: convex
 \end{itemize}
 
@@ -153,8 +153,8 @@
             $\frac {\partial f(\mathbf{x})} {\partial x_i} = \frac {z_i} {\sum_k z_k}$,
             $\frac {\partial^2 f(\mathbf{x})} {\partial x_i^2} = \frac {z_i \sum_k z_k - (z_i)^2} {(\sum_k z_k)^2}$,
             $\frac {\partial^2 f(\mathbf{x})} {\partial x_i \partial x_j} = -\frac {z_i z_j} {(\sum_k z_k)^2}$
-        \item $\nabla^2 f(\mathbf{x}) = \frac 1 {\mathbf{1}^T \mathbf{z}} \mathrm{diag}(\mathbf{z}) - \frac 1 {(\mathbf{1}^T \mathbf{z})^2} \mathbf{z}\mathbf{z}^T$
-        \item $\forall \mathbf{v}$, $\mathbf{v}^T \nabla^2 f(\mathbf{x}) \mathbf{v}
+        \item $\nabla^2 f(\mathbf{x}) = \frac 1 {\mathbf{1}^{\top} \mathbf{z}} \mathrm{diag}(\mathbf{z}) - \frac 1 {(\mathbf{1}^{\top} \mathbf{z})^2} \mathbf{z}\mathbf{z}^{\top}$
+        \item $\forall \mathbf{v}$, $\mathbf{v}^{\top} \nabla^2 f(\mathbf{x}) \mathbf{v}
             = \frac {(\sum_k z_k v_k^2)(\sum_k z_k) - (\sum_k v_k z_k)^2} {(\sum_k z_k^2)^2} \geq 0$
             ($\because$ Cauchy-Schwarz Inequality)
     \end{itemize}
@@ -199,8 +199,8 @@
 \begin{itemize}
     \item $f$: convex $\Rightarrow$ $f(A\mathbf{x} + \mathbf{b})$: convex
     \item Log barrier for linear inequalities:
-        $f(\mathbf{x}) = - \sum_{i=1}^n \log (\mathbf{b}_i - \mathbf{a}_i^T \mathbf{x})$,
-        $\mathcal{D}(f) = \{x~|~\mathbf{a}_i^T \mathbf{x} < \mathbf{b}_i,~i=1,~2,~\cdots,~m\}$
+        $f(\mathbf{x}) = - \sum_{i=1}^n \log (\mathbf{b}_i - \mathbf{a}_i^{\top} \mathbf{x})$,
+        $\mathcal{D}(f) = \{x~|~\mathbf{a}_i^{\top} \mathbf{x} < \mathbf{b}_i,~i=1,~2,~\cdots,~m\}$
     \begin{itemize}
         \item $f$ is the ``interior''(borders excluded) of the polyhedron
     \end{itemize}
@@ -218,7 +218,7 @@
     \item Pointwise Maximum Examples
     \begin{itemize}
         \item Piecewise-linear Function:
-            $f(\mathbf{x}) = \max_i \left\{ \mathbf{a}_i^T\mathbf{x} + \mathbf{b}_i \right\}$: convex
+            $f(\mathbf{x}) = \max_i \left\{ \mathbf{a}_i^{\top}\mathbf{x} + \mathbf{b}_i \right\}$: convex
         \item Sum of $r$ largest components of $\mathbf{x} \in \mathbb{R}^n$:
             $f(\mathbf{x}) = \sum_{i=1}^r \mathbf{x}_{[i]}$: convex
         \begin{itemize}
@@ -228,11 +228,11 @@
     \end{itemize}
     \item Pointwise Supremum Examples
     \begin{itemize}
-        \item Support function of set $C$: $S_C(\mathbf{x}) = \sup_{\mathbf{y} \in C} \mathbf{y}^T \mathbf{x}$: convex
+        \item Support function of set $C$: $S_C(\mathbf{x}) = \sup_{\mathbf{y} \in C} \mathbf{y}^{\top} \mathbf{x}$: convex
         \item Distance to farthest point in a set $C$: $f(\mathbf{x}) = \sup_{\mathbf{y}\in C} \Vert \mathbf{x} - \mathbf{y} \Vert$: convex
         \item Maximum eigenvalue: $A \in \mathbb{S}^n$, $f$: convex
         \begin{equation}
-            f(A) = \sup_{\mathbf{x} \in \mathbb{R}^n} \frac {\mathbf{x}^T A\mathbf{x}} {\mathbf{x}^T\mathbf{x}}
+            f(A) = \sup_{\mathbf{x} \in \mathbb{R}^n} \frac {\mathbf{x}^{\top} A\mathbf{x}} {\mathbf{x}^{\top}\mathbf{x}}
         \end{equation}
     \end{itemize}
 \end{itemize}
@@ -262,14 +262,14 @@
     \item Note: Convexity condition on $f$ has been ``strengthened''
     \item Examples
     \begin{itemize}
-        \item $C \succ 0$, $Q = \begin{mtx}{cc} A & B \\ B^T & C\end{mtx} \succeq 0$,
+        \item $C \succ 0$, $Q = \begin{mtx}{cc} A & B \\ B^{\top} & C\end{mtx} \succeq 0$,
             $\mathbf{z} = \begin{mtx}{c} \mathbf{x} \\ \mathbf{y} \end{mtx}$,
-            $f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^TA\mathbf{x} + 2\mathbf{x}^TB\mathbf{y} + \mathbf{y}^TC\mathbf{y} = Q\mathbf{z}$ $\Rightarrow$ $g$: convex
+            $f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{\top}A\mathbf{x} + 2\mathbf{x}^{\top}B\mathbf{y} + \mathbf{y}^{\top}C\mathbf{y} = Q\mathbf{z}$ $\Rightarrow$ $g$: convex
             \begin{equation}
-                g(\mathbf{x}) = \inf_{\mathbf{y}} f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T (A - BC^{-1}B^T)\mathbf{x}
+                g(\mathbf{x}) = \inf_{\mathbf{y}} f(\mathbf{x}, \mathbf{y}) = \mathbf{x}^{\top} (A - BC^{-1}B^{\top})\mathbf{x}
             \end{equation}
             \begin{itemize}
-                \item Since $g$: convex, Schur Complement $A - BC^{-1}B^T \succeq 0$
+                \item Since $g$: convex, Schur Complement $A - BC^{-1}B^{\top} \succeq 0$
             \end{itemize}
         \item Distance to a set: $S$: convex $\Rightarrow$
             $\mathrm{dist}(\mathbf{x}, S) = \inf_{\mathbf{y} \in S} \Vert \mathbf{x} - \mathbf{y} \Vert$: convex
@@ -282,11 +282,11 @@
         $f$: convex, $t>0$ $\Rightarrow$ $g(\mathbf{x}, t) = t f\left( \frac {\mathbf{x}} t \right)$: convex
     \item Examples
     \begin{itemize}
-        \item $f(\mathbf{x}) = \mathbf{x}^T\mathbf{x}$: convex
-            $\Rightarrow$ $g(\mathbf{x}, t) = \frac {\mathbf{x}^T\mathbf{x}} t$: convex
+        \item $f(\mathbf{x}) = \mathbf{x}^{\top}\mathbf{x}$: convex
+            $\Rightarrow$ $g(\mathbf{x}, t) = \frac {\mathbf{x}^{\top}\mathbf{x}} t$: convex
         \item $g(\mathbf{x}, t) = -t\log {\frac {\mathbf{x}} t} = t\log t - t\log \mathbf{x}$: convex
         \item $f$: convex $\Rightarrow$
-            $g(\mathbf{x}) = \left(\mathbf{c}^T\mathbf{x} + \mathbf{d}\right) f \left( \frac {A\mathbf{x} + \mathbf{b}} {\mathbf{c}^T\mathbf{x} + d} \right)$: convex
+            $g(\mathbf{x}) = \left(\mathbf{c}^{\top}\mathbf{x} + \mathbf{d}\right) f \left( \frac {A\mathbf{x} + \mathbf{b}} {\mathbf{c}^{\top}\mathbf{x} + d} \right)$: convex
     \end{itemize}
 \end{itemize}
 
@@ -306,8 +306,8 @@
     \item $\mathrm{ceil}(x) = \inf \{z \in \mathbb{Z}~|~z \geq x \}$: quasilinear
     \item $\log x$ ($x \in \mathbb{R}_{++}$): quasilinear
     \item $f(x_1, x_2): x_1 x_2$ ($x_1,~x_2 \in \mathbb{R}$): quasiconcave
-    \item Linear-fractional function: $f(\mathbf{x}) = \frac {\mathbf{a}^T\mathbf{x} + b} {\mathbf{c}^T\mathbf{x} + d}$
-        ($\mathcal{D}(f) = \left\{\mathbf{x}~|~\mathbf{c}^T\mathbf{x} + d > 0 \right\}$): quasilinear
+    \item Linear-fractional function: $f(\mathbf{x}) = \frac {\mathbf{a}^{\top}\mathbf{x} + b} {\mathbf{c}^{\top}\mathbf{x} + d}$
+        ($\mathcal{D}(f) = \left\{\mathbf{x}~|~\mathbf{c}^{\top}\mathbf{x} + d > 0 \right\}$): quasilinear
     \item Distance ratio: $f(\mathbf{x}) = \frac {\Vert \mathbf{x} - \mathbf{a} \Vert_2} {\Vert \mathbf{x} - \mathbf{b} \Vert_2}$,
     ($\mathcal{D}(f) = \left\{\mathbf{x}|\Vert\mathbf{x}-\mathbf{a}\Vert_2 \leq \Vert\mathbf{x}-\mathbf{b}\Vert_2 \right\}$): quasiconvex
 \end{itemize}
@@ -318,7 +318,7 @@
         $f(\theta\mathbf{x}_1 + (1 - \theta)\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
     \item First order condition: $f$: differentiable, $\mathcal{D}(f)$: convex. $f$: quasiconvex
         $\Leftrightarrow$ $\forall f(\mathbf{y}) \leq f(\mathbf{x})$,
-        $\nabla f(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \leq 0 $
+        $\nabla f(\mathbf{x})^{\top} (\mathbf{y} - \mathbf{x}) \leq 0 $
 \end{itemize}
 
 \subsubsection*{Quasiconvexity-preserving Operations}
@@ -347,7 +347,7 @@
     \item Powers: $x^{\alpha}$ ($x \in \mathbb{R}$): log-convex if $\alpha \leq 0$, log-concave if $\alpha \geq 0$
     \item Normal Distribution Probability Density Function: log-concave
     \begin{equation}
-        f(\mathbf{x}) = \frac 1 {\sqrt{(2\pi)^n \det\Sigma}} e^{-\frac 1 2 \left(\mathbf{x} - \mathbf{\overline{x}}\right)^T \Sigma^{-1} \left(\mathbf{x} - \mathbf{\overline{x}}\right)}
+        f(\mathbf{x}) = \frac 1 {\sqrt{(2\pi)^n \det\Sigma}} e^{-\frac 1 2 \left(\mathbf{x} - \mathbf{\overline{x}}\right)^{\top} \Sigma^{-1} \left(\mathbf{x} - \mathbf{\overline{x}}\right)}
     \end{equation}
     \item Cumulative Gaussian Distribution: log-concave
     \begin{equation}
@@ -365,7 +365,7 @@
 \subsubsection*{Properties}
 \begin{itemize}
     \item $\mathcal{D}(f)$: convex, $f$: twice differentiable. $f$: log-concave $\Rightarrow$
-        $\forall \mathbf{x} \in \mathcal{D}(f),~ f(\mathbf{x})\nabla^2f(\mathbf{x}) \preceq \nabla f(\mathbf{x}) \nabla f(\mathbf{x})^T$
+        $\forall \mathbf{x} \in \mathcal{D}(f),~ f(\mathbf{x})\nabla^2f(\mathbf{x}) \preceq \nabla f(\mathbf{x}) \nabla f(\mathbf{x})^{\top}$
     \item $f_i$: log-concave $\Rightarrow$ $f = \prod_{i} f_i$: log-concave
     \item Marginalization: $f:\mathbb{R}^n \times \mathbb{R}^m \rightarrow \mathbb{R}$: log-concave $\Rightarrow$
         $g(\mathbf{x}) = \int f(\mathbf{x}, \mathbf{y}) d\mathbf{y}$: log-concave

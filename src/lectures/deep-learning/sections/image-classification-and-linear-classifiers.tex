@@ -152,19 +152,19 @@
     \item Linear binary classifier
     \begin{itemize}
         \item Separating points into two sets: $X=\{x_1,x_2,\cdots,x_N\}$ and $Y=\{y_1,y_2,\cdots,y_M\}$
-        \item 경계에 가장 가까운 $X$, $Y$의 점: $\hat{x}$, $\hat{y}$ $\Rightarrow$ $\exists~w,b$ s.t. $w^T\hat{x}+b=1$, $w^T\hat{y}+b=-1$
-        \item $\forall~x\in X$, $w^Tx+b\geq1$, $\forall~y\in Y$, $w^Ty+b\leq-1$
-        \item Boundary hyperplane $w^Tx+b=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
+        \item 경계에 가장 가까운 $X$, $Y$의 점: $\hat{x}$, $\hat{y}$ $\Rightarrow$ $\exists~w,b$ s.t. $w^{\top}\hat{x}+b=1$, $w^{\top}\hat{y}+b=-1$
+        \item $\forall~x\in X$, $w^{\top}x+b\geq1$, $\forall~y\in Y$, $w^{\top}y+b\leq-1$
+        \item Boundary hyperplane $w^{\top}x+b=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
     \end{itemize}
     \item Robust linear classifier
     \begin{itemize}
         \item In case the points can be separated into two sets completely
-        \item Let $\mathcal{H}_1=\{z~|~w^Tz+b=1\}$, $\mathcal{H}_2=\{z~|~w^Tz+b=-1\}$
+        \item Let $\mathcal{H}_1=\{z~|~w^{\top}z+b=1\}$, $\mathcal{H}_2=\{z~|~w^{\top}z+b=-1\}$
         \item Maximize the margin between two sets: $\mathrm{dist}(\mathcal{H}_1,\mathcal{H}_2)=\frac{2}{\Vert w\Vert_2}$
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert w\Vert_2 \\
-            \mathrm{subject~to}~~&~~w^Tx_i+b\geq1\\
-                &~~w^Ty_i+b\leq-1\\
+            \mathrm{subject~to}~~&~~w^{\top}x_i+b\geq1\\
+                &~~w^{\top}y_i+b\leq-1\\
                 &~~(i=1,2,\cdots,M)
         \end{aligned}\end{equation}
     \end{itemize}
@@ -175,8 +175,8 @@
         \item Objective: minimizing \# of missclassified points
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\sum_{i}u_i \\
-            \mathrm{subject~to}~~&~~w^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~w^Ty_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
+            \mathrm{subject~to}~~&~~w^{\top}x_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~w^{\top}y_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
                 &~~u_i\geq 0
         \end{aligned}\end{equation}
         \item $u_i$: \# of missclassified points; slack variable
@@ -189,8 +189,8 @@
         \item Large $\gamma$ $\Rightarrow$ Less slack; Small $\gamma$ $\Rightarrow$ Less separate distance
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert w\Vert_2^2+\gamma\sum_{i}u_i \\
-            \mathrm{subject~to}~~&~~w^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~w^Ty_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
+            \mathrm{subject~to}~~&~~w^{\top}x_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~w^{\top}y_i+b\leq-1+u_i~~(i=1,2,\cdots,M) \\
                 &~~u_i\geq0
         \end{aligned}\end{equation}
     \end{itemize}
@@ -206,8 +206,8 @@
     \item Form SVM for each class $k=1,2,\cdots,K$ $\Rightarrow$ $K$ binary classifiers
     \begin{equation}\begin{aligned}
         \mathrm{minimize}~~&~~\Vert w_k\Vert_2^2+\gamma\sum_{i}u_i \\
-        \mathrm{subject~to}~~&~~w_k^Tx_i+b_k\geq1-u_i~~(k=y_i) \\
-            &~~w_k^Ty_i+b_k\leq-1+u_i~~(k\neq y_i) \\
+        \mathrm{subject~to}~~&~~w_k^{\top}x_i+b_k\geq1-u_i~~(k=y_i) \\
+            &~~w_k^{\top}y_i+b_k\leq-1+u_i~~(k\neq y_i) \\
             &~~u_i\geq0,~\forall i
     \end{aligned}\end{equation}
     \begin{itemize}
@@ -216,7 +216,7 @@
     \item One-vs-rest classifier
     \begin{enumerate}
         \item Solve $K$ optimization problems
-        \item $\forall k$, compute $s_k=w_k^Tx+b_k$
+        \item $\forall k$, compute $s_k=w_k^{\top}x+b_k$
         \item Select class $k^\ast$ with maximum $s_{k^\ast}$
     \end{enumerate}
     \begin{figures}
@@ -230,14 +230,14 @@
     \begin{equation}\begin{aligned}
         \mathrm{minimize}~~&~~\sum_k\Vert w_k\Vert_2^2+\gamma\sum_{i}\sum_{k\neq y_i}u_{i,k} \\
         \mathrm{subject~to}~~&~~s_{y_i}\geq s_{k}+b_k+2~~(k\neq y_i)\\
-            &~~s_j=w_j^Tx_i+b_j\\
+            &~~s_j=w_j^{\top}x_i+b_j\\
             &~~u_{i,k}\geq 0,~\forall i,~k
     \end{aligned}\end{equation}
     \begin{itemize}
         \item $y_i$: ground-truth label of $x_i$
-        \item $s_j=w_j^Tx_i+b_i$ is a linear score for label $j$
+        \item $s_j=w_j^{\top}x_i+b_i$ is a linear score for label $j$
     \end{itemize}
-    \item At optimality, slack value of $i$-th input classified as label $j$ is $u_{i,j}=\max\{1+s_j-s_{y_i},0\}$ ($s_j=w_j^Tx_i+b_j$)
+    \item At optimality, slack value of $i$-th input classified as label $j$ is $u_{i,j}=\max\{1+s_j-s_{y_i},0\}$ ($s_j=w_j^{\top}x_i+b_j$)
     \item Loss function for $i$-th input whose ground-truth label is $y_i$ is
     \begin{equation}
         L_i=\sum_{j\neq y_i}\max\{0,s_j-s_{y_i}+1\}
@@ -260,18 +260,18 @@
     \item Similarly, define log-ratio of conditional probability as hyperplane decision boundary
     \begin{equation}
         \log\frac{\mathbb{P}(Y=j|X)}{\mathbb{P}(Y=y_i|X)}=\begin{cases}
-            w_j^Tx_i+b_j & (j\neq y_i)\\
+            w_j^{\top}x_i+b_j & (j\neq y_i)\\
             0 & (j=y_i)
         \end{cases}
     \end{equation}
     \item Solving these equations with $\sum_{k=1}^K\mathbb{P}(Y=k)=1$:
     \begin{itemize}
-        \item $\mathbb{P}(Y=j|X)=\frac{\exp(w_j^Tx_i+b_j)}{1+\sum_{k\neq y_i}\exp(w_k^Tx_i+b_k)}$ ($j\neq y_k$)
-        \item $\mathbb{P}(Y=y_i|X)=\frac{1}{1+\sum_{k\neq y_i}\exp(w_k^Tx_i+b_k)}$
+        \item $\mathbb{P}(Y=j|X)=\frac{\exp(w_j^{\top}x_i+b_j)}{1+\sum_{k\neq y_i}\exp(w_k^{\top}x_i+b_k)}$ ($j\neq y_k$)
+        \item $\mathbb{P}(Y=y_i|X)=\frac{1}{1+\sum_{k\neq y_i}\exp(w_k^{\top}x_i+b_k)}$
     \end{itemize}
     \item Alternatively, we get softmax of linear scores
     \begin{equation}
-        P(Y=j)=\frac{\exp(w_j^Tx_i+b_j)}{\sum_{k=1}^K\exp(w_k^Tx_i+b_k)}=\text{softmax}(Wx_i+b)
+        P(Y=j)=\frac{\exp(w_j^{\top}x_i+b_j)}{\sum_{k=1}^K\exp(w_k^{\top}x_i+b_k)}=\text{softmax}(Wx_i+b)
     \end{equation}
 \end{itemize}
 
@@ -280,10 +280,10 @@
     \item $E_i=[e_i]_K$: one-hot encoding s.t. $e_{y_i}=1$, else is $0$
     \item Loss function is cross-entropy of $E_i$ and softmax of linear scores
     \begin{equation}
-        L_i=-E_i^T\log\Bigr[\text{softmax}(Wx_i+b)\Bigr]=-\log\left(\frac{e^{s_{y_i}}}{\sum_j e^{s_j}}\right),~s_k=w_kx_i+b_k
+        L_i=-E_i^{\top}\log\Bigr[\text{softmax}(Wx_i+b)\Bigr]=-\log\left(\frac{e^{s_{y_i}}}{\sum_j e^{s_j}}\right),~s_k=w_kx_i+b_k
     \end{equation}
     \begin{itemize}
-        \item Cross-entropy $-p^T\log q$ is a discrepancy caused by using dist. $q$ instead of true dist. $p$
+        \item Cross-entropy $-p^{\top}\log q$ is a discrepancy caused by using dist. $q$ instead of true dist. $p$
     \end{itemize}
     \item Average loss: $L(W)=\frac{1}{N}\sum_{i=1}^NL_i$
 \end{itemize}

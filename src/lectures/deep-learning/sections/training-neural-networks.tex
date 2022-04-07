@@ -238,7 +238,7 @@
             \item Consider linear layer($W,b$) $\to$ ReLU ($f$)
             \item Consider backprop. on $i$-th neuron of linear layer, i.e. $\frac{\partial L}{\partial w_i}=\frac{\partial L}{\partial f}\frac{\partial f}{\partial w_i}$
             \item Remind: $\frac{\partial f}{\partial w_i}$ is $1$ if $x_j>0$, else $0$
-            \item If $\forall x_j$, $w_i^Tx_j+b_i<0$, $\frac{\partial L}{\partial w_i}=0$, i.e. $w_i$ NEVER changes $\implies$ ``dead'' neuron
+            \item If $\forall x_j$, $w_i^{\top}x_j+b_i<0$, $\frac{\partial L}{\partial w_i}=0$, i.e. $w_i$ NEVER changes $\implies$ ``dead'' neuron
         \end{itemize}
     \end{itemize}
     \item Leaky ReLU: Most benefits of ReLU, Closer to zero-center, No saturation (dead neuron)
@@ -265,7 +265,7 @@
     \begin{itemize}
         \item Consider linear layer $q=Wx$ $\to$ L2 loss layer $f$
         \begin{equation}
-            L=f(q)=\norm{Wx}_2^2,~\nabla_Wf=2qx^T,~\nabla_xf=2W^Tq
+            L=f(q)=\norm{Wx}_2^2,~\nabla_Wf=2qx^{\top},~\nabla_xf=2W^{\top}q
         \end{equation}
         \item $[W]_{ij}=0$ $\implies$ $\nabla_Wf=0$ $\implies$ $W$ never changes
         \item $[W]_{ij}=1$ $\implies$ $\nabla_xf=2q$ $\implies$ Consistent gradients $\implies$ Limits directions on previous layer

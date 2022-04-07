@@ -49,7 +49,7 @@
 \begin{itemize}
     \item Linear explanation
     \begin{equation}
-        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx
+        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^{\top}x
     \end{equation}
     \begin{itemize}
         \item Independent (explanatory, input) variable: $a_1,a_2,\cdots,a_m\in\mathbb{R}^n$
@@ -62,7 +62,7 @@
     \end{equation}
     \begin{itemize}
         \item Mean Square Error (MSE), Adjust $x$ to minimize $L$
-        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^Tx$ $\Rightarrow$ Linear regression
+        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^{\top}x$ $\Rightarrow$ Linear regression
         \item $\hat{f}(a_i;x)$: estimation, $b_i$: true explanation
     \end{itemize}
 \end{itemize}
@@ -71,7 +71,7 @@
 
 \subsubsection*{Overfitting}
 \begin{itemize}
-    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^Tx$ where $\psi_i(a)=a^i$
+    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^{\top}x$ where $\psi_i(a)=a^i$
     \item Suppose 10 samples (graphs below) in second-order polynomial relation
     \begin{itemize}
         \item Low order ($M=0,1$) does not fit the samples accurately
@@ -151,12 +151,12 @@
 \begin{itemize}
     \item Logistic regression provides \textbf{classifier}
     \begin{equation}\label{eq:dl:logistic-classifier}
-        \mathbb{P}(b=1)=\sigma(a^Tx)=\frac{1}{1+\exp(-a^Tx)}
+        \mathbb{P}(b=1)=\sigma(a^{\top}x)=\frac{1}{1+\exp(-a^{\top}x)}
     \end{equation}
     \begin{itemize}
         \item Binary classification: output $b$ is either $0$(false) or $1$(true)
         \item $\hat{f}(a;x)\approx\mathbb{P}(b=1)$: probability of input $a$ is true($b=1$); $\mathcal{R}(\hat{f})=[0,1]$
-        \item Obtain ``score'' from linear regression $a^Tx$; $\mathcal{R}(a^Tx)=(-\infty,\infty)$
+        \item Obtain ``score'' from linear regression $a^{\top}x$; $\mathcal{R}(a^{\top}x)=(-\infty,\infty)$
         \item Large score $\Rightarrow$ $\mathrm{prob}\approx1$, small score $\Rightarrow$ $\mathrm{prob}\approx0$
         \item Use sigmoid function $\sigma(t)=\frac{1}{1+\exp(-t)}$ to normalize $(-\infty,\infty)\rightarrow[0,1]$
     \end{itemize}
@@ -167,7 +167,7 @@
     \item Decision boundary($s$): 판단을 내리는 기준점
     \begin{itemize}
         \item $\sigma(x)>s$ $\Rightarrow$ true($1$), $\sigma(x)\leq s$ $\Rightarrow$ false($0$)
-        \item $a^Tx=\sigma^{-1}(s)$, i.e. a hyperplane is a decision boundary
+        \item $a^{\top}x=\sigma^{-1}(s)$, i.e. a hyperplane is a decision boundary
     \end{itemize}
     \item Interpretation
     \begin{itemize}
@@ -207,11 +207,11 @@
         \item Observed data: $(a_i,b_i)$ ($i=1,2,\cdots,m$)
         \item Likelihood of observing these data:
         \begin{equation}
-            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^Tx)^{b_i}\left(1-\sigma(a_i^Tx)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^Tx)\right)^{b_i}}{1+\exp(a_i^Tx)}
+            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^{\top}x)^{b_i}\left(1-\sigma(a_i^{\top}x)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^{\top}x)\right)^{b_i}}{1+\exp(a_i^{\top}x)}
         \end{equation}
         \item Log-likelihood:
         \begin{equation}
-            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^Tx)\right)+\sum_{i\in\{i|b_i=1\}}a_i^Tx
+            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^{\top}x)\right)+\sum_{i\in\{i|b_i=1\}}a_i^{\top}x
         \end{equation}
         \item Log-likelihood function is concave $\Rightarrow$ Convex optimization problem
         \item Maximizing likelihood $\Rightarrow$ Minimizing cross-entropy loss in deep models

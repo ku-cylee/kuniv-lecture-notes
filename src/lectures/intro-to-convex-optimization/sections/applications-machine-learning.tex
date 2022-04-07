@@ -16,7 +16,7 @@
 \begin{itemize}
     \item Linear explanation
     \begin{equation}
-        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^Tx
+        b_i\approx\hat{f}(a_i;x)=x_0+x_1a_{i,1}+x_2a_{i,2}+\cdots+x_na_{i,n}=\tilde{a}_i^{\top}x
     \end{equation}
     \begin{itemize}
         \item Independent (explanatory, input) variable: $a_1,a_2,\cdots,a_m\in\mathbb{R}^n$
@@ -29,9 +29,9 @@
     \end{equation}
     \begin{itemize}
         \item Mean Square Error (MSE), Adjust $x$ to minimize $L$ $\Rightarrow$ QP for MSE
-        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^Tx$ $\Rightarrow$ Linear regression
+        \item Linear explanation $\hat{f}(a_i;x)=\tilde{a}_i^{\top}x$ $\Rightarrow$ Linear regression
         \item $\hat{f}(a_i;x)$: estimation, $b_i$: true explanation
-        \item Solution: $\nabla L(x^\ast)=0$ $\Rightarrow$ $x^\ast=(A^TA)^{-1}A^Tb$
+        \item Solution: $\nabla L(x^\ast)=0$ $\Rightarrow$ $x^\ast=(A^{\top}A)^{-1}A^{\top}b$
     \end{itemize}
 \end{itemize}
 
@@ -41,7 +41,7 @@
     \begin{itemize}
         \item Machine Learning: Accepts very large dataset and number of variables
         \item Assume linear regression $L(x)=\frac{1}{m}\sum_{i=1}^{m}\left(\hat{f}(a_i;x)-b_i\right)^2 = \frac{1}{m}\Vert Ax-b\Vert_2^2$
-        \item GD update: $x\leftarrow x-\gamma\frac{1}{m}\sum_{i=1}^{m}\nabla\left(\hat{f}(a_i;x)-b_i\right)^2=x-\gamma\frac{2}{m}\sum_{i=1}^ma_i(a_i^Tx-b_i)$
+        \item GD update: $x\leftarrow x-\gamma\frac{1}{m}\sum_{i=1}^{m}\nabla\left(\hat{f}(a_i;x)-b_i\right)^2=x-\gamma\frac{2}{m}\sum_{i=1}^ma_i(a_i^{\top}x-b_i)$
         \item $m$이 매우 크면 step별 계산이 너무 많아짐
     \end{itemize}
     \newpage
@@ -98,7 +98,7 @@
 
 \subsubsection*{Overfitting}
 \begin{itemize}
-    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^Tx$ where $\psi_i(a)=a^i$
+    \item Consider a polynomial estimation $\hat{f}(a;x)=\sum_{i=0}^n\psi_i(a)x_i=\psi(a)^{\top}x$ where $\psi_i(a)=a^i$
     \item Suppose 10 samples (graphs below) in second-order polynomial relation
     \begin{itemize}
         \item Low order ($M=0,1$) does not fit the samples accurately
@@ -133,7 +133,7 @@
     \begin{itemize}
         \item Unconstrained QP
         \item $\lambda>0$: hyperparameter; $\lambda\ll1$: Data loss 중시; $\lambda\gg1$: Regulation loss 중시
-        \item Optimality condition: $x=\left(A^TA+\lambda I\right)^{-1}A^Tb$
+        \item Optimality condition: $x=\left(A^{\top}A+\lambda I\right)^{-1}A^{\top}b$
     \end{itemize}
     \begin{figures}
         \subfig{$\ln\lambda=-18$}{regularization-small-lambda.png}{.4}
@@ -171,19 +171,19 @@
 \begin{itemize}
     \item Logistic regression provides \textbf{classifier}
     \begin{equation}
-        \mathbb{P}(b=1)=\sigma(a^Tx)=\frac{1}{1+\exp(-a^Tx)}
+        \mathbb{P}(b=1)=\sigma(a^{\top}x)=\frac{1}{1+\exp(-a^{\top}x)}
     \end{equation}
     \begin{itemize}
         \item Binary classification: output $b$ is either $0$ or $1$
         \item $\hat{f}(a;x)\approx\mathbb{P}(b=1)$: probability of input $a$ classified into $b=1$; $\mathcal{R}(\hat{f})=[0,1]$
-        \item Obtain `score' from linear regression $a^Tx$; $\mathcal{R}(a^Tx)=(-\infty,\infty)$
+        \item Obtain `score' from linear regression $a^{\top}x$; $\mathcal{R}(a^{\top}x)=(-\infty,\infty)$
         \item Large score $\Rightarrow$ $\mathrm{prob}\approx1$, small score $\Rightarrow$ $\mathrm{prob}\approx0$
         \item Use sigmoid function $\sigma(t)=\frac{1}{1+\exp(-t)}$ to normalize $(-\infty,\infty)\rightarrow[0,1]$
     \end{itemize}
     \item Decision boundary: 판단을 내리는 기준점
     \begin{itemize}
         \item $\sigma(0)=0.5$를 기준으로 classification 결과를 정하는 것이 상식
-        \item $a^Tx=0$, i.e. a hyperplane is a decision boundary
+        \item $a^{\top}x=0$, i.e. a hyperplane is a decision boundary
     \end{itemize}
 \end{itemize}
 \newpage
@@ -212,15 +212,15 @@
         \item Observed data: $(a_i,b_i)$ ($i=1,2,\cdots,m$)
         \item Likelihood of observing these data:
         \begin{equation}
-            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^Tx)^{b_i}\left(1-\sigma(a_i^Tx)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^Tx)\right)^{b_i}}{1+\exp(a_i^Tx)}
+            \Lambda(x)=\prod_{i=1}^m\sigma(a_i^{\top}x)^{b_i}\left(1-\sigma(a_i^{\top}x)\right)^{1-b_i}=\prod_{i=1}^m\frac{\left(\exp(a_i^{\top}x)\right)^{b_i}}{1+\exp(a_i^{\top}x)}
         \end{equation}
         \item Log-likelihood:
         \begin{equation}
-            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^Tx)\right)+\sum_{i\in\{i|b_i=1\}}a_i^Tx
+            \log\Lambda(x)=-\sum_{i=1}^m\log\left(1+\exp(a_i^{\top}x)\right)+\sum_{i\in\{i|b_i=1\}}a_i^{\top}x
         \end{equation}
-        \item $\log\left(1+\exp(a_i^Tx)\right)$ is a log-sum-exponential of affine transform $\Rightarrow$ convex
+        \item $\log\left(1+\exp(a_i^{\top}x)\right)$ is a log-sum-exponential of affine transform $\Rightarrow$ convex
         \begin{equation}
-            y_i=\begin{mtx}{c}\mathbf{0}^T\\a_i^T\end{mtx}x=\begin{mtx}{c}0\\a_i^Tx\end{mtx}~\Rightarrow~\log\sum_{k=1}^2\exp y_{i,k}=\log\left(1+\exp(a_i^Tx)\right)
+            y_i=\begin{mtx}{c}\mathbf{0}^{\top}\\a_i^{\top}\end{mtx}x=\begin{mtx}{c}0\\a_i^{\top}x\end{mtx}~\Rightarrow~\log\sum_{k=1}^2\exp y_{i,k}=\log\left(1+\exp(a_i^{\top}x)\right)
         \end{equation}
         \item Objective function is concave $\Rightarrow$ Convex optimization problem
     \end{itemize}
@@ -231,20 +231,20 @@
     \item Linear classifier
     \begin{itemize}
         \item Separating points into two sets: $X=\{x_1,x_2,\cdots,x_N\}$ and $Y=\{y_1,y_2,\cdots,y_M\}$
-        \item 경계에 가장 가까운 $X$, $Y$의 점: $\hat{x}$, $\hat{y}$ $\Rightarrow$ $\exists~a,b$ s.t. $a^T\hat{x}+b=1$, $a^T\hat{y}+b=-1$
-        \item $\forall~x\in X$, $a^Tx+b\geq1$, $\forall~y\in Y$, $a^Ty+b\leq-1$
-        \item Boundary hyperplane $a^Tx+b=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
+        \item 경계에 가장 가까운 $X$, $Y$의 점: $\hat{x}$, $\hat{y}$ $\Rightarrow$ $\exists~a,b$ s.t. $a^{\top}\hat{x}+b=1$, $a^{\top}\hat{y}+b=-1$
+        \item $\forall~x\in X$, $a^{\top}x+b\geq1$, $\forall~y\in Y$, $a^{\top}y+b\leq-1$
+        \item Boundary hyperplane $a^{\top}x+b=0$: $\hat{x}$, $\hat{y}$까지의 거리가 같음
     \end{itemize}
     \newpage
     \item Robust linear classifier
     \begin{itemize}
         \item In case the points can be separated into two sets completely
-        \item Let $\mathcal{H}_1=\{z~|~a^Tz+b=1\}$, $\mathcal{H}_2=\{z~|~a^Tz+b=-1\}$
+        \item Let $\mathcal{H}_1=\{z~|~a^{\top}z+b=1\}$, $\mathcal{H}_2=\{z~|~a^{\top}z+b=-1\}$
         \item Maximize the margin between two sets: $\mathrm{dist}(\mathcal{H}_1,\mathcal{H}_2)=\frac{2}{\Vert a\Vert_2}$
         \begin{equation}\begin{aligned}
             \mathrm{minimize}~~&~~\Vert a\Vert_2 \\
-            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1~~(i=1,2,\cdots,N) \\
-                &~~a^Ty_i+b\leq-1~~(i=1,2,\cdots,M)
+            \mathrm{subject~to}~~&~~a^{\top}x_i+b\geq1~~(i=1,2,\cdots,N) \\
+                &~~a^{\top}y_i+b\leq-1~~(i=1,2,\cdots,M)
         \end{aligned}\end{equation}
     \end{itemize}
     \item Approximate linear classifier
@@ -252,22 +252,22 @@
         \item In case the points cannot be separated into two sets completely
         \item Objective: minimizing \# of missclassified points $\Rightarrow$ L0-norm $\Rightarrow$ Approximate to L1-norm
         \begin{equation}\begin{aligned}
-            \mathrm{minimize}~~&~~\mathbf{1}^Tu+\mathbf{1}^Tv \\
-            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~a^Ty_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+            \mathrm{minimize}~~&~~\mathbf{1}^{\top}u+\mathbf{1}^{\top}v \\
+            \mathrm{subject~to}~~&~~a^{\top}x_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~a^{\top}y_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
                 &~~u\succeq0,~v\succeq0
         \end{aligned}\end{equation}
         \item $u$, $v$ means \# of missclassified points
-        \item At optimum, $u_i=\max\{0,1-a^Tx_i-b\}$, $v_i=\max\{0,1+a^Ty_i+b\}$
+        \item At optimum, $u_i=\max\{0,1-a^{\top}x_i-b\}$, $v_i=\max\{0,1+a^{\top}y_i+b\}$
     \end{itemize}
     \item Support Vector Machine (SVM)
     \begin{itemize}
         \item Tradeoff between robust L.C. and approximate L.C.
         \item Introduces a hyperparameter $\gamma>0$
         \begin{equation}\begin{aligned}
-            \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^Tu+\mathbf{1}^Tv) \\
-            \mathrm{subject~to}~~&~~a^Tx_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
-                &~~a^Ty_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
+            \mathrm{minimize}~~&~~\Vert a\Vert_2+\gamma(\mathbf{1}^{\top}u+\mathbf{1}^{\top}v) \\
+            \mathrm{subject~to}~~&~~a^{\top}x_i+b\geq1-u_i~~(i=1,2,\cdots,N) \\
+                &~~a^{\top}y_i+b\leq-1+v_i~~(i=1,2,\cdots,M) \\
                 &~~u\succeq0,~v\succeq0
         \end{aligned}\end{equation}
     \end{itemize}
