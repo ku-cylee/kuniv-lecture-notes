@@ -2,9 +2,9 @@
 
 \makeatletter
 \@ifclassloaded{book}{
-    \newcommand\chap[1]{\chapter{#1}}
+    \newcommand\chap{\chapter{\leccode: \lectitle}}
 }{
-    \newcommand\chap[1]{}
+    \newcommand\chap{}
 }
 \makeatother
 
