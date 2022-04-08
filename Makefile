@@ -8,42 +8,56 @@ all:
 	$(ENGINE) $(FLAGS) $(SRC_DIR)/lecture-notes.tex
 
 single:
-	$(ENGINE) -usepretex="\def\lectitle{$(LECTURE_TITLE)}\def\lecsem{$(LECTURE_SEMESTER)}\def\lecdirname{$(LECTURE_NAME)}" -jobname="$(LECTURE_NAME)" $(FLAGS) $(SRC_DIR)/single-lecture-note.tex
+	$(ENGINE) -usepretex="\def\leccode{$(LEC_CODE)}\def\lectitle{$(LEC_TITLE)}\def\lecsem{$(LEC_SEMESTER)}\def\lecdirname{$(LEC_NAME)}\def\lecprof{$(LEC_PROFESSOR)}" -jobname="$(LEC_NAME)" $(FLAGS) $(SRC_DIR)/single-lecture-note.tex
 
 clean:
 	rm -r $(DST_DIR)
 
-ca: LECTURE_TITLE=COSE222: Computer Architecture
-ca: LECTURE_SEMESTER=2021 Autumn
-ca: LECTURE_NAME=computer-architecture
+ca: LEC_CODE=COSE222
+ca: LEC_TITLE=Computer Architecture
+ca: LEC_SEMESTER=2021 Autumn
+ca: LEC_PROFESSOR=Chung, Sung Woo
+ca: LEC_NAME=computer-architecture
 ca: single
 
-cg: LECTURE_TITLE=COSE331: Computer Graphics
-cg: LECTURE_SEMESTER=2021 Spring
-cg: LECTURE_NAME=computer-graphics
+cg: LEC_CODE=COSE331
+cg: LEC_TITLE=Computer Graphics
+cg: LEC_SEMESTER=2021 Spring
+cg: LEC_PROFESSOR=Han, JungHyun
+cg: LEC_NAME=computer-graphics
 cg: single
 
-dl: LECTURE_TITLE=COSE474: Deep Learning
-dl: LECTURE_SEMESTER=2021 Autumn
-dl: LECTURE_NAME=deep-learning
+dl: LEC_CODE=COSE474
+dl: LEC_TITLE=Deep Learning
+dl: LEC_SEMESTER=2021 Autumn
+dl: LEC_PROFESSOR=Baek, Seung Jun
+dl: LEC_NAME=deep-learning
 dl: single
 
-engmath: LECTURE_TITLE=COSE281: Engineering Mathematics
-engmath: LECTURE_SEMESTER=2021 Spring
-engmath: LECTURE_NAME=engineering-mathematics
+engmath: LEC_CODE=COSE281
+engmath: LEC_TITLE=Engineering Mathematics
+engmath: LEC_SEMESTER=2021 Spring
+engmath: LEC_PROFESSOR=Lee, Ju Seop
+engmath: LEC_NAME=engineering-mathematics
 engmath: single
 
-cvxopt: LECTURE_TITLE=COSE423: Introduction to Convex Optimization
-cvxopt: LECTURE_SEMESTER=2021 Spring
-cvxopt: LECTURE_NAME=intro-to-convex-optimization
+cvxopt: LEC_CODE=COSE423
+cvxopt: LEC_TITLE=Introduction to Convex Optimization
+cvxopt: LEC_SEMESTER=2021 Spring
+cvxopt: LEC_PROFESSOR=Baek, Seung Jun
+cvxopt: LEC_NAME=intro-to-convex-optimization
 cvxopt: single
 
-lowpower: LECTURE_TITLE=COSE415: Lower Power Computing
-lowpower: LECTURE_SEMESTER=2021 Spring
-lowpower: LECTURE_NAME=lower-power-computing
+lowpower: LEC_CODE=COSE415
+lowpower: LEC_TITLE=Lower Power Computing
+lowpower: LEC_SEMESTER=2021 Spring
+lowpower: LEC_PROFESSOR=Chung, Sung Woo
+lowpower: LEC_NAME=lower-power-computing
 lowpower: single
 
-prp: LECTURE_TITLE=COSE382: Probability and Random Process
-prp: LECTURE_SEMESTER=2021 Autumn
-prp: LECTURE_NAME=probability-and-random-process
+prp: LEC_CODE=COSE382
+prp: LEC_TITLE=Probability and Random Process
+prp: LEC_SEMESTER=2021 Autumn
+prp: LEC_PROFESSOR=Chung, Wonzoo
+prp: LEC_NAME=probability-and-random-process
 prp: single
