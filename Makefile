@@ -13,11 +13,20 @@ single:
 clean:
 	rm -r $(DST_DIR)
 
+ai: LEC_NAME=artificial-intelligence
+ai: single
+
 ca: LEC_NAME=computer-architecture
 ca: single
 
 cg: LEC_NAME=computer-graphics
 cg: single
+
+csd: LEC_NAME=computer-system-design
+csd: single
+
+ds: LEC_NAME=data-science
+ds: single
 
 dl: LEC_NAME=deep-learning
 dl: single
@@ -31,5 +40,11 @@ cvxopt: single
 lowpower: LEC_NAME=lower-power-computing
 lowpower: single
 
+nlp: LEC_NAME=natural-language-processing
+nlp: single
+
 prp: LEC_NAME=probability-and-random-process
 prp: single
+
+rf: LEC_NAME=rf-circuits
+rf: single
