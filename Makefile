@@ -37,14 +37,20 @@ engmath: single
 cvxopt: LEC_NAME=intro-to-convex-optimization
 cvxopt: single
 
-lowpower: LEC_NAME=lower-power-computing
-lowpower: single
+lp: LEC_NAME=lower-power-computing
+lp: single
 
 nlp: LEC_NAME=natural-language-processing
 nlp: single
+
+os: LEC_NAME=operating-systems
+os: single
 
 prp: LEC_NAME=probability-and-random-process
 prp: single
 
 rf: LEC_NAME=rf-circuits
 rf: single
+
+sp: LEC_NAME=system-programming
+sp: single
