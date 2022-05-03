@@ -25,9 +25,6 @@ cg: single
 csd: LEC_NAME=computer-system-design
 csd: single
 
-ds: LEC_NAME=data-science
-ds: single
-
 dl: LEC_NAME=deep-learning
 dl: single
 
