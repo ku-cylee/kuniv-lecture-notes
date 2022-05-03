@@ -1,0 +1,108 @@
+\section{ARM Instructions}
+
+\subsection{ARM Registers}
+
+\subsubsection*{General Purpose Registers}
+\begin{itemize}
+    \item ARM has 16 GP registers: \cd{r0}, \cd{r1}, $\cdots$, \cd{r15}
+    \item Each GP registers' size are 32b
+    \item Unbanked registers (\cd{r0} - \cd{r7})
+    \begin{itemize}
+        \item No special uses by the architecture
+    \end{itemize}
+    \item Banked registers (\cd{r8} - \cd{r14})
+    \begin{itemize}
+        \item \cd{r8} - \cd{r12}: No dedicated special purposes \textit{except for} FIQ mode
+        \item \cd{r13}, \cd{r14}: Dedicated for special purposes
+    \end{itemize}
+    \item \cd{r13}: Stack pointer (\cd{sp}); Used to store live registers for procedures
+    \item \cd{r14}: Link register (\cd{lr}); Store return location for procedures
+    \item \cd{r15}: Program counter (\cd{pc}); Store current instruction address
+\end{itemize}
+
+\subsubsection*{CPSR (Current Program Status Register)}
+\begin{figures}
+    \fig{cpsr.png}{.75}
+\end{figures}
+\begin{itemize}
+    \item Can be read or written in any mode
+    \item Condition Flags (\cd{CPSR[31:28]})
+    \begin{itemize}
+        \item N (\cd{CPSR[31]}): negative condition flag
+        \item Z (\cd{CPSR[30]}): zero condition flag
+        \item C (\cd{CPSR[29]}): carry condition flag
+        \item V (\cd{CPSR[28]}): overflow condition flag
+    \end{itemize}
+    \item Instruction Set State Bits
+    \begin{itemize}
+        \item J (\cd{CPSR[24]}): Jazelle execution state bit
+        \item T (\cd{CPSR[5]}): Thumb execution state bit
+        \item None set $\implies$ ARM state; Both set $\implies$ ThumbEE state (deprecated) 
+    \end{itemize}
+    \item Interrupt Disable Bits
+    \begin{itemize}
+        \item A (\cd{CPSR[8]}): Disables imprecise data aborts if set
+        \item I (\cd{CPSR[7]}): Disables IRQ interrupts if set
+        \item F (\cd{CPSR[6]}): Disables FIQ interrupts if set
+    \end{itemize}
+    \item Processor Mode Bits (\cd{CPSR[4:0]}): Determines operator mode
+\end{itemize}
+
+\subsubsection*{APSR}
+\begin{itemize}
+    \item Application Program Status Register
+    \item User mode is prohibited to touch \cd{CPSR[15:0]} $\implies$ Use APSR instead
+\end{itemize}
+
+\subsection{Conditional Execution}
+
+\subsubsection*{Conditional Execution}
+\begin{itemize}
+    \item Most ARM instructions can be conditionally executed
+    \item Each instruction has condition field (\cd{inst[31:28]})
+    \begin{itemize}
+        \item Exclusive conditions share same upper 3 bits (e.g. \cd{eq}: 0000, \cd{ne}: 0001)
+        \item Always condition (\cd{al}) is default condition
+    \end{itemize}
+    \item Each condition field has corresponding condition flag states
+    \item Compare: Current NZCV $\iff$ Condition flag states of the instruction
+    \begin{itemize}
+        \item Condition met: The instruction is executed
+        \item Condition not met: The instruction is silently converted to \cd{nop}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{NZCV Update}
+\begin{itemize}
+    \item If S flag(\cd{inst[20]}) is set, NZCV is updated
+    \begin{itemize}
+        \item e.g. \cd{add} does not update NZCV; \cd{adds} updates NZCV
+        \item Some instructions' S flag is always set; e.g. \cd{cmp}, \cd{cmn} always update NZCV
+    \end{itemize}
+    \item NZCV is set based on the result of the instruction
+    \begin{itemize}
+        \item e.g. Arithmetic Instructions
+        \item $r_i$: $i$-th bit of result; $c_i$: Carry bit issued from $i$-th bit to $(i+1)$-th bit
+        \item $N\leftarrow r_{31}$, $Z\leftarrow!(r_{31}\lor r_{30}\lor\cdots r_0)$, $C\leftarrow c_{31}$, $V\leftarrow c_{31}\oplus c_{30}$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Example}
+\linespread{1.1}
+\begin{verbatim}
+    subs r1, r2, r3
+    addeq r4, r4, #1
+    subne r4, r4, #1
+\end{verbatim}
+\linespread{1.6}
+\begin{itemize}
+    \item Assume \cd{r2 = 70}, \cd{r3 = 30}
+    \item \cd{r2}: \cd{0b0000\_0000\_0000\_0000\_0000\_0000\_0100\_0110}
+    \item \cd{-r3}: \cd{0b1111\_1111\_1111\_1111\_1111\_1111\_1110\_0010}
+    \item \cd{r1 = r2 - r3 = r2 + (- r3)}
+    \item \cd{result}: \cd{0b0000\_0000\_0000\_0000\_0000\_0000\_0010\_1000}
+    \item \cd{carry}: \cd{0b1111\_1111\_1111\_1111\_1111\_1111\_1100\_0110}
+    \item \cd{N = 0}, \cd{Z = 0}, \cd{C = 1}, \cd{V = 1 \^{} 1 = 0} $\implies$ nzCv (0010)
+    \item \cd{eq} is not satisfied $\implies$ \cd{addeq} is ignored
+    \item \cd{ne} is satisfied $\implies$ \cd{addne} is executed
+\end{itemize}
