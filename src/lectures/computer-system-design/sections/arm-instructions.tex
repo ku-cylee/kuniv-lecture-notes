@@ -106,3 +106,65 @@
     \item \cd{eq} is not satisfied $\implies$ \cd{addeq} is ignored
     \item \cd{ne} is satisfied $\implies$ \cd{addne} is executed
 \end{itemize}
+
+\subsection{ARM Instructions}
+
+\subsubsection*{Instruction Format and Barrel Shifter}
+\begin{itemize}
+    \item \cd{Rn}: Operand 1 Register
+    \item \cd{Rm}: Operand 2 Register
+    \item \cd{Rd}: Destination Register
+\end{itemize}
+
+\subsubsection*{Preprocessing with Barrel Shifter}
+\begin{itemize}
+    \item Second operand can be pre-processed by barrel shifter
+    \item Shift operations
+    \begin{itemize}
+        \item \cd{lsl}(logical shift left), \cd{asl}(arithmetic shift left)
+        \begin{itemize}
+            \item Both operations operate the same
+        \end{itemize}
+        \item \cd{lsr}(logical shift right), \cd{asr}(arithmetic shift right)
+        \begin{itemize}
+            \item \cd{lsr} fills vacated bits by 0, \cd{asr} fills vacated bits by MSB
+        \end{itemize}
+        \item \cd{ror}(rotate right), \cd{rrx}(rotate right with extend)
+    \end{itemize}
+    \item Shift format: \cd{Rm <op> \#imm} or \cd{Rm <op> Rs}
+    \begin{itemize}
+        \item Result of the pre-processing is denoted as \cd{N}
+    \end{itemize}
+    \item Examples
+    \begin{itemize}
+        \item e.g. \cd{add r0, r1, r2 lsl \#3} $\iff$ \cd{r0 = r1 + r2 << 3}
+        \item e.g. \cd{sub r0, r1, r2 lsr r3} $\iff$ \cd{r0 = r1 - r2 >> r3}
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Move Instructions}
+\begin{itemize}
+    \item Format: \cd{<inst>\{cond\}\{s\} Rd, N}
+    \begin{itemize}
+        \item \cd{mov}: \cd{Rd = N}
+        \item \cd{mvn}: \cd{Rd = \textasciitilde{}N}
+    \end{itemize}
+    \item Setting initial values, Transferring data between registers
+    \item S flag set $\implies$ Updates C(by result of barrel shifter), N, Z
+    \item Examples
+    \begin{itemize}
+        \item \cd{mov r0, r1 lsl \#1}
+        \begin{description}
+            \item[Before] \cd{r0}: \cd{0x0000\_00AB}, \cd{r1}: \cd{0x8000\_0004}
+            \item[After] \cd{r0}: \cd{0x0000\_0008}, \cd{r1}: \cd{0x8000\_0004}
+        \end{description}
+        \item \cd{mov pc, lr}: Return to procedure caller
+        \item \cd{movs pc, lr}: Return from interrupt or exception
+    \end{itemize}
+    \item Loading large constants
+    \begin{itemize}
+        \item Only 12bits are allowed for immediate values
+        \item Use pseudo instruction \cd{ldr rd, =const} / \cd{ldr rd, =label} for larger values
+        \item Automatically generates instructions that move the value on address \cd{const} or \cd{label} to \cd{rd}
+    \end{itemize}
+\end{itemize}
