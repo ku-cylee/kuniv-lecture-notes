@@ -1,0 +1,273 @@
+\section{Basic Tree Search}
+
+\subsection{Search Problems}
+
+\subsubsection*{Agents}
+\begin{itemize}
+    \item Creating rational agent is a central problem of AI
+    \item Reflex Agents
+    \begin{itemize}
+        \item Select an action based solely on the current state (and maybe memory)
+        \item Do not consider the future consequences of the action
+        \item Can be rational enough for simple problems
+    \end{itemize}
+    \item Planning Agents
+    \begin{itemize}
+        \item Determine hypothesized consequences of the actions $\Rightarrow$ Select the best action
+        \item Must have a model of how world evolves in response to actions
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Search Problems}
+\begin{itemize}
+    \item State Space
+    \begin{itemize}
+        \item The set of all possible states that are possible in the given world
+        \item Simplification of the world state by ignoring some unnecessary variables
+        \item State is \textit{much} smaller than the world state $\implies$ Efficient solution search
+    \end{itemize}
+    \item Successor state($s^\prime$): The new state if the action($a$) is taken at the current state($s$)
+    \item Cost($c$): The required cost to performing action $a$ from state $s$ to state $s^\prime$
+    \item Successor Function: $(s,a)\to(s^\prime,c)$
+    \item Start state: The state that an agent exists initially
+    \item Goal test
+    \begin{itemize}
+        \item A function that determines that if the input state is goal state or not
+        \item Goal \textit{test} since multiple goal states possible
+    \end{itemize}
+    \item Solution: Plan (sequence of actions) that transforms the start state to the goal state
+\end{itemize}
+
+\subsubsection*{State Space Graph and Search Tree}
+\begin{itemize}
+    \item Nodes $\iff$ States / Edges $\iff$ Actions
+    \item State Space Graph
+    \begin{itemize}
+        \item Goal test: A set of goal nodes
+        \item Mathematical representation of a search problem
+        \item Each state occurs only once
+    \end{itemize}
+    \item Search Tree
+    \begin{itemize}
+        \item Root node $\iff$ Start state / Children $\iff$ Successors
+        \item Building the whole tree is impossible for most problems
+    \end{itemize}
+    \item Despite finite state space graph, search tree can be infinite
+\end{itemize}
+\clearpage
+\begin{figures}
+    \subfig{State Space Graph}{state-space-graph.png}{.3358}
+    \subfig{Search Tree}{search-tree.png}{.3345}
+    \subfig{4-state Graph}{infinite-search-tree.png}{.2299}
+\end{figures}
+
+\subsection{Uninformed Search}
+
+\subsubsection*{Searching with a Search Tree}
+\begin{itemize}
+    \item Considers
+    \begin{itemize}
+        \item Expand out potential plans, i.e. tree nodes
+        \item Maintain a \textit{fringe}, i.e. potential plans of partial plans
+        \item Try to expand as few nodes as possible
+    \end{itemize}
+    \item Completeness: Is the strategy guaranteed to find the solution?
+    \item Optimality: Is the strategy guaranteed to find the \textit{optimal} solution?
+    \item Branching factor $b$: Increase of \# of nodes on the fringe when a node replaced with its children
+    \item Maximum depth $m$, Shallowest solution depth $s$
+\end{itemize}
+
+\subsubsection*{Depth-First Search (DFS)}
+\begin{itemize}
+    \item Expand the deepest node first; Implement fringe with LIFO stack
+    \item Completeness: Yes
+    \item Optimality: No; Finds the leftmost solution
+    \item Time Complexity: $O(b^m)$
+    \item Space complexity: $O(bm)$
+    \item Example
+    \begin{itemize}
+        \item Nodes visited: S $\to$ d $\to$ b $\to$ a $\to$ c $\to$ a $\to$ e $\to$ h $\to$ p $\to$ q $\to$ q $\to$ r $\to$ f $\to$ c $\to$ a $\to$ G
+        \item Solution: S $\to$ d $\to$ e $\to$ r $\to$ f $\to$ G
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Properties}{dfs-properties.png}{.3097}
+    \subfig{Search Tree}{dfs-path-search-tree.png}{.2856}
+    \subfig{State Space Graph}{dfs-path-state-space-graph.png}{.3047}
+\end{figures}
+
+\subsubsection*{Breadth-First Search (BFS)}
+\begin{itemize}
+    \item Expand the shallowest node first; Implement fringe with FIFO queue
+    \item Completeness: Yes
+    \item Optimality: Yes, only if costs are all $1$
+    \item Time Complexity: $O(b^s)$
+    \item Space complexity: $O(b^s)$
+    \item Example
+    \begin{itemize}
+        \item Nodes visited: S $\to$ d $\to$ e $\to$ p $\to$ b $\to$ c $\to$ e $\to$ h $\to$ r $\to$ q $\to$ a $\to$ a $\to$ h $\to$ r $\to$ p $\to$ q $\to$ f $\to$ p $\to$ q $\to$ f $\to$ q $\to$ c $\to$ G
+        \item Solution: S $\to$ e $\to$ r $\to$ f $\to$ G
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Properties}{bfs-properties.png}{.2793}
+    \subfig{Search Tree}{bfs-path-search-tree.png}{.3439}
+    \subfig{State Space Graph}{bfs-path-state-space-graph.png}{.2679}
+\end{figures}
+
+\subsubsection*{DFS vs BFS}
+\begin{itemize}
+    \item Cases BFS > DFS
+    \begin{itemize}
+        \item Solution is shallow
+        \item Small branching factor $b$
+        \item Optimal solution is required
+    \end{itemize}
+    \item Cases DFS > BFS
+    \begin{itemize}
+        \item Limited search time
+        \item Optimality not required
+        \item High spatial complexity, i.e. large $b$
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Iterative Deepening}
+\begin{itemize}
+    \item Combine: space advantage of DFS + time \& shallow advantage of BFS
+    \item Run DFS with depth limit of $i=1$ $\to$ If no solution, $i\leftarrow i+1$ $\to$ Repeat
+    \item More time complexity, less space complexity compared to BFS
+\end{itemize}
+
+\subsubsection*{Uniform Cost Search (UCS)}
+\begin{itemize}
+    \item Expand the cheapest node first; Implement fringe with priority queue with cumulative cost
+    \item Cost of solution $C^\ast$, Least cost of solution arcs $\varepsilon$ $\implies$ Effective depth: $C^\ast/\varepsilon$
+    \item Completeness: Yes
+    \item Optimality: Yes
+    \item Time Complexity: $O(b^{C^\ast/\varepsilon})$
+    \item Space complexity: $O(b^{C^\ast/\varepsilon})$
+    \item Explores options in every direction, i.e. ``isotrophic'' in terms of cost
+    \item Example
+    \begin{itemize}
+        \item Nodes visited: S $\to$ p $\to$ d $\to$ b $\to$ e $\to$ a $\to$ r $\to$ f $\to$ e $\to$ G
+        \item Solution: S $\to$ d $\to$ e $\to$ r $\to$ f $\to$ G
+    \end{itemize}
+\end{itemize}
+\begin{figures}
+    \subfig{Properties}{ucs-properties.png}{.2389}
+    \subfig{State Space Graph}{ucs-path-state-space-graph.png}{.2763}
+    \subfig{Search Tree}{ucs-path-search-tree.png}{.3848}
+\end{figures}
+
+\subsubsection*{Summary}
+\begin{itemize}
+    \item Light blue: lower cost, Dark blue: higher cost
+    \item DFS: Dumb solution, but fast problem solving
+    \item BFS: Suboptimal solution, but searches almost every node
+    \item UCS: Optimal solution, searches less nodes than BFS
+\end{itemize}
+\begin{figures}
+    \subfig{DFS}{dfs-maze-search.png}{.3}
+    \subfig{BFS}{bfs-maze-search.png}{.3}
+    \subfig{UCS}{ucs-maze-search.png}{.3}
+\end{figures}
+
+\subsection{Informed Search}
+
+\subsubsection*{Heuristic}
+\begin{itemize}
+    \item A function that estimates how the state is close to the goal
+    \item e.g. Manhattan distance, Euclidean distance
+    \item Gives a hint, bias to the goal
+\end{itemize}
+
+\subsubsection*{Greedy Search}
+\begin{itemize}
+    \item Expand the node with the lowest heuristic first; UCS with heuristic as cost
+    \item Optimality \textit{not} guaranteed
+\end{itemize}
+
+\subsubsection*{A\textsuperscript{*} Search}
+\begin{itemize}
+    \item Combination of UCS and Greedy Search
+    \item $g(n)$: Accumulated cost from the start state to the state $n$
+    \item $h(n)$: Heuristic of the state $n$ to the goal state
+    \item Expand the node with the lowest $f(n):=g(n)+h(n)$; UCS with $f$ as cost
+    \item A\textsuperscript{*} search should be terminated when the goal is \textit{dequeued}
+    \begin{itemize}
+        \item DFS, BFS, UCS: OK to terminate when the goal is enqueued
+    \end{itemize}
+    \item Optimality: Yes if $h$ is \textit{admissible}
+\end{itemize}
+
+\subsubsection*{Admissibility}
+\begin{itemize}
+    \item A heuristic $h$ is \textit{admissible}(optimistic) if
+    \begin{equation}
+        \forall n\in S,~0\leq h(n)\leq h^\ast(n)
+    \end{equation}
+    \begin{itemize}
+        \item $h^\ast(n)$: True cost from state $n$ to the nearest goal
+        \item Heuristic of the goal state is always $0$
+    \end{itemize}
+    \item Admissible heuristics are often solutions to relaxed problems, i.e. some constraints released
+    \item Trivial Heuristics
+    \begin{itemize}
+        \item Top of lattice: Exact heuristic, i.e. $\forall n\in S$, $h(n)=h^\ast(n)$
+        \item Bottom of lattice: Null heuristic, i.e. $\forall n\in S$, $h(n)=0$
+    \end{itemize}
+    \item Heuristics from semi-lattice
+    \begin{itemize}
+        \item For admissible heuristics $h_1$ and $h_2$, $h(n)=\max\{h_1(n),h_2(n)\}$ is also heuristic
+        \item $h$ is an \textit{ensemble} of $h_1$ and $h_2$
+    \end{itemize}
+    \item Dominance
+    \begin{itemize}
+        \item $h_1$ is better than $h_2$ $\impliedby$ $\forall n\in S$, $h_1(n)\geq h_2(n)$
+        \item Closer to the true cost $\implies$ Better heuristic
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{UCS vs. Greedy vs. A\textsuperscript{*}}
+\begin{itemize}
+    \item Example
+    \begin{itemize}
+        \item UCS visits S $\to$ a $\to$ b $\to$ c $\to$ d $\to$ G; Solution optimal, slow
+        \item Greedy visits S $\to$ a $\to$ e $\to$ d $\to$ G; Solution not optimal
+        \item A\textsuperscript{*} visits S $\to$ a $\to$ d $\to$ G; Solution optimal, fast
+    \end{itemize}
+    \begin{figures}
+        \fig{informed-search-state-space-graph.png}{.5}
+    \end{figures}
+    \item UCS expands equally in all directions
+    \item A\textsuperscript{*} expands mainly toward the goal, but also expands the surroundings
+\end{itemize}
+\begin{figures}
+    \subfig{UCS}{ucs-countours.png}{.25}
+    \subfig{Greedy}{greedy-contours.png}{.25}
+    \subfig{A\textsuperscript{*}}{astar-contours.png}{.25}
+\end{figures}
+
+\subsubsection*{Graph Search and Consistency}
+\begin{itemize}
+    \item Graph Search
+    \begin{itemize}
+        \item Tree search may fail in some cases; e.g. Stuck in infinite loop, Too huge tree, etc.
+        \item Graph search can be used to solve these problems
+    \end{itemize}
+    \item For performance, we use skipping the visited state policy
+    \begin{itemize}
+        \item Works for BFS, DFS, UCS
+        \item \textit{Fails} for A\textsuperscript{*}; ruins completeness and optimality
+    \end{itemize}
+    \item A heuristic $h$ is \textit{consistent} if
+    \begin{equation}
+        \forall n_1,n_2\in S,~h(n_1)-h(n_2)\leq\text{cost}(n_1\to n_2)
+    \end{equation}
+    \begin{itemize}
+        \item Admissibility: $\forall n\in S,~0\leq h(n)\leq h^\star(n)$
+        \item Consistency implies admissibility
+        \item Graph search is optimal if $h$ is consistent
+        \item Tree search is optimal if $h$ is admissible
+    \end{itemize}
+\end{itemize}
