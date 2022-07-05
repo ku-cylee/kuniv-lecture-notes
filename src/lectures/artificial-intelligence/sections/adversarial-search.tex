@@ -1,0 +1,268 @@
+\section{Adversarial Search}
+
+\subsection{Minimax Search}
+
+\subsubsection*{Deterministic Games}
+\begin{itemize}
+    \item Formalizations
+    \begin{itemize}
+        \item States: $S$ (start at $s_0$)
+        \item Players: $P=\{1,2,\cdots,N\}$, usually take turns
+        \item Actions: $A$
+        \item Transition functions: $T:S\times A\to S$
+        \begin{itemize}
+            \item Similar term of successor functions
+        \end{itemize}
+        \item Terminal test: $S\to\{\text{true},\text{false}\}$
+        \item Terminal utilities: $S\times P\to R$, i.e. rewards
+        \item Policy: $S\to A$, i.e. solution for a player
+    \end{itemize}
+    \item Zero-sum Games
+    \begin{itemize}
+        \item Agents have \textit{opposite} utilities $\implies$ adversarial, competition
+        \item e.g. Given a single utility, one maximizes it and the other minimizes it
+    \end{itemize}
+    \item General Games
+    \begin{itemize}
+        \item Agents have independent utilities
+        \item cooperative, indifference, competition, etc
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Value of a State}
+\begin{itemize}
+    \item The best achievable utility from that state
+    \item Non-terminal state: $V(s)=\max_{s^\prime\in\text{successors}(s)}V(s^\prime)$ (only for single-agent)
+    \item Terminal state: $V(s)$ is given
+\end{itemize}
+
+\subsubsection*{Minimax Search}
+\begin{itemize}
+    \item Assumptions
+    \begin{itemize}
+        \item Deterministic, Zero-sum, Players alternate turns
+        \item Every players \textit{always} take the best action possible
+    \end{itemize}
+    \item Minimax Values
+    \begin{itemize}
+        \item States under the Maximizing agent: $V(s)=\max_{s^\prime\in\text{successors}(s)}V(s^\prime)$
+        \item States under the Minimizing agent: $V(s)=\min_{s^\prime\in\text{successors}(s)}V(s^\prime)$
+    \end{itemize}
+    \item Why minimax search? Example:
+    \begin{itemize}
+        \item The max terminal-state utility is 14, but $V(n)\neq14$
+        \item If: Max agent takes action $n\to n_3$ to achieve $14$ $\Rightarrow$ Min agent takes action $n_3\to n_{3,3}$ to \textit{minimize} its utility
+        \item $\therefore$ We need to consider the values from the bottom
+    \end{itemize}
+    \clearpage
+    \item Minimax Search
+    \begin{itemize}
+        \item $V(n_1)=\min_{s\in\text{successors}(n_1)}(n_1)=\min\{V(n_{1,1}),V(n_{1,2}),V(n_{1,3})\}=\min\{3,12,8\}=3$
+        \item $V(n_2)=\min\{2,4,6\}=2$, $V(n_3)=\min\{14,5,2\}=2$
+        \item $V(n)=\max_{s\in\text{successors}(n)}(n)=\max\{V(n_1),V(n_2),V(n_3)\}=\max\{3,2,2\}=3$
+    \end{itemize}
+    \begin{figures}
+        \fig{minimax-tree.png}{.7}
+    \end{figures}
+    \item Minimax Implementation (Pseudo-code)
+    \begin{itemize}
+        \item \cd{getValue}
+        \linespread{1.1}
+        \begin{verbatim}
+const getValue = (state, nextAgent) => {
+    if (state.isTerminal()) return state.utility;
+    if (nextAgent.isMax()) return getMaxValue(state, nextAgent);
+    else return getMinValue(state, nextAgent);
+};
+        \end{verbatim}
+        \linespread{1.6}
+        \item \cd{getMaxValue}
+        \linespread{1.1}
+        \begin{verbatim}
+const getMaxValue = (state, agent) => {
+    let value = -Infinity;
+    const nextAgent = agent.getNextAgent();
+    state.successors.forEach(succ => {
+        value = max(value, getValue(succ, nextAgent));
+    });
+    return value;
+};
+        \end{verbatim}
+        \linespread{1.6}
+        \item \cd{getMinValue}
+        \linespread{1.1}
+        \begin{verbatim}
+const getMinValue = (state, agent) => {
+    let value = Infinity;
+    state.successors.forEach(succ => {
+        value = min(value, getValue(succ, nextAgent));
+    });
+    return value;
+};
+        \end{verbatim}
+        \linespread{1.6}
+    \end{itemize}
+    \item Efficiency: Same as DFS
+    \begin{itemize}
+        \item Time complexity: $O(b^m)$, Space complexity: $O(bm)$
+        \item For most cases, completely infeasible
+    \end{itemize}
+    \item Optimal against a \textit{perfect} player
+\end{itemize}
+
+\subsection{Alpha-Beta Pruning}
+
+\subsubsection*{Resource Limits and Solutions}
+\begin{itemize}
+    \item In practice: Searching to leaf nodes is impossible
+    \item Depth-limited Search: Search only to a limited depth in the tree
+    \begin{itemize}
+        \item Terminal utilities $\leftarrow$ Evaluation function for non-terminal nodes
+        \item Evaluation function: Nice guess, surrogate for nodes
+        \item Optimality not guaranteed
+    \end{itemize}
+    \item Alpha-Beta Pruning
+\end{itemize}
+
+\subsubsection*{Motivation}
+\begin{itemize}
+    \item $V(n_1)=\min\{V(n_{1,1}),V(n_{1,2}),V(n_{1,3})\}=\min\{3,12,8\}=3$
+    \item $V(n_2)=\min\{V(n_{2,1}),V(n_{2,2}),V(n_{2,3})\}=\min\{2,V(n_{2,2}),V(n_{2,3})\}\leq2$
+    \item $V(n)=\max\{V(n_1),V(n_2),V(n_3)\}=\max\{3,V(n_2),V(n_3)\}$ and $V(n_2)\leq2$
+    \item Node $n_2$ will \textit{never} be selected \textit{regardless} to Node $n_{2,2}$ and $n_{2,3}$ $\implies$ Prune out Node $n_{2,2}$, $n_{2,3}$
+\end{itemize}
+\begin{figures}
+    \fig{minimax-tree-pruning.png}{.55}
+\end{figures}
+
+\subsubsection*{Implementation}
+\begin{itemize}
+    \item $\alpha$: Best option on path to root for max node; Initialize to $-\infty$ for root
+    \item $\beta$: Best option on path to root for min node; Initialize to $+\infty$ for root
+    \item \cd{getValue}
+    \linespread{1.1}
+    \begin{verbatim}
+const getValue = (state, nextAgent, alpha, beta) => {
+    if (state.isTerminal()) return state.utility;
+    if (nextAgent.isMax()) return getMaxValue(state, nextAgent, alpha, beta);
+    else return getMinValue(state, nextAgent, alpha, beta);
+};
+    \end{verbatim}
+    \linespread{1.6}
+    \item \cd{getMaxValue}
+    \linespread{1.1}
+    \begin{verbatim}
+const getMaxValue = (state, agent, alpha, beta) => {
+    let value = -Infinity;
+    const nextAgent = agent.getNextAgent();
+    for (const succ for state.successors) {
+        value = max(value, getValue(succ, nextAgent, alpha, beta));
+        if (value >= beta) return value;
+        alpha = max(alpha, value);
+    }
+    return value;
+};
+    \end{verbatim}
+    \linespread{1.6}
+    \item \cd{getMinValue}
+    \linespread{1.1}
+    \begin{verbatim}
+const getMaxValue = (state, agent, alpha, beta) => {
+    let value = Infinity;
+    const nextAgent = agent.getNextAgent();
+    for (const succ for state.successors) {
+        value = min(value, getValue(succ, nextAgent, alpha, beta));
+        if (value <= alpha) return value;
+        beta = min(beta, value);
+    }
+    return value;
+};
+    \end{verbatim}
+    \linespread{1.6}
+    \item Nodes that has never involved in the computation are pruned
+\end{itemize}
+
+\subsubsection*{Properties}
+\begin{itemize}
+    \item Minimax Value
+    \begin{itemize}
+        \item Uneffected for the root
+        \item Might be wrong for intermediate nodes
+    \end{itemize}
+    \item Perfect ordering $\implies$ time complexity drops to $O(b^{m/2})$
+    \item Simple example of metareasoning, i.e. computing about what to compute
+\end{itemize}
+
+\subsection{Uncertainty and Utilities}
+
+\subsubsection*{Expectimax Search}
+\begin{itemize}
+    \item Agent can be stochastic, i.e. sometimes choose worse case
+    \item Values should reflect average-case outcomes
+    \item Expectimax search: Compute \textit{average} score of the children nodes as a value
+    \item $V(n)=\mathbb{E}(S)=\frac{1}{\lvert\text{successors}(n)\rvert}\sum_{s\in\text{successors}(n)}P(s)V(s)$
+    \item Expectimax pruning is impossible $\implies$ Possible solution: Depth-limited expectimax
+\end{itemize}
+
+\subsubsection*{Modeling Assumptions}
+\begin{itemize}
+    \item Expectimax: Probabilistic model of the agent is given
+    \item Optimistic assumption: Considers the chance despite the world is adversarial
+    \item Pessimistic assumption: Considers the unlikely worst case
+\end{itemize}
+
+\subsubsection*{Other Game Types}
+\begin{itemize}
+    \item Mixed Layer Types: Extra random agent player exists after min/max agent
+    \item Multi-Agent Utilities
+    \begin{itemize}
+        \item Assign utility for each agents $\implies$ Terminals have utility tuples
+        \item Each player maximizes its own component
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Utilities}
+\begin{itemize}
+    \item Function that maps outcomes to real numbers; Describes agent's preferences
+    \begin{itemize}
+        \item Any \textit{rational} preferences can be summarized as a utility function
+    \end{itemize}
+    \item What utilities to use?
+    \begin{itemize}
+        \item Worst-case minimax: Only ordering is important $\implies$ Insensitive to monotonic transformation
+        \item Average-case minimax: Magnitudes should be meaningful and reasonable
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Preferences}
+\begin{itemize}
+    \item For given prize $A$ and $B$
+    \item $A\succ B$: Agent prefers receiving prize $A$ to $B$
+    \item $A\sim B$: Agent is indifferent between $A$ or $B$
+    \item Lottery $L=[p,A;(1-p),B]$: Situation with different prizes with corresponding probabilities
+\end{itemize}
+
+\subsubsection*{The Axioms of Rationality}
+\begin{itemize}
+    \item Orderability: $(A\succ B)\vee(A\prec B)\vee(A\sim B)$
+    \begin{itemize}
+        \item The agent should either prefer one of $A$ or $B$, or be indifferent
+    \end{itemize}
+    \item Transitivity: $(A\succ B)\wedge(B\succ C)\implies(A\succ C)$
+    \item Continuity: $A\succ B\succ C\implies\exists p~\text{s.t.}~[p,A;(1-p),C]\sim B$
+    \item Substitutability: $A\sim B\implies[p,A;(1-p),C]\sim[p,B;(1-p),C]$
+    \item Monotonicity: $A\succ B\implies(p\geq q\iff[p,A;(1-p),B]\succeq[q,A;(1-q),B])$
+\end{itemize}
+
+\subsubsection*{MEU Principle}
+\begin{itemize}
+    \item \textbf{Thm.} All rationality axioms are satisfied by an agent $\implies$ $\exists$ Utility function that represents preferences
+    \item Mathematically, utility function $U$ satisfies
+    \begin{equation}
+        \begin{array}{c}
+            U(A)\geq U(B)\iff A\succeq B \\
+            U([p_1,S_1;p_2,S_2;\cdots;p_n,S_n])=\sum_{i}p_iU(S_i)
+        \end{array}
+    \end{equation}
+    \item Maximum expected utility (MEU) principle: Choose the action that maximizes expected utility
+\end{itemize}
